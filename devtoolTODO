@@ -1,0 +1,8 @@
+TO DO
+
+FROM DEVTOOL SUGGESTIONS:
+
+1.
+Next, include the following roxygen tags somewhere in your package:
+#' @useDynLib addmtools
+#' @importFrom Rcpp sourceCpp
