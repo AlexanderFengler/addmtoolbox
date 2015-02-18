@@ -67,7 +67,7 @@ aDDMOpti = function(subjects,                    # Subject to be tested: -1 = Mo
 
       # EXTRACT RELEVANT VALUATIONS
         if (cur.subject == -1){
-          cur.choice.dat = core.clean.model.test.dat$choice.dat
+          cur.choice.dat = choice.dat
         } else if (cur.subject == 0){
           cur.choice.dat =  choice.dat[choice.dat$set_size == cur.set_size, names(choice.dat),with=FALSE]
         } else {
@@ -78,7 +78,7 @@ aDDMOpti = function(subjects,                    # Subject to be tested: -1 = Mo
 
       # EXTRACT RELEVANT FIXATIONS
       if (cur.subject == -1) {
-        cur.eye.dat = core.clean.mode.test.dat$fixations
+        cur.eye.dat = eye.dat
       } else if (cur.subject == 0){
         cur.eye.dat = eye.dat[eye.dat$set_size == cur.set_size, list(fixloc,fixnr,fixdur,trialid)]
       } else {
