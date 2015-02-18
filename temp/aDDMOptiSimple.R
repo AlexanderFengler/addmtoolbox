@@ -19,9 +19,8 @@ aDDMOpti= function(subjects,                    # Subject to be tested: -1 = Mod
                    fixation.model,              # Fixation model used in simulations: "Normal" - Real Fixations used, "Random", "FakePath" - prespecified path for fixations
                    allow.extension,             # Binary, whether we allow extensions of the grid in case we find corner-solution
                    allow.fine.grid,             # Binary, whether we allow the fine-grid step in the grid search procedure
-                   generate)                    # Generate (binary) tells the aDDM function whether to spit out full data (1) or log likelihoods (0)
-{
-  #
+                   generate){                   # Generate (binary) tells the aDDM function whether to spit out full data (1) or log likelihoods (0)
+
   # LOAD ALL PACKAGES AND FUNCTIONS NECESSARY ----------------------------------------------------
   # Load all high level functions needed
   source('temp/addm_opti_supportfuns/generate_parameter_combinations.R')
