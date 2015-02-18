@@ -16,13 +16,13 @@ aDDMOpti= function(subjects,                    # Subject to be tested: -1 = Mod
                    nr.reps,                     # Number of repitions used in simulation runs
                    model.type,                  # Currently choice between model with memory effects, divided in no drift for items not seen ('mem') and no drift and no sd for items not seen ('memzeronoise') and without ('nomem')
                    output.type,                 # Output type can be: "Opti" - Normal loglikelihood for model optimization, "FakeOpti" - loglikelihoods for optimization for artificially created data
-                   fixation.model,              # Fixation model used in simulations: "Normal" - Real Fixations used, "Random"
+                   fixation.model,              # Fixation model used in simulations: "Normal" - Real Fixations used, "Random", "FakePath" - prespecified path for fixations
                    allow.extension,             # Binary, whether we allow extensions of the grid in case we find corner-solution
                    allow.fine.grid,             # Binary, whether we allow the fine-grid step in the grid search procedure
                    generate)                    # Generate (binary) tells the aDDM function whether to spit out full data (1) or log likelihoods (0)
 {
-  # LOAD ALL PACKAGES AND FUNCTIONS NECESSARY
-  # ----------------------------------------------------------------------------------------------
+  #
+  # LOAD ALL PACKAGES AND FUNCTIONS NECESSARY ----------------------------------------------------
   # Load all high level functions needed
   source('temp/addm_opti_supportfuns/generate_parameter_combinations.R')
   source('temp/addm_opti_supportfuns/aDDM_gridsearch.R')
@@ -38,9 +38,7 @@ aDDMOpti= function(subjects,                    # Subject to be tested: -1 = Mod
   # Initialize parameters, subjects, set_size
   load.aDDM.scripts()
 
-  # INITIALIZING VARIABLES THAT CAN BE MANIPULATED
-  ###############################################################################################
-  # ---------------------------------------------------------------------------------------------
+  # INITIALIZING VARIABLES THAT CAN BE MANIPULATED ------------------------------------------------
 
   # Initialize the logfile we are going to use for storing results from the gridsearch
   cur.log.file = "temp/cur_log.txt"
@@ -49,7 +47,8 @@ aDDMOpti= function(subjects,                    # Subject to be tested: -1 = Mod
   # In case we find corner solutions what parameter shift shall we allow per round (balance between degree of exploration and time spend computing)
   drift.shift = (drifts[length(drifts)] - drifts[length(drifts)-1])*3
   sd.shift = (sds[length(sds)] - sds[length(sds)-1])*3
-  non.decision.time.shift = (non.decision.times[length(non.decision.times)] - non.decision.times[length(non.decision.times)-1])*3
+  non.decision.time.shift = (non.decision.times[length(non.decision.times)] -
+                               non.decision.times[length(non.decision.times)-1])*3
 
   # Parameters for fine grid search
   # Distance between two points on the grid by dimension (drift.rate,sd)
@@ -58,13 +57,14 @@ aDDMOpti= function(subjects,                    # Subject to be tested: -1 = Mod
   drift.step.fine = (drifts[length(drifts)] - drifts[length(drifts)-1])/coarse.to.fine.ratio
   theta.step.fine = (thetas[length(thetas)] - thetas[length(thetas)-1])/coarse.to.fine.ratio
   sd.step.fine = (sds[length(sds)] - sds[length(sds)-1])/coarse.to.fine.ratio
-  non.decision.time.step.fine = (non.decision.times[length(non.decision.times)] - non.decision.times[length(non.decision.times)-1])/coarse.to.fine.ratio
-  # ---------------------------------------------------------------------------------------------
+  non.decision.time.step.fine = (non.decision.times[length(non.decision.times)] -
+                                   non.decision.times[length(non.decision.times)-1])/coarse.to.fine.ratio
+  # -----------------------------------------------------------------------------------------------
 
   for (cur.subject in subjects){
     for (cur.set_size in set.sizes){
-      # GENERATING SUBSETS OF DATA.FRAMES ACCORDING TO SPECIFICATIONS OF SUBJECTS AND SET SIZES TO BE INCLUDED
-      # ---------------------------------------------------------------------------------------------
+      #
+      # GENERATING SUBSET OF DATA.FRAMES ----------------------------------------------------------
 
       # EXTRACT RELEVANT VALUATIONS
         if (cur.subject == -1){
@@ -92,16 +92,15 @@ aDDMOpti= function(subjects,                    # Subject to be tested: -1 = Mod
       setkey(cur.eye.dat,trialid)
       # ---------------------------------------------------------------------------------------------
 
-      # GENERATE PARAMETER MATRIX (ALL COMBINATIONS OF PARAMETERS SPECIFIED ABOVE)
-      # ---------------------------------------------------------------------------------------------
+      #
+      # GENERATE PARAMETER MATRIX -------------------------------------------------------------------
       parameter.matrix = param.combs(drifts,
                                      sds,
                                      thetas,
                                      non.decision.times)
       # ---------------------------------------------------------------------------------------------
 
-      # RUN COARSE GRID SEARCH
-      # ---------------------------------------------------------------------------------------------
+      # RUN COARSE GRID SEARCH ----------------------------------------------------------------------
       log.liks = aDDM.gridsearch(cur.choice.dat,
                                  cur.eye.dat,
                                  parameter.matrix,
@@ -116,18 +115,15 @@ aDDMOpti= function(subjects,                    # Subject to be tested: -1 = Mod
                                  generate)
       # ---------------------------------------------------------------------------------------------
 
-      # UPDATE LOGLIKS
-      # ---------------------------------------------------------------------------------------------
+      # UPDATE LOGLIKS ------------------------------------------------------------------------------
       log.liks$Coarse = 1
       log.liks$Extension = 0
       # ---------------------------------------------------------------------------------------------
 
-      # IF WE ALLOW A FINE GRID SEARCH THEN WE DO THE FOLLOWING
-      # ---------------------------------------------------------------------------------------------
+      # IN CASE WE ALLOW FOR FINE GRID SEARCH -------------------------------------------------------
       if (allow.fine.grid == 1){
 
-        # GENERATE FINE GRID
-        # ---------------------------------------------------------------------------------------------
+        # GENERATE FINE GRID ------------------------------------------------------------------------
         fine.parameter.matrix = generate.fine.grid(drift.step.fine,
                                                    sd.step.fine,
                                                    thetas,
@@ -136,8 +132,7 @@ aDDMOpti= function(subjects,                    # Subject to be tested: -1 = Mod
                                                    log.liks)
         # ---------------------------------------------------------------------------------------------
 
-        # RUN FINE GRID SEARCH
-        # ---------------------------------------------------------------------------------------------
+        # RUN FINE GRID SEARCH ------------------------------------------------------------------------
         fine.log.liks = aDDM.gridsearch(cur.choice.dat,
                                         cur.eye.dat,
                                         fine.parameter.matrix,
@@ -152,16 +147,15 @@ aDDMOpti= function(subjects,                    # Subject to be tested: -1 = Mod
                                         generate)
         # ---------------------------------------------------------------------------------------------
 
-        # UPDATE LOGLIKS
-        # ---------------------------------------------------------------------------------------------
+        #
+        # UPDATE LOGLIKS ------------------------------------------------------------------------------
         fine.log.liks$Coarse = 0
         fine.log.liks$Extension = 0
         log.liks = rbind(log.liks,fine.log.liks)
         # ---------------------------------------------------------------------------------------------
       }
 
-      # SAVE LOGLIKS
-      # ---------------------------------------------------------------------------------------------
+      # SAVE LOGLIKS ----------------------------------------------------------------------------------
       if (cur.subject == -1){
         cur.file = paste('temp/model_testing/loglik_modeltest_',toString(cur.set_size), sep="")
       }
