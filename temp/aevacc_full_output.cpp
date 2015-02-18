@@ -95,7 +95,7 @@ NumericVector aevacc_full_output(int nr_reps,
 
    // Initialize vector that stores all fixation locations that can be sampled from later (see usage of vector below)
    IntegerVector eligible(nr_items);
-   for (in i = 0; i < nr_items; i++){
+   for (int i = 0; i < nr_items; i++){
      eligible[i] = i + 1;
    }
 

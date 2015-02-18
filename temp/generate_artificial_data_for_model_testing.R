@@ -2,89 +2,46 @@
 # Project: aDDM_4_6_8
 # Date: Jan 14th 2015
 
-
 # This script generates all necessary data needed as input to generate artificial aDDM data
 # We can then use this to test the model fitting procedures which currently reside in file: run_aDDM_optimization
 
-# RUN THIS PART ONLY IF CORRESPONDING FILE IS LOST FROM WORKSPACE -- OTHERWISE IT IS REUSABLE
-#------------------------------------------------------------------------------------------------------------------------------------------
-# Generating a list that collect all necessary input data to generate artificial aDDM from the aDDM.R scripts (aDDM() function)
-  
-core.clean.model.test.dat = list(items_4 = data.table(v1=sample(c(0,1,2,3),100,replace=TRUE),
-                                                      v2=sample(c(0,1,2,3),100,replace=TRUE),
-                                                      v3=sample(c(0,1,2,3),100,replace=TRUE),
-                                                      v4=sample(c(0,1,2,3),100,replace=TRUE),
-                                                      trialid=1:100),
-                                 items_6 = data.table(v1=sample(c(0,1,2,3),100,replace=TRUE),
-                                                      v2=sample(c(0,1,2,3),100,replace=TRUE),
-                                                      v3=sample(c(0,1,2,3),100,replace=TRUE),
-                                                      v4=sample(c(0,1,2,3),100,replace=TRUE),
-                                                      v5=sample(c(0,1,2,3),100,replace=TRUE),
-                                                      v6=sample(c(0,1,2,3),100,replace=TRUE),
-                                                      trialid=1:100),
-                                 items_8 = data.table(v1=sample(c(0,1,2,3),100,replace=TRUE),
-                                                      v2=sample(c(0,1,2,3),100,replace=TRUE),
-                                                      v3=sample(c(0,1,2,3),100,replace=TRUE),
-                                                      v4=sample(c(0,1,2,3),100,replace=TRUE),
-                                                      v5=sample(c(0,1,2,3),100,replace=TRUE),
-                                                      v6=sample(c(0,1,2,3),100,replace=TRUE),
-                                                      v7=sample(c(0,1,2,3),100,replace=TRUE),
-                                                      v8=sample(c(0,1,2,3),100,replace=TRUE),
-                                                      trialid=1:100),
-                                 decisions = data.table(decision = 0,
-                                                        trialid = 1:100),
-                                 trialids= 1:100,
-                                 rts = data.table(rt = 0,
-                                                  trialid = 1:100),
-                                 fixations = data.table(fixloc = 0,fixnr=0,fixdur=0,trialid = 1:100),
+# Generating a list that collects all necessary input data to generate artificial aDDM from the aDDM.R scripts (aDDM() function)
+
+addm_generate_artificial = function(set_size, possible_valuations){
+
+# GENERATE MODEL INPUT DATA --------------------------------------------------------------------------------------------------------------
+val.dat = as.data.table(matrix(sample(possible_valuations,25*set_size,replace=TRUE),ncol=set_size))
+setnames(val.dat,names(val.dat),tolower(names(val.dat)))
+
+decisions = data.table(decision = 0,
+                       trialid = 1:25)
+
+rts = data.table(rt = 0)
+
+choice.dat = cbind(val.dat,decisions,rts)
+
+core.clean.model.test.dat = list(choice.dat = choice.dat,
+                                 fixations = data.table(fixloc = 0,fixnr=0,fixdur=0,trialid = 1:25),
                                  timestep.ms = 10,
-                                 nr.reps = 2000,
+                                 nr.reps = 10000,
+                                 model.type = "nomem",
                                  fixation.model = "FakePath",
                                  output.type = "Fake",
-                                 core.parameters = c(0.05,0.5,0.1,0))  # order of core parameter: drift.rate,sd,theta,non.decision.time
+                                 core.parameters = c(0.005,0.5,0.05,0), # order of core parameter: drift.rate, sd, theta, non.decision.time
+                                 generate = 1) # the last model parameter tells the model to generate a data.frame instead of running log.likelihood test
 #------------------------------------------------------------------------------------------------------------------------------------------
 
-# GENERATING ARTIFICIAL OUTPUT
+# RUN MODEL -------------------------------------------------------------------------------------------------------------------------------
+aDDM(core.clean.model.test.dat$choice.dat,
+     core.clean.model.test.dat$fixations,
+     core.clean.model.test.dat$core.parameters,
+     core.clean.model.test.dat$nr.reps,
+     core.clean.model.test.dat$model.type,
+     core.clean.model.test.dat$output.type,
+     core.clean.model.test.dat$fixation.model,
+     core.clean.model.test.dat$timestep.ms,
+     core.clean.model.test.dat$generate)
 #------------------------------------------------------------------------------------------------------------------------------------------
-
-core.clean.artificial.choice.table.4 = aDDM(core.clean.model.test.dat$items_4,
-                                            core.clean.model.test.dat$decisions,
-                                            core.clean.model.test.dat$fixations,
-                                            core.clean.model.test.dat$rts,
-                                            core.clean.model.test.dat$trialids,
-                                            core.clean.model.test.dat$core.parameters,
-                                            core.clean.model.test.dat$nr.reps,
-                                            core.clean.model.test.dat$output.type,
-                                            core.clean.model.test.dat$fixation.model,
-                                            core.clean.model.test.dat$timestep.ms,
-                                            1) # the last model parameter tells the model to generate a data.frame instead of running log.likelihood test
-
-
-core.clean.artificial.choice.table.6 = aDDM(core.clean.model.test.dat$items_6,
-                                            core.clean.model.test.dat$decisions,
-                                            core.clean.model.test.dat$fixations,
-                                            core.clean.model.test.dat$rts,
-                                            core.clean.model.test.dat$trialids,
-                                            core.clean.model.test.dat$core.parameters,
-                                            core.clean.model.test.dat$nr.reps,
-                                            core.clean.model.test.dat$output.type,
-                                            core.clean.model.test.dat$fixation.model,
-                                            core.clean.model.test.dat$timestep.ms,
-                                            1) # the last model parameter tells the model to generate a data.frame instead of running log.likelihood test
-
-
-core.clean.artificial.choice.table.8 = aDDM(core.clean.model.test.dat$items_8,
-                                            core.clean.model.test.dat$decisions,
-                                            core.clean.model.test.dat$fixations,
-                                            core.clean.model.test.dat$rts,
-                                            core.clean.model.test.dat$trialids,
-                                            core.clean.model.test.dat$core.parameters,
-                                            core.clean.model.test.dat$nr.reps,
-                                            core.clean.model.test.dat$output.type,
-                                            core.clean.model.test.dat$fixation.model,
-                                            core.clean.model.test.dat$timestep.ms,
-                                            1) # the last model parameter tells the model to generate a data.frame instead of running log.likelihood test
-
-#------------------------------------------------------------------------------------------------------------------------------------------
+}
 
 

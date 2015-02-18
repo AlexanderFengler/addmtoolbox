@@ -39,7 +39,7 @@ aDDM_fast = function(cur.choice.dat,
 
   # valuation is a matrix that already takes into account the drift rate to describe the per-timestep mean shift by item for each trial
   # is then supplied to the evidence accumulation function below
-  valuations=matrix(rep(0,len.trials*cur.set_size),nrow=cur.set_size,ncol=length(cur.choice.dat[,trialid])
+  valuations=matrix(rep(0,len.trials*cur.set_size),nrow=cur.set_size,ncol=length(cur.choice.dat[,trialid]))
   for (i in seq(cur.set_size)){
     valuations[i,] = cur.choice.dat[[i]]*drift.rate
   }

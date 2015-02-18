@@ -55,6 +55,8 @@ IntegerVector aevacc_hist(int nr_reps,
 
    // moreover we have to add a variable storing the current fixation position
    IntegerVector cur_fixpos(1);
+   IntegerVector cur_fixdur(1);
+   IntegerVector temp_fixpos(1);
 
    // moreover we need a variable that counts the amount of fixations we use
    int cur_fix_cnt = 0;
@@ -64,7 +66,7 @@ IntegerVector aevacc_hist(int nr_reps,
 
    // Initialize vector that stores all fixation locations that can be sampled from later (see usage of vector below)
    IntegerVector eligible(nr_items);
-   for (in i = 0; i < nr_items; i++){
+   for (int i = 0; i < nr_items; i++){
      eligible[i] = i + 1;
    }
 
