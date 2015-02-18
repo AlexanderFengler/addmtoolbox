@@ -23,7 +23,7 @@ train.dat = list(subjects = c(-1),
                  thetas = seq(0.2,1,0.2),             #default seq(0.0,1,0.1)
                  sds = seq(0.02,0.1,0.02),            #default seq(0,0.2,0.025)
                  non.decision.times = 0,
-                 timesteps.ms = timesteps,
+                 timesteps.ms = timesteps.ms,
                  nr.reps = nr.reps,
                  model.type = model.type,
                  output.type = "Fake",
