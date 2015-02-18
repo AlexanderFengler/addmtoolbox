@@ -18,22 +18,23 @@ decisions = data.table(decision = 0,
 
 rts = data.table(rt = 0)
 
-choice.dat = cbind(val.dat,decisions,rts)
+addm.choice.dat.fake <<- cbind(val.dat,decisions,rts)
+addm.eye.dat.fake <<- data.table(fixloc = 0,fixnr=0,fixdur=0,trialid = 1:25)
 
-core.clean.model.test.dat = list(choice.dat = choice.dat,
-                                 fixations = data.table(fixloc = 0,fixnr=0,fixdur=0,trialid = 1:25),
+core.clean.model.test.dat = list(choice.dat = addm.choice.dat.fake,
+                                 eye.dat = addm.eye.dat.fake,
                                  timestep.ms = 10,
                                  nr.reps = 10000,
                                  model.type = "nomem",
                                  fixation.model = "FakePath",
                                  output.type = "Fake",
-                                 core.parameters = c(0.005,0.5,0.05,0), # order of core parameter: drift.rate, sd, theta, non.decision.time
+                                 core.parameters = c(0.006,0.6,0.06,0), # order of core parameter: drift.rate, sd, theta, non.decision.time
                                  generate = generate) # the last model parameter tells the model to generate a data.frame instead of running log.likelihood test
 #------------------------------------------------------------------------------------------------------------------------------------------
 
 # RUN MODEL -------------------------------------------------------------------------------------------------------------------------------
 aDDM(core.clean.model.test.dat$choice.dat,
-     core.clean.model.test.dat$fixations,
+     core.clean.model.test.dat$eye.dat,
      core.clean.model.test.dat$core.parameters,
      core.clean.model.test.dat$nr.reps,
      core.clean.model.test.dat$model.type,

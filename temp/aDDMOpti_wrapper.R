@@ -48,7 +48,7 @@ for(trial in trials){
 # Step 2
 # We adjust the last fixation length for each trial such that we have data until the end of the rt.bin that the particular trial is assigned to
 # Moreover we add a little more to allow the aDDM to go on after the real rt.bin is passed (to assign the simulation run as a failure)
-eye$Duration[eye$Last.fix.binary == 1] = eye$Duration[eye$Last.fix.binary == 1] + eye$rt.add.last[eye$Last.fix.binary == 1] + 100
+eye$Duration[eye$Last.fix.binary == 1] = eye$Duration[eye$Last.fix.binary == 1] + eye$rt.add.last[eye$Last.fix.binary == 1] + rtbinsize
 
 # Finalize the two data.table
 choice = choice[,list(Subject,Set_size,Snack_1,Snack_2,Snack_3,Snack_4,Snack_5,Snack_6,Snack_7,Snack_8,Snack_picked,RT_no_sacc,rtup,rtdown,Trialid)]
