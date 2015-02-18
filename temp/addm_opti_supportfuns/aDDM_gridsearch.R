@@ -3,8 +3,8 @@
 
 # There are 4 types of aDDM that can be run here
 
-# Two different output types: 
-# 1 Loglikelihood for optimization purposes 
+# Two different output types:
+# 1 Loglikelihood for optimization purposes
 # 2 Full Output for purposes of detailed observation of a particular parameter setup
 
 # Two differen fixation models
@@ -46,19 +46,19 @@ aDDM.gridsearch = function(cur.choice.dat,
                            generate){
 
   # The parameter matrix needs to be puts into iterator form with the help of iter()
-  
+
   ita = iter(parameter.matrix,by="row")
 
   ###################################### RUN ALL PARAMETERS IN PARALLEL WITH FOREACH ############################################
   ###############################################################################################################################
   #-------------------------------------------------------------------------------------------------------------------------------------
-  
+
   out = list(0)
-  
+
   if (output.type == "Opti"){
-    
+
     sink(cur.log.file,append=TRUE)
-    
+
     out[[1]] = foreach (i = ita,.combine='rbind') %dopar% aDDM_fast(cur.choice.dat,
                                                                     cur.eye.dat,
                                                                     i,
@@ -66,14 +66,14 @@ aDDM.gridsearch = function(cur.choice.dat,
                                                                     model.type,
                                                                     fixation.model,
                                                                     timestep.ms)
-    
+
     cur.sink.num = sink.number()
     for (z in 1:cur.sink.num){
     sink(NULL)
     }
-    
+
     temp = do.call(rbind,out)
-    
+
     out = data.table(Subject = cur.subject,
                      Set.size = cur.set_size,
                      Drift.Rate = temp[,1],
@@ -84,12 +84,12 @@ aDDM.gridsearch = function(cur.choice.dat,
                      Log.Likelihood = temp[,6]);
     return(out)
   }
-    
 
-  if (output.type == "FakeOpti"){
+
+  if (output.type == "Fake"){
 
     sink(cur.log.file,append=TRUE)
-    
+
     out[[1]] = foreach (i = ita,.combine='rbind') %dopar% aDDM(cur.choice.dat,
                                                                cur.eye.dat,
                                                                i,
@@ -99,12 +99,12 @@ aDDM.gridsearch = function(cur.choice.dat,
                                                                fixation.model,
                                                                timestep.ms,
                                                                generate)
-    
+
     cur.sink.num = sink.number()
     for (z in 1:cur.sink.num){
       sink(NULL)
     }
-    
+
     temp = do.call(rbind,out)
 
     out = data.table(Subject = cur.subject,
@@ -115,7 +115,7 @@ aDDM.gridsearch = function(cur.choice.dat,
                      Non.decision.time = temp[,4],
                      Nr.Reps = temp[,5],
                      Log.Likelihood = temp[,6]);
-    
+
     return (out)
   }
   #-------------------------------------------------------------------------------------------------------------------------------------

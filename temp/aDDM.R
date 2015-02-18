@@ -188,22 +188,26 @@ aDDM = function(cur.choice.dat,
 
     # If we run the function to generate a data frame instead of getting log likelihood we just return the frame here
     if (generate == 1){
+      setnames(addm.choice.table,'choice.p','choice.p.fake')
       addm.choice.table.fake <<- addm.choice.table
       return()
     }
 
 ############################### CALCULATING LOGLIKELIHOOD ###########################################################################################
 #-------------------------------------------------------------------------------------------------------------------------------------
-    setnames(addm.choice.table.fake,'choice.p','choice.p.fake')
     setkey(addm.choice.table,trialid,decision,rtbins)
     setkey(addm.choice.table.fake,trialid,decision,rtbins)
 
-    temp.table = addm.choice.table.fake[addm.choice.table]
-
+    temp.table = addm.choice.table[addm.choice.table.fake]
+    #temp.table = temp.table[!is.na(choice.p.fake),]
+    temp.table[is.na(choice.p),choice.p:=0.000001]
+#return(temp.table)
     # account for unlikely bins
-    temp.table[is.na(temp.table)] = 0.0000001
-    temp.table[,log.lik:=log(choice.p)*choice.p.fake]
+    #temp.table[is.na(temp.table)] = 0.0000001
 
+    #temp.table = temp.table[complete.cases(temp.table),]
+    temp.table[,log.lik:=log(choice.p)*choice.p.fake]
+#return(temp.table)
     LogLik = sum(temp.table[,log.lik])
 
   # Now store loglikelihood -----------------------------------------------------------------------------------------------------------

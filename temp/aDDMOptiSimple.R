@@ -91,7 +91,6 @@ aDDMOpti = function(subjects,                    # Subject to be tested: -1 = Mo
       setkey(cur.eye.dat,trialid)
       # ---------------------------------------------------------------------------------------------
 
-      #
       # GENERATE PARAMETER MATRIX -------------------------------------------------------------------
       parameter.matrix = param.combs(drifts,
                                      sds,
@@ -156,7 +155,7 @@ aDDMOpti = function(subjects,                    # Subject to be tested: -1 = Mo
 
       # SAVE LOGLIKS ----------------------------------------------------------------------------------
       if (cur.subject == -1){
-        cur.file = paste('temp/model_testing/loglik_modeltest_',toString(cur.set_size), sep="")
+        cur.file = paste('temp/loglik_modeltest_',toString(cur.set_size), sep="")
       }
 
       if (cur.subject == 0){

@@ -6,12 +6,11 @@
 # ----------------------------------------------------------------------------------------------
 
 
-addm_fit_artificial = function(nr.reps = 2000,timesteps.ms = 10,model.type = 'nomem'){
+addm_fit_artificial = function(nrsims = 5000,timesteps.ms = 10,addmmodel = 'nomem'){
 
 library(data.table)
 library(tidyr)
 library(dplyr)
-
 
 # Create List that contains all necessary information to run the aDDM optimization in one place
 # ---------------------------------------------------------------------------------------------
@@ -24,12 +23,12 @@ train.dat = list(subjects = c(-1),
                  sds = seq(0.02,0.1,0.02),            #default seq(0,0.2,0.025)
                  non.decision.times = 0,
                  timesteps.ms = timesteps.ms,
-                 nr.reps = nr.reps,
-                 model.type = model.type,
+                 nr.reps = nrsims,
+                 model.type = addmmodel,
                  output.type = "Fake",
                  fixation.model="FakePath",
-                 allow.extension = 1,
-                 allow.fine.grid = 1,
+                 allow.extension = 0,
+                 allow.fine.grid = 0,
                  generate = 0)
 # ----------------------------------------------------------------------------------------------
 

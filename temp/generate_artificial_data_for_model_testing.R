@@ -24,11 +24,11 @@ addm.eye.dat.fake <<- data.table(fixloc = 0,fixnr=0,fixdur=0,trialid = 1:25)
 core.clean.model.test.dat = list(choice.dat = addm.choice.dat.fake,
                                  eye.dat = addm.eye.dat.fake,
                                  timestep.ms = 10,
-                                 nr.reps = 10000,
+                                 nr.reps = 5000,
                                  model.type = "nomem",
                                  fixation.model = "FakePath",
                                  output.type = "Fake",
-                                 core.parameters = c(0.006,0.6,0.06,0), # order of core parameter: drift.rate, sd, theta, non.decision.time
+                                 core.parameters = c(0.006,0.6,0.06,0), # order of core parameter: drift.rate, theta, sd, non.decision.time
                                  generate = 1) # the last model parameter tells the model to generate a data.frame instead of running log.likelihood test
 #------------------------------------------------------------------------------------------------------------------------------------------
 
