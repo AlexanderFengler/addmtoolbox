@@ -38,7 +38,6 @@ train.dat = list(subjects = c(-1),
 # Source Model function
 source('temp/aDDMOptiSimple.R')
 
-
 # Model Function
 aDDMOpti(train.dat$subjects,
          train.dat$set.sizes,
