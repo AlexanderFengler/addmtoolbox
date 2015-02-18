@@ -4,16 +4,13 @@
 
 # According to some model parameters that we chose we need to adjust a few columns in our main data
 # ----------------------------------------------------------------------------------------------
-
-
 addm_fit_artificial = function(nrsims = 5000,timesteps.ms = 10,addmmodel = 'nomem'){
 
 library(data.table)
 library(tidyr)
 library(dplyr)
 
-# Create List that contains all necessary information to run the aDDM optimization in one place
-# ---------------------------------------------------------------------------------------------
+# CREATE MODEL FITTING INPUT DATA--------------------------------------------------------------
 train.dat = list(subjects = c(-1),
                  set.sizes = c(0),
                  choice.dat = addm.choice.dat.fake,
@@ -32,9 +29,8 @@ train.dat = list(subjects = c(-1),
                  generate = 0)
 # ----------------------------------------------------------------------------------------------
 
-# Run the model
-# ----------------------------------------------------------------------------------------------
-# Source Model function
+# RUN THE MODEL---------------------------------------------------------------------------------
+# Source fitting function
 source('temp/aDDMOptiSimple.R')
 
 # Model Function
@@ -54,6 +50,6 @@ aDDMOpti(train.dat$subjects,
          train.dat$allow.extension,
          train.dat$allow.fine.grid,
          train.dat$generate)
+# ------------------------------------------------------------------------------------------------
 }
-# ----------------------------------------------------------------------------------------------
 

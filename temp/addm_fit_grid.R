@@ -4,22 +4,22 @@
 
 # Several options: run by subject, run with fake dataset, run over all subjects
 
-aDDMOpti = function(subjects,                    # Subject to be tested: -1 = Model testing with fake data // 0 = Fit over all subjects // > 0 fit by subject
-                   set.sizes,                   # Set sizes to be tested
-                   choice.dat,                  # Choice data - Needs: All item values per condition as seperate columns by item, item chosen,subject, set.sizes, trialid, RT
-                   eye.dat,                     # Fixation data - Needs: Fixation Locations, Fixation Durations, subject, set.sizes, trialid (sorted within trial according to fixation number)
-                   drifts,                      # Minimum Drift Rate we consider in grid
-                   thetas,                      # Minimum Theta we consider in grid
-                   sds,                         # Minimum SD we consider in grid
-                   non.decision.times,          # Minimum Non Decision Time
-                   timestep.ms,                 # Timestep-size in milliseconds for aDDM simulation propagation
-                   nr.reps,                     # Number of repitions used in simulation runs
-                   model.type,                  # Currently choice between model with memory effects, divided in no drift for items not seen ('mem') and no drift and no sd for items not seen ('memzeronoise') and without ('nomem')
-                   output.type,                 # Output type can be: "Opti" - Normal loglikelihood for model optimization, "FakeOpti" - loglikelihoods for optimization for artificially created data
-                   fixation.model,              # Fixation model used in simulations: "Normal" - Real Fixations used, "Random", "FakePath" - prespecified path for fixations
-                   allow.extension,             # Binary, whether we allow extensions of the grid in case we find corner-solution
-                   allow.fine.grid,             # Binary, whether we allow the fine-grid step in the grid search procedure
-                   generate){                   # Generate (binary) tells the aDDM function whether to spit out full data (1) or log likelihoods (0)
+addm_fit_grid = function(subjects,                    # Subject to be tested: -1 = Model testing with fake data // 0 = Fit over all subjects // > 0 fit by subject
+                         set.sizes,                   # Set sizes to be tested
+                         choice.dat,                  # Choice data - Needs: All item values per condition as seperate columns by item, item chosen,subject, set.sizes, trialid, RT
+                         eye.dat,                     # Fixation data - Needs: Fixation Locations, Fixation Durations, subject, set.sizes, trialid (sorted within trial according to fixation number)
+                         drifts,                      # Minimum Drift Rate we consider in grid
+                         thetas,                      # Minimum Theta we consider in grid
+                         sds,                         # Minimum SD we consider in grid
+                         non.decision.times,          # Minimum Non Decision Time
+                         timestep.ms,                 # Timestep-size in milliseconds for aDDM simulation propagation
+                         nr.reps,                     # Number of repitions used in simulation runs
+                         model.type,                  # Currently choice between model with memory effects, divided in no drift for items not seen ('mem') and no drift and no sd for items not seen ('memzeronoise') and without ('nomem')
+                         output.type,                 # Output type can be: "Opti" - Normal loglikelihood for model optimization, "FakeOpti" - loglikelihoods for optimization for artificially created data
+                         fixation.model,              # Fixation model used in simulations: "Normal" - Real Fixations used, "Random", "FakePath" - prespecified path for fixations
+                         allow.extension,             # Binary, whether we allow extensions of the grid in case we find corner-solution
+                         allow.fine.grid,             # Binary, whether we allow the fine-grid step in the grid search procedure
+                         generate){                   # Generate (binary) tells the aDDM function whether to spit out full data (1) or log likelihoods (0)
 
   # LOAD ALL PACKAGES AND FUNCTIONS NECESSARY ----------------------------------------------------
   # Load all high level functions needed

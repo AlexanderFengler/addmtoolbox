@@ -33,15 +33,15 @@ core.clean.model.test.dat = list(choice.dat = addm.choice.dat.fake,
 #------------------------------------------------------------------------------------------------------------------------------------------
 
 # RUN MODEL -------------------------------------------------------------------------------------------------------------------------------
-aDDM(core.clean.model.test.dat$choice.dat,
-     core.clean.model.test.dat$eye.dat,
-     core.clean.model.test.dat$core.parameters,
-     core.clean.model.test.dat$nr.reps,
-     core.clean.model.test.dat$model.type,
-     core.clean.model.test.dat$output.type,
-     core.clean.model.test.dat$fixation.model,
-     core.clean.model.test.dat$timestep.ms,
-     core.clean.model.test.dat$generate)
+addm_run(core.clean.model.test.dat$choice.dat,
+         core.clean.model.test.dat$eye.dat,
+         core.clean.model.test.dat$core.parameters,
+         core.clean.model.test.dat$nr.reps,
+         core.clean.model.test.dat$model.type,
+         core.clean.model.test.dat$output.type,
+         core.clean.model.test.dat$fixation.model,
+         core.clean.model.test.dat$timestep.ms,
+         core.clean.model.test.dat$generate)
 #------------------------------------------------------------------------------------------------------------------------------------------
 }
 

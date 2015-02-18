@@ -1,7 +1,6 @@
 ###### I AM GOING TO USE THE ADDM BASIS AND ADJUST IT TOWARDS NO ATTENTIONAL EFFECT
 
 #   inputs needed:
-
 # - item distribution matrix
 # - each item distribution is assigned a fixation path matrix
 # - fixation duration
@@ -17,15 +16,14 @@
 #               -- 'Full' returns the full data output for a specific model (every single simulation repetition as single row)
 # - timesteps used -- in ms (the model accounts for it then)
 
-aDDM_fast = function(cur.choice.dat,
-                     cur.eye.dat,
-                     core.parameters,
-                     nr.reps,
-                     model.type,
-                     fixation.model,
-                     timestep.ms){
+addm_trial = function(cur.choice.dat,
+                      cur.eye.dat,
+                      core.parameters,
+                      nr.reps,
+                      model.type,
+                      fixation.model,
+                      timestep.ms){
 
-  #
   # INITIALIZATION OF PARAMETERS -------------------------------------------------------------------------------------------------------
   drift.rate = core.parameters[1]
   theta = core.parameters[2]
@@ -44,7 +42,7 @@ aDDM_fast = function(cur.choice.dat,
     valuations[i,] = cur.choice.dat[[i]]*drift.rate
   }
 
-  # We generate a decisions vector and adjust the number to accomodate difference in indexing between R and C++
+  # Denerate a decisions vector and adjust the number to accomodate difference in indexing between R and C++
   decisions = cur.choice.dat[,decision] - 1 # Minus one because in C++ vectorsstart at indice zero
   #-------------------------------------------------------------------------------------------------------------------------------------
 
@@ -89,9 +87,9 @@ aDDM_fast = function(cur.choice.dat,
     }
 
   # CONTINUE BY CALCULATING LOG LIKELIHOOD----------------------------------------------------------------------------------------------
-    success.counts[success.counts == 0] = 0.0001
+    success.counts[success.counts == 0] = 0.00001
     total.log.lik = c(drift.rate,theta,cur.sd,non.decision.time,nr.reps,sum(log(success.counts/nr.reps)))
     print(total.log.lik)
     return(total.log.lik)
-  #-------------------------------------------------------------------------------------------------------------------------------------
+  # ------------------------------------------------------------------------------------------------------------------------------------
 }

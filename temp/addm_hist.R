@@ -17,7 +17,7 @@
 #               -- "nomem" use addm function without memory (normal Krajbich Type)
 # - generate -- boolean variable indicating whether we run the function to generate a data frame (1) or to get a log likelihood (0)
 
-aDDM = function(cur.choice.dat,
+addm_run = function(cur.choice.dat,
                 cur.eye.dat,
                 core.parameters,
                 nr.reps,
