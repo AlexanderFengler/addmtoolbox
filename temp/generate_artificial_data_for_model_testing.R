@@ -29,7 +29,7 @@ core.clean.model.test.dat = list(choice.dat = addm.choice.dat.fake,
                                  fixation.model = "FakePath",
                                  output.type = "Fake",
                                  core.parameters = c(0.006,0.6,0.06,0), # order of core parameter: drift.rate, sd, theta, non.decision.time
-                                 generate = generate) # the last model parameter tells the model to generate a data.frame instead of running log.likelihood test
+                                 generate = 1) # the last model parameter tells the model to generate a data.frame instead of running log.likelihood test
 #------------------------------------------------------------------------------------------------------------------------------------------
 
 # RUN MODEL -------------------------------------------------------------------------------------------------------------------------------
