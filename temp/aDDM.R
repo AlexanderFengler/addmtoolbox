@@ -1,7 +1,4 @@
-###### I AM GOING TO USE THE ADDM BASIS AND ADJUST IT TOWARDS NO ATTENTIONAL EFFECT
-
-#   inputs needed:
-
+#   Inputs needed:
 # - subject
 # - set size
 # - drift.rate
@@ -20,7 +17,7 @@
 #               -- "nomem" use addm function without memory (normal Krajbich Type)
 # - generate -- boolean variable indicating whether we run the function to generate a data frame (1) or to get a log likelihood (0)
 
-aDDM = function(cur.choice.dat,
+addm = function(cur.choice.dat,
                 cur.eye.dat,
                 core.parameters,
                 nr.reps,
@@ -30,34 +27,35 @@ aDDM = function(cur.choice.dat,
                 timestep.ms,
                 generate){
 
-  # INITIALIZATION OF PARAMETERS AND RELEVANT SUBSETS OF DATA FRAMES
-  #-------------------------------------------------------------------------------------------------------------------------------------
-  # initialize model parameters
+
+  # INITIALIZATION OF PARAMETERS AND RELEVANT SUBSETS OF DATA FRAMES--------------------------------------------------------------------
+
+  # Initialize model parameters
   drift.rate = core.parameters[1]
   theta = core.parameters[2]
   cur.sd = core.parameters[3]
   non.decision.time = core.parameters[4]
   #-------------------------------------------------------------------------------------------------------------------------------------
 
-  # SOME MISCELLANEOUS VARIABLES THAT ARE UTILIZED LATER
-  #-------------------------------------------------------------------------------------------------------------------------------------
-  # First we need to define max. RT
+  # SOME MISCELLANEOUS VARIABLES THAT ARE UTILIZED LATER--------------------------------------------------------------------------------
+
+  # First we need to define max.RT
   cur.max.RT = 40000 %/% timestep.ms
 
-  # generating column that provides a cutted (binned) version of reaction times
+  # Generating column that provides a cutted (binned) version of reaction times
   increment.distances = 100
   cur.breaks = c(rev(seq(20000,0,-increment.distances)),100000)
   #-------------------------------------------------------------------------------------------------------------------------------------
+
+  # INITIALIZATION OF ALL DATA FRAMES THAT WE NEED TO STORE addm RESULTS IN-------------------------------------------------------------
   nr_rows = length(cur.choice.dat[,trialid])*nr.reps
   len.trials = length(cur.choice.dat[,trialid])
   trialids = cur.choice.dat[,trialid]
 
-  # INITIALIZATION OF ALL DATA FRAMES THAT WE NEED TO STORE ADDM RESULTS IN
-  #-------------------------------------------------------------------------------------------------------------------------------------
   if (output.type == "Real" | output.type == "Fake"){
-  aDDM.output = matrix(rep(-1,nr_rows*2),nrow=nr_rows,ncol=2)
-  aDDM.output[,1] = -1 #Decision
-  aDDM.output[,2] = -1 #RT
+  addm.output = matrix(rep(-1,nr_rows*2),nrow=nr_rows,ncol=2)
+  addm.output[,1] = -1 #Decision
+  addm.output[,2] = -1 #RT
 
   output = rep(0,2*nr.reps)
   output.cols = c(1,2)
@@ -65,13 +63,13 @@ aDDM = function(cur.choice.dat,
   }
 
   if (output.type == "Full"){
-    aDDM.output = matrix(rep(-1,nr_rows*27),nrow=nr_rows,ncol=27)
-    aDDM.output[,1] = drift.rate
-    aDDM.output[,2] = theta
-    aDDM.output[,3] = cur.sd
-    aDDM.output[,4] = non.decision.time
+    addm.output = matrix(rep(-1,nr_rows*27),nrow=nr_rows,ncol=27)
+    addm.output[,1] = drift.rate
+    addm.output[,2] = theta
+    addm.output[,3] = cur.sd
+    addm.output[,4] = non.decision.time
 
-    # output cols are just the columns in which the output (Choices and RT's) will be stored
+    # output cols are the columns in which the output (Choices and RT's) will be stored
     output = rep(0,22*nr.reps)
     output.cols = seq(5,26)
     nr.output.cols = length(output.cols)
@@ -79,14 +77,15 @@ aDDM = function(cur.choice.dat,
 
   # Valuations is an intermediate matrix that is then filled into the ev.update (for evidence update) vector that is passed to the DDM function
   valuations=matrix(rep(0,len.trials*cur.set_size),nrow=cur.set_size,ncol=len.trials)
-  cur.set_size = length(which(cur.choice.dat[1,grep("^v[1-9]",names(cur.choice.dat)),with=FALSE] > -1))
+  cur.set_size = length(which(cur.choice.dat[1,grep("^v[1-9]*",names(cur.choice.dat)),with=FALSE] > -1))
   start.pos = which(names(cur.choice.dat) == "v1") # we define startpos, because there may be some columns in the cur.choice.dat data.table prior to the item valuation columns
+
   for (i in seq(cur.set_size)){
     valuations[i,] = cur.choice.dat[[start.pos + i - 1]]*drift.rate
   }
-
-  # DEFINE CORRCT EVIDENCE ACCUMULATION FUNCTION GIVEN INPUTS
   #-------------------------------------------------------------------------------------------------------------------------------------
+
+  # DEFINE CORRCT EVIDENCE ACCUMULATION FUNCTION GIVEN INPUTS---------------------------------------------------------------------------
   if (model.type == "nomem"){
     if (output.type == "Normal"){
       aevacc = aevacc_hist
@@ -106,18 +105,14 @@ aDDM = function(cur.choice.dat,
       aevacc = aevacc_full_output_withmem_zeronoise
     }
   }
-
-
   #-------------------------------------------------------------------------------------------------------------------------------------
 
-  # WE LOOP THROUGH ALL TRIALS FOR THE ADDM RUNS
-  #-------------------------------------------------------------------------------------------------------------------------------------
+  # WE LOOP THROUGH ALL TRIALS FOR THE addm RUNS----------------------------------------------------------------------------------------
   output.row.min = 1
   output.row.max = nr.reps
-
   cur.fix.nr = 0
   cnt = 1
-  #last.fix.add = 20000 %/% timestep.ms
+
   fixdur.vec = eye$fixdur.sampled %/% timestep.ms
 
   if (fixation.model == "FakePath"){
