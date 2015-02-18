@@ -24,14 +24,14 @@ aDDMOpti= function(subjects,                    # Subject to be tested: -1 = Mod
   # LOAD ALL PACKAGES AND FUNCTIONS NECESSARY
   # ----------------------------------------------------------------------------------------------
   # Load all high level functions needed
-  source('Analysis_Visualization/aDDM_Simulation/addm_opti_supportfuns/generate_parameter_combinations.R')
-  source('Analysis_Visualization/aDDM_Simulation/addm_opti_supportfuns/aDDM_gridsearch.R')
-  source('Analysis_Visualization/aDDM_Simulation/addm_opti_supportfuns/check_grid_search_completeness.R')
-  source('Analysis_Visualization/aDDM_Simulation/addm_opti_supportfuns/check_and_update_corners.R')
-  source('Analysis_Visualization/aDDM_Simulation/addm_opti_supportfuns/generate_fine_grid.R')
+  source('temp/addm_opti_supportfuns/generate_parameter_combinations.R')
+  source('temp/addm_opti_supportfuns/aDDM_gridsearch.R')
+  source('temp/addm_opti_supportfuns/check_grid_search_completeness.R')
+  source('temp/addm_opti_supportfuns/check_and_update_corners.R')
+  source('temp/addm_opti_supportfuns/generate_fine_grid.R')
 
 
-  source('Analysis_Visualization/aDDM_Simulation/load_packages_scripts_aDDM.R')
+  source('temp/load_packages_scripts_aDDM.R')
   # Initialize all packages
   load.aDDM.packages()
 
@@ -43,7 +43,7 @@ aDDMOpti= function(subjects,                    # Subject to be tested: -1 = Mod
   # ---------------------------------------------------------------------------------------------
 
   # Initialize the logfile we are going to use for storing results from the gridsearch
-  cur.log.file = "Sim_logs/cur_log.txt"
+  cur.log.file = "temp/cur_log.txt"
   writeLines(c(""),cur.log.file)
 
   # In case we find corner solutions what parameter shift shall we allow per round (balance between degree of exploration and time spend computing)
@@ -68,7 +68,7 @@ aDDMOpti= function(subjects,                    # Subject to be tested: -1 = Mod
 
       # EXTRACT RELEVANT VALUATIONS
         if (cur.subject == -1){
-          cur.choice.dat = core.clean.model.test.dat$items_4
+          cur.choice.dat = core.clean.model.test.dat$choice.dat
         } else if (cur.subject == 0){
           cur.choice.dat =  choice.dat[choice.dat$set_size == cur.set_size, names(choice.dat),with=FALSE]
         } else {
@@ -163,15 +163,15 @@ aDDMOpti= function(subjects,                    # Subject to be tested: -1 = Mod
       # SAVE LOGLIKS
       # ---------------------------------------------------------------------------------------------
       if (cur.subject == -1){
-        cur.file = paste('Sim_logs/model_testing/loglik_modeltest_',toString(cur.set_size), sep="")
+        cur.file = paste('temp/model_testing/loglik_modeltest_',toString(cur.set_size), sep="")
       }
 
       if (cur.subject == 0){
-        cur.file = paste('Sim_logs/loglik_',model.type,'_all_setsize_', toString(cur.set_size), sep="")
+        cur.file = paste('temp/loglik_',model.type,'_all_setsize_', toString(cur.set_size), sep="")
       }
 
       if (cur.subject > 0){
-        cur.file = paste('Sim_logs/loglik_',model.type,'_subject_', toString(cur.subject), '_setsize_', toString(cur.set_size), sep="")
+        cur.file = paste('temp/loglik_',model.type,'_subject_', toString(cur.subject), '_setsize_', toString(cur.set_size), sep="")
       }
 
       cur.file = paste(cur.file,".txt",sep="")
