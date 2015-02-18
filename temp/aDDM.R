@@ -199,6 +199,9 @@ aDDM = function(cur.choice.dat,
     setkey(addm.choice.table.fake,trialid,decision,rtbins)
 
     temp.table = addm.choice.table.fake[addm.choice.table]
+
+    # account for unlikely bins
+    temp.table[is.na(temp.table)] = 0.0000001
     temp.table[,log.lik:=log(choice.p)*choice.p.fake]
 
     LogLik = sum(temp.table[,log.lik])
