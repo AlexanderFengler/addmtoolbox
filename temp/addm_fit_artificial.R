@@ -36,7 +36,8 @@ train.dat = list(subjects = c(-1),
 # Run the model
 # ----------------------------------------------------------------------------------------------
 # Source Model function
-source('temp/aDDMOpti.R')
+source('temp/aDDMOptiSimple.R')
+
 
 # Model Function
 aDDMOpti(train.dat$subjects,

@@ -4,7 +4,7 @@
 
 # Several options: run by subject, run with fake dataset, run over all subjects
 
-aDDMOpti= function(subjects,                    # Subject to be tested: -1 = Model testing with fake data // 0 = Fit over all subjects // > 0 fit by subject
+aDDMOpti = function(subjects,                    # Subject to be tested: -1 = Model testing with fake data // 0 = Fit over all subjects // > 0 fit by subject
                    set.sizes,                   # Set sizes to be tested
                    choice.dat,                  # Choice data - Needs: All item values per condition as seperate columns by item, item chosen,subject, set.sizes, trialid, RT
                    eye.dat,                     # Fixation data - Needs: Fixation Locations, Fixation Durations, subject, set.sizes, trialid (sorted within trial according to fixation number)

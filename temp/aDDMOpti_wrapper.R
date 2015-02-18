@@ -79,7 +79,7 @@ core.clean.train.dat = list(subjects = c(0),
 # Run the model
 # ----------------------------------------------------------------------------------------------
 # Source Model function
-source('Analysis_Visualization/aDDM_Simulation/aDDMOpti.R')
+source('temp/aDDMOptiSimple.R')
 
 # Model Function
 aDDMOpti(core.clean.train.dat$subjects,
