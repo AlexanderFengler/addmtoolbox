@@ -55,21 +55,20 @@ addm_dataprep = function(choice.dat,eye.dat,timestep.ms,rtbinsize){
 
   # Create List that contains all necessary information to run the aDDM optimization in one place
   # ----------------------------------------------------------------------------------------------
-  core.clean.train.dat = list(subjects = c(0),
-                              set.sizes = c(4),
-                              choice.dat = choice,
-                              eye.dat = eye,
-                              drifts = seq(0.00,0.03,0.005),     #default seq(0.00,0.03,0.005)
-                              thetas = seq(0.0,1,0.1),           #default seq(0.0,1,0.1)
-                              sds = seq(0,0.2,0.025),            #default seq(0,0.2,0.025)
-                              non.decision.times = 0,
-                              timesteps.ms = 10,
-                              nr.reps = 5000,
-                              model.type = 'nomem',
-                              output.type = "Opti",
-                              fixation.model="Normal",
-                              allow.extension = 1,
-                              allow.fine.grid = 1,
-                              generate = 0)
-
+  addm.ready.frame = list(subjects = c(0),
+                          set.sizes = c(4),
+                          choice.dat = choice,
+                          eye.dat = eye,
+                          drifts = seq(0.00,0.03,0.005),     #default seq(0.00,0.03,0.005)
+                          thetas = seq(0.0,1,0.1),           #default seq(0.0,1,0.1)
+                          sds = seq(0,0.2,0.025),            #default seq(0,0.2,0.025)
+                          non.decision.times = 0,
+                          timesteps.ms = 10,
+                          nr.reps = 5000,
+                          model.type = 'nomem',
+                          output.type = "Opti",
+                          fixation.model="Normal",
+                          allow.extension = 1,
+                          allow.fine.grid = 1,
+                          generate = 0)
 }
