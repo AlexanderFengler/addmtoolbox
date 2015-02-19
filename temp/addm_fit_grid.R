@@ -92,10 +92,7 @@ addm_fit_grid = function(subjects,                    # Subject to be tested: -1
       # ---------------------------------------------------------------------------------------------
 
       # GENERATE PARAMETER MATRIX -------------------------------------------------------------------
-      parameter.matrix = param.combs(drifts,
-                                     sds,
-                                     thetas,
-                                     non.decision.times)
+      parameter.matrix = as.matrix(expand.grid(drifts,sds,thetas,non.decision.times))
       # ---------------------------------------------------------------------------------------------
 
       # RUN COARSE GRID SEARCH ----------------------------------------------------------------------
