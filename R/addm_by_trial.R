@@ -1,51 +1,48 @@
-###### I AM GOING TO USE THE ADDM BASIS AND ADJUST IT TOWARDS NO ATTENTIONAL EFFECT
+#' Runs the model by trial
+#' @author Alexander Fengler, \email{alexanderfengler@@gmx.de}
+#' @title Model run by trial
+#' @return Returns a log likelihood value.
+#' \code{addm_by_trial} Returns log likelihood
+#' @export
+#' @param eye.dat A 'data.frame' or 'data.table' storing eyetracking data by trial. Fixation location (fixloc), Fixation number (fixnr), Fixation duration (fixdur) and an id column (id). Can all be initialized as zero columns when a by condition fit is attempted.
+#' @param choice.dat A 'data.frame' or  'data.table' storing the item valuations (v1,v2...) , reaction times in ms (rt), decisions as decision and an id column (id). A by trial form is assumed.
+#' @param model.parameters A vector with the four core addm parameters in order (drift.rate,theta,sd,non.decision.time).
+#' @param nr.reps An integer number that tells the function how many simulation runs to use.
+#' @param model.type A string that indicates which version of the model to run. 'standard' or 'memnoise' when memory effects shall be allowed.
+#' @param timestep An integer number that provides the timestep-size that is used in the simulations (in ms).
 
-#   inputs needed:
-# - item distribution matrix
-# - each item distribution is assigned a fixation path matrix
-# - fixation duration
-# - drift rate
-# - theta
-# - standard deviation
-
-# - number of repetitions used -- nr.reps
-# - model.type -- "standard" or "memnoise"  two model types so far, with memory and without memory effects (memory effects currently theta = 0 for unseen items)
-# - fixation.model -- 'Normal' or 'Random'
-# - timesteps used -- in ms (the model accounts for it then)
-
-addm_by_trial = function(cur.choice.dat,
-                         cur.eye.dat,
-                         core.parameters,
+addm_by_trial = function(choice.dat,
+                         eye.dat,
+                         model.parameters,
                          nr.reps,
                          model.type,
-                         fixation.model,
-                         timestep.ms){
+                         timestep){
 
   # INITIALIZATION OF PARAMETERS -------------------------------------------------------------------------------------------------------
-  drift.rate = core.parameters[1]
-  theta = core.parameters[2]
-  cur.sd = core.parameters[3]
-  non.decision.time = core.parameters[4]
+  drift.rate = model.parameters[1]
+  theta = model.parameters[2]
+  cur.sd = model.parameters[3]
+  non.decision.time = model.parameters[4]
   #-------------------------------------------------------------------------------------------------------------------------------------
 
   # OTHER INITIALIZATIONS --------------------------------------------------------------------------------------------------------------
   # Get set size of current data set
-  cur.set_size = length(grep("^v[0-9]$",names(cur.choice.dat))) # this works only if the item columns are supplied according to the correct naming (v1,v2 etc.)
+  cur.set_size = length(grep("^v[0-9]$",names(choice.dat))) # this works only if the item columns are supplied according to the correct naming (v1,v2 etc.)
 
   # valuation is a matrix that already takes into account the drift rate to describe the per-timestep mean shift by item for each trial
   # is then supplied to the evidence accumulation function below
-  valuations=matrix(rep(0,len.trials*cur.set_size),nrow=cur.set_size,ncol=length(cur.choice.dat[,trialid]))
+  valuations=matrix(rep(0,len.trials*cur.set_size),nrow=cur.set_size,ncol=length(choice.dat[,trialid]))
 
   # Define position of vector where valuations start
-  start.pos = which(names(cur.choice.dat) == "v1")
+  start.pos = which(names(choice.dat) == "v1")
 
   # fill up valuations matrix
   for (i in seq(cur.set_size)){
-    valuations[i,] = cur.choice.dat[[start.pos + i - 1]]
+    valuations[i,] = choice.dat[[start.pos + i - 1]]
   }
 
   # Denerate a decisions vector and adjust the number to accomodate difference in indexing between R and C++
-  decisions = cur.choice.dat[,decision] - 1 # Minus one because in C++ vectorsstart at indice zero
+  decisions = choice.dat[,decision] - 1 # Minus one because in C++ vectorsstart at indice zero
   #-------------------------------------------------------------------------------------------------------------------------------------
 
   # INITIALIZE EVIDENCE ACCUMULATION FUNCTION ------------------------------------------------------------------------------------------
@@ -61,12 +58,12 @@ addm_by_trial = function(cur.choice.dat,
   # ------------------------------------------------------------------------------------------------------------------------------------
 
   # RUN MODEL --------------------------------------------------------------------------------------------------------------------------
-  success.counts = rep(0,length(cur.choice.dat[,trialid]))
+  success.counts = rep(0,length(choice.dat[,trialid]))
   cnt = 1
 
-  cur.rtbin.up = cur.choice.dat[,rtup]
-  cur.rtbin.down = cur.choice.dat[,rtdown]
-  trialids = cur.choice.dat[,trialid]
+  cur.rtbin.up = choice.dat[,rtup]
+  cur.rtbin.down = choice.dat[,rtdown]
+  trialids = choice.dat[,trialid]
 
   for (trial in trialids){
     # Extract Empirical Fixations and Fixations Durations

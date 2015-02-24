@@ -1,6 +1,20 @@
-// Author: Alexander Fengler
-// Date: February 22nd 2015
-// Title: rdvence accumulation for aDDM fitting by condition
+//' Runs evidence accumulation function (2 item case) for one trial condition
+//' \code{aevacc2_by_condition} Returns data.table with log likelihoods and corresponding parameter combinations
+//' @author Alexander Fengler, \email{alexanderfengler@@gmx.de}
+//' @title evidence accumulation (2 item case)
+//' @return Returns a vector that stores decisions and rts for each simulation run
+//' @export
+//' @param sd standard deviation used for drift diffusion process
+//' @param theta theta used for drift diffusion process
+//' @param non_decision_time non decision time used for drift diffusion process
+//' @param timestep timestep in ms associated with each step in the drift diffusion process
+//' @param nr_reps number of repitions (simulation runs)
+//' @param maxdur maximum duration in ms that the process is allowed to simulate
+//' @param update Vector that stores the item valuations for the trial conditon simulated
+//' @param fixpos Vector that stores the locations for a supplied fixed fixation pathway
+//' @param fixdur Vector that stores the fixation durations for a supplied fixed fixation pathway
+//' @param fixdursamples Vector from which fixation duration can be sampled once supplied fixations run out
+//' @param fixation_model a user supplied fixation model that will be utilized to supply fixation locations and potentially fixation durations
 
 #include <Rcpp.h>
 #include <Ziggurat.h>
@@ -13,19 +27,18 @@ static Ziggurat::Ziggurat::Ziggurat zigg;
 // [[Rcpp::depends(RcppZiggurat)]]
 // [[Rcpp::export]]
 
-IntegerVector aevacc2_by_condition(float cur_sd,
-                                  float theta,
-                                  float drift,
-                                  int non_decision_time,
-                                  int timestep,
-                                  int nr_reps,
-                                  int maxdur,
-                                  NumericVector update,
-                                  IntegerVector fixpos,
-                                  IntegerVector fixdur,
-                                  IntegerVector fixdursamples,
-                                  int nr_items,
-                                  Function s){
+IntegerVector aevacc2_by_condition(float sd,
+                                   float theta,
+                                   float drift,
+                                   int non_decision_time,
+                                   int timestep,
+                                   int nr_reps,
+                                   int maxdur,
+                                   NumericVector update,
+                                   IntegerVector fixpos,
+                                   IntegerVector fixdur,
+                                   IntegerVector fixdursamples,
+                                   Function fixation_model){
 
   // Set seed for random sampler ------------------------------------------------------------------
   NumericVector seed(1);
@@ -38,7 +51,8 @@ IntegerVector aevacc2_by_condition(float cur_sd,
   // ----------------------------------------------------------------------------------------------
 
   // Initialize Variables needed to propagate model -----------------------------------------------
-  float rdv;
+  int nr_items = update.size();
+    float rdv;
   bool decision = 0;
   int cur_rt = 0;
   int out_cnt = -2; // index for output vector
@@ -88,16 +102,16 @@ IntegerVector aevacc2_by_condition(float cur_sd,
 
         // get fixation duration
         if (fix_cnt == num_fixpos - 1){
-          cur_fixdur = s(fixdursamples,1);
+          cur_fixdur = fixation_model(fixdursamples,1);
         }
       } else if (fix_cnt > (num_fixpos - 1)){
 
         temp_fixpos[0] = cur_fixpos[0];
         // sample fixation and make sure the new fixation is not the same as the old one
         while (cur_fixpos[0] == temp_fixpos[0]){
-          cur_fixpos = s(potential_fixpos,1);
+          cur_fixpos = fixation_model(potential_fixpos,1);
         }
-        cur_fixdur = s(fixdursamples,1);
+        cur_fixdur = fixation_model(fixdursamples,1);
       }
       // ---------------------------------------------------------------------------------------
 
@@ -110,7 +124,7 @@ IntegerVector aevacc2_by_condition(float cur_sd,
       for (int rt_cur_fix = 0; rt_cur_fix < fixdur[fix_cnt];rt_cur_fix += timestep){
 
         // Accumulate rdvence for current timestep
-        rdv += (cur_update[0] - cur_update[1]) + cur_sd*zigg.norm();
+        rdv += (cur_update[0] - cur_update[1]) + sd*zigg.norm();
 
         //update RT
         cur_rt += timestep;

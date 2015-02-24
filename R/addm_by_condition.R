@@ -1,45 +1,43 @@
-#   Inputs needed:
-# - subject
-# - set size
-# - drift.rate
-# - theta
-# - standard deviation
-# - non decision time
+#' Runs the model by unique trial conditions.
+#' @author Alexander Fengler, \email{alexanderfengler@@gmx.de}
+#' @title Model run by condition
+#' @return The function has three potential return values. A log likelihood value, utilized when trying to fit the model. A simple data.table providing simulated rts,decisions by condition id, which useful for generating fake data in testing. A full model output with many details, utilized for running the model with optimal parameters and extracting data for plots.
+#' \code{addm_by_condition} Returns either log likelihoods, a simple id,decision,rt data frame or a detailed model output
+#' @export
+#' @param conditions.dat A 'data.frame' storing the item valuations (v1,v2...) by unique trial conditions. An id column (id) needs to be provided that matches by trial data.
+#' @param eye.dat A 'data.frame' or 'data.table' storing eyetracking data by trial. Fixation location (fixloc), Fixation number (fixnr), Fixation duration (fixdur) and an id column (id). Can all be initialized as zero columns when a by condition fit is attempted.
+#' @param choice.dat A 'data.frame' or  'data.table' storing the item valuations (v1,v2...) , reaction times in ms (rt), decisions as decision and an id column (id). A by trial form is assumed.
+#' @param model.parameters A vector with the four core addm parameters in order (drift.rate,theta,sd,non.decision.time).
+#' @param nr.reps An integer number that tells the function how many simulation runs to use.
+#' @param model.type A string that indicates which version of the model to run. 'standard' or 'memnoise' when memory effects shall be allowed.
+#' @param output.type A string that indicates what output the model shall produce. 'full' for detailed model output, 'fit' for sparse output (rt,decision) by id variable.
+#' @param fixation.model A string that indicates which fixation model will be utilized for simulations. 'random' for random fixations (implemented) 'fakepath' for following a predetermined fixation path with fixed durations (implemented)
+#' @param timestep An integer number that provides the timestep-size that is used in the simulations (in ms).
+#' @param generate Binary variable that tells the function to return either log likelihood values (0) or rt, decision (1). Relevant only if model.type variable is 'fit'.
 
-# - number of repetitions used -- nr.reps
-# - fixation.model -- 'normal'
-#                  -- 'fakepath' (used for fitting pregenerated datasets)
-#                  -- 'random'
-# - output.type -- 'full'
-#               -- 'fit'
-# - model.type -- "standard" use addm function with memory effects (whichever the best at the moment)
-#               -- "memnoise" use addm function without memory (normal Krajbich Type)
-# - generate -- boolean variable indicating whether we run the function to generate a data frame (1) or to get a log likelihood (0)
-
-addm_by_condition = function(conditions,
-                             cur.eye.dat,
+addm_by_condition = function(conditions.dat,
+                             eye.dat,
                              choice.dat,
-                             core.parameters,
+                             model.parameters,
                              nr.reps,
                              model.type,
                              output.type,
                              fixation.model,
-                             timestep.ms,
+                             timestep,
                              generate){
-
 
   # INITIALIZATION OF PARAMETERS AND RELEVANT SUBSETS OF DATA FRAMES--------------------------------------------------------------------
   # Initialize model parameters
-  drift.rate = core.parameters[1]
-  theta = core.parameters[2]
-  cur.sd = core.parameters[3]
-  non.decision.time = core.parameters[4]
+  drift.rate = model.parameters[1]
+  theta = model.parameters[2]
+  cur.sd = model.parameters[3]
+  non.decision.time = model.parameters[4]
   #-------------------------------------------------------------------------------------------------------------------------------------
 
   # SOME MISCELLANEOUS VARIABLES THAT ARE UTILIZED LATER--------------------------------------------------------------------------------
 
   # First we need to define max.RT
-  cur.max.RT = 40000 %/% timestep.ms
+  cur.max.RT = 40000 %/% timestep
 
   # Generating column that provides a cutted (binned) version of reaction times
   increment.distances = 100
@@ -47,19 +45,19 @@ addm_by_condition = function(conditions,
   #-------------------------------------------------------------------------------------------------------------------------------------
 
   # INITIALIZATION OF ALL DATA FRAMES THAT WE NEED TO STORE addm RESULTS IN-------------------------------------------------------------
-  nr_rows = length(conditions[,id])*nr.reps
-  len.trials = length(conditions[,id])
-  ids = conditions[,id]
-  cur.set_size = length(which(conditions[1,grep("^v[1-9]*",names(conditions)),with=FALSE] > -1))
+  nr_rows = length(conditions.dat[,id])*nr.reps
+  len.trials = length(conditions.dat[,id])
+  ids = conditions.dat[,id]
+  cur.set_size = length(which(conditions.dat[1,grep("^v[1-9]*",names(conditions.dat)),with=FALSE] > -1))
 
   # Define Matrix that stores values adjusted for drift rates // will be fed into evidence accumulaiton function
   valuations=matrix(rep(0,len.trials*cur.set_size),nrow=cur.set_size,ncol=len.trials)
 
   # Define position of vector where valuations start
-  start.pos = which(names(conditions) == "v1")
+  start.pos = which(names(conditions.dat) == "v1")
 
   for (i in seq(cur.set_size)){
-    valuations[i,] = conditions[[start.pos + i - 1]]
+    valuations[i,] = conditions.dat[[start.pos + i - 1]]
   }
 
   if (output.type == "fit"){
@@ -136,7 +134,7 @@ addm_by_condition = function(conditions,
                       theta,
                       drift.rate,
                       non.decision.time,
-                      timestep.ms,
+                      timestep,
                       nr.reps,
                       cur.max.RT,
                       valuations[,cnt],
@@ -180,7 +178,7 @@ addm_by_condition = function(conditions,
   } else if (output.type == "fit"){
 
     addm.output.frame = data.table(decision=addm.output[,1],
-                                   rt=addm.output[,2]*timestep.ms,
+                                   rt=addm.output[,2]*timestep,
                                    id=rep(ids,each=nr.reps))
 
     if (generate == 1){

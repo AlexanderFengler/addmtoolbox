@@ -1,8 +1,13 @@
-# Author: Alexander Fengler
-# Date: February 23rd 2015
-# Title: Prepare data to be supplied to
-# choice.dat - "v1","v2"...."vn","decision","rt","id"
-# eye,dat - "fixloc","fixnr","fixdur","trialid"
+#' Shapes up a 'data.frame' or 'data.table' to be straight usable with the other addm_*** functions
+#' \code{addm_dataprep} List of three components. A 'data.table' that stores all unique choice set conditions. A 'data.table' that stores eyetracking.data adjusted to be usable for by trial fits. A 'data.table' that stores by trial choice data. An id variable links all three data.tables.
+#' @param choice.dat A 'data.frame' or  'data.table' storing the item valuations (v1,v2...) , reaction times in ms (rt), decisions as decision and an id column (id). A by trial form is assumed.
+#' @param eye.dat A 'data.frame' or 'data.table' storing eyetracking data by trial. Fixation location (fixloc), Fixation number (fixnr), Fixation duration (fixdur) and an id column (id). Can all be initialized as zero columns when a by condition fit is attempted.
+#' @param timestep An integer number that provides the timestep-size that is used in the simulations (in ms).
+#' @param rtbinsize An integer number that provides the binsize that is used for binning reaction time data (in ms).
+#' @author Alexander Fengler, \email{alexanderfengler@@gmx.de}
+#' @title Data Preparation for easy supply to fit functions
+#' @return returns a list of three components. A 'data.table' that stores all unique choice set conditions. A 'data.table' that stores eyetracking.data adjusted to be usable for by trial fits. A 'data.table' that stores by trial choice data. An id variable links all three data.tables.
+#' @export
 
 addm_dataprep = function(choice.dat =  data.table(v1 = c(1,2,3),v2 = c(3,2,1),id = c(1,2,3),rt = c(0,0,0), decision = c(0,0,0)),
                          eye.dat = data.table(fixloc = 0,fixnr = 1, fixdur= 0, id = c(1,2,3)),

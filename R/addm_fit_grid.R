@@ -1,24 +1,40 @@
-# Author: Alexander Fengler
-# Date: Jan 16th 2015
-# Purpose: Main function running aDDM optimization based on grid search algorithm
+#' Runs grid search over supplied parameter space
+#' @author Alexander Fengler, \email{alexanderfengler@@gmx.de}
+#' @title Run Gridsearch over supplied parameter space
+#' @return Returns data.table with log likelihoods by parameter combination
+#' \code{addm_fit_grid} Returns data.table with log likelihoods by parameter combination
+#' @export
+#' @param eye.dat A 'data.frame' or 'data.table' storing eyetracking data by trial. Fixation location (fixloc), Fixation number (fixnr), Fixation duration (fixdur) and an id column (id). Can all be initialized as zero columns when a by condition fit is attempted.
+#' @param choice.dat A 'data.frame' or  'data.table' storing the item valuations (v1,v2...) , reaction times in ms (rt), decisions as decision and an id column (id). A by trial form is assumed.
+#' @param conditions.dat A 'data.frame' storing the item valuations (v1,v2...) by unique trial conditions. An id column (id) needs to be provided that matches by trial data.
+#' @param drifts Vector of all driftrate values to be tested.
+#' @param thetas Vector of all theta to be tested (between 0 and 1).
+#' @param sds Vector of all standard deviation values to be tested.
+#' @param non.decision.times Vector of all non decision times to be tested (in ms).
+#' @param timestep An integer number that provides the timestep-size that is used in the simulations (in ms).
+#' @param nr.reps An integer number that tells the function how many simulation runs to use.
+#' @param model.type A string that indicates which version of the model to run. 'standard' or 'memnoise' when memory effects shall be allowed.
+#' @param output.type A string that indicates what output the model shall produce. 'full' for detailed model output, 'fit' for sparse output (rt,decision) by id variable.
+#' @param fit.type A string indicating either 'condition' for fits by unique trial conditions or 'trial' for fits by trial.
+#' @param fixation.model A string that indicates which fixation model will be utilized for simulations. 'random' for random fixations (implemented) 'fakepath' for following a predetermined fixation path with fixed durations (implemented).
+#' @param allow.fine.grid Binary variable that indicates whether we allow (1) a fine grid to be created an searched around the coarse grid minimum or not (0).
+#' @param log.file Filepath for storage of logs
 
-# Several options: run by subject, run with fake dataset, run over all subjects
-
-addm_fit_grid = function(conditions = data.table(v1 = c(1,2,3),v2 = c(3,2,1),id = c(1,2,3)), # Choice data - Needs: All item values per condition as seperate columns by item, item chosen,subject, set.sizes, id, RT
-                         eye.dat = data.table(fixloc = 0,fixnr = 0, fixdur= 0, id = c(1,2,3)),                     # Fixation data - Needs: Fixation Locations, Fixation Durations, subject, set.sizes, id (sorted within trial according to fixation number)
+addm_fit_grid = function(conditions.dat = data.table(v1 = c(1,2,3),v2 = c(3,2,1),id = c(1,2,3)),
+                         eye.dat = data.table(fixloc = 0,fixnr = 0, fixdur= 0, id = c(1,2,3)),
                          choice.dat = data.table(v1 = c(1,2,3),v2 = c(3,2,1),id = c(1,2,3), rt = c(0,0,0), decision = c(1,1,1)),
-                         drifts = seq(0.002,0.01,0.002),                      # Minimum Drift Rate we consider in grid
-                         thetas = seq(0.2,1,0.2),                      # Minimum Theta we consider in grid
-                         sds = seq(0.02,0.1,0.02),                         # Minimum SD we consider in grid
-                         non.decision.times = 0,          # Minimum Non Decision Time
-                         timestep.ms = 10,                 # Timestep-size in milliseconds for aDDM simulation propagation
-                         nr.reps = 2000,                     # Number of repitions used in simulation runs
-                         model.type = 'nomem',                  # Currently choice between model with memory effects, divided in no drift for items not seen ('mem') and no drift and no sd for items not seen ('memzeronoise') and without ('nomem')
-                         output.type = 'condition',                 # Output type can be: "Opti" - Normal loglikelihood for model optimization, "FakeOpti" - loglikelihoods for optimization for artificially created data
-                         fixation.model = 'FakePath',              # Fixation model used in simulations: "Normal" - Real Fixations used, "Random", "FakePath" - prespecified path for fixations
-                         allow.fine.grid = 0,             # Binary, whether we allow the fine-grid step in the grid search procedure
-                         generate = 0,
-                         logfile = "defaultlog.txt"){                   # Generate (binary) tells the aDDM function whether to spit out full data (1) or log likelihoods (0)
+                         drifts = seq(0.002,0.01,0.002),
+                         thetas = seq(0.2,1,0.2),
+                         sds = seq(0.02,0.1,0.02),
+                         non.decision.times = 0,
+                         timestep = 10,
+                         nr.reps = 2000,
+                         model.type = 'standard',
+                         output.type = 'fit',
+                         fit.type = 'condition',
+                         fixation.model = 'fakepath',
+                         allow.fine.grid = 0,
+                         log.file = "defaultlog.txt"){
 
   # LOAD ALL PACKAGES AND FUNCTIONS NECESSARY ----------------------------------------------------
   # Load all high level functions needed
@@ -34,7 +50,7 @@ addm_fit_grid = function(conditions = data.table(v1 = c(1,2,3),v2 = c(3,2,1),id 
 
   # INITIALIZING VARIABLES THAT CAN BE MANIPULATED ------------------------------------------------
 
-  # Initialize the logfile we are going to use for storing results from the gridsearch
+  # Initialize the log.file we are going to use for storing results from the gridsearch
   cur.log.file = "temp/cur_addm_log.txt"
   writeLines(c(""),cur.log.file)
 
@@ -61,7 +77,7 @@ addm_fit_grid = function(conditions = data.table(v1 = c(1,2,3),v2 = c(3,2,1),id 
       # ---------------------------------------------------------------------------------------------
 
       # RUN coarse GRID SEARCH ----------------------------------------------------------------------
-      log.liks = addm_gridsearch_foreach(conditions,
+      log.liks = addm_gridsearch_foreach(conditions.dat,
                                          eye.dat,
                                          choice.dat,
                                          parameter.matrix,
@@ -70,7 +86,7 @@ addm_fit_grid = function(conditions = data.table(v1 = c(1,2,3),v2 = c(3,2,1),id 
                                          model.type,
                                          fixation.model,
                                          cur.log.file,
-                                         timestep.ms,
+                                         timestep,
                                          generate)
       # ---------------------------------------------------------------------------------------------
 
@@ -82,16 +98,16 @@ addm_fit_grid = function(conditions = data.table(v1 = c(1,2,3),v2 = c(3,2,1),id 
       if (allow.fine.grid == 1){
 
         # GENERATE FINE GRID ------------------------------------------------------------------------
-        fine.parameter.matrix = generate.fine.grid(drift.step.fine,
-                                                   sd.step.fine,
-                                                   thetas,
-                                                   non.decision.time.step.fine,
-                                                   coarse.to.fine.ratio,
-                                                   log.liks)
+        fine.parameter.matrix = addm_support_compute_finegrid(drift.step.fine,
+                                                              sd.step.fine,
+                                                              thetas,
+                                                              non.decision.time.step.fine,
+                                                              coarse.to.fine.ratio,
+                                                              log.liks)
         # ---------------------------------------------------------------------------------------------
 
         # RUN FINE GRID SEARCH ------------------------------------------------------------------------
-        fine.log.liks = addm_gridsearch_foreach(conditions,
+        fine.log.liks = addm_gridsearch_foreach(conditions.dat,
                                                 eye.dat,
                                                 choice.dat,
                                                 fine.parameter.matrix,
@@ -100,7 +116,7 @@ addm_fit_grid = function(conditions = data.table(v1 = c(1,2,3),v2 = c(3,2,1),id 
                                                 model.type,
                                                 fixation.model,
                                                 cur.log.file,
-                                                timestep.ms,
+                                                timestep,
                                                 generate)
         # ---------------------------------------------------------------------------------------------
 
@@ -112,10 +128,10 @@ addm_fit_grid = function(conditions = data.table(v1 = c(1,2,3),v2 = c(3,2,1),id 
       }
 
       # SAVE LOGLIKS ----------------------------------------------------------------------------------
-      write.table(log.liks,logfile,quote=FALSE, sep=" ", col.names=TRUE, row.names=FALSE)
+      write.table(log.liks,log.file,quote=FALSE, sep=" ", col.names=TRUE, row.names=FALSE)
 
       #Status
-      #print(paste(logfile,"done....",sep=': '))
+      #print(paste(log.file,"done....",sep=': '))
       # ---------------------------------------------------------------------------------------------
       return(log.liks)
       }

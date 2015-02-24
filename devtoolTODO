@@ -6,3 +6,11 @@ FROM DEVTOOL SUGGESTIONS:
 Next, include the following roxygen tags somewhere in your package:
 #' @useDynLib addmtools
 #' @importFrom Rcpp sourceCpp
+
+
+
+TO DO
+
+OTHER
+
+1. Solve the fixation_model supply thing in aevaccs more elegantly

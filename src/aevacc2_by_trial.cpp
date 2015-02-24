@@ -1,6 +1,21 @@
-// Author: Alexander Fengler
-// Date: February 22nd 2015
-// Title: aDDM evidence accumulation for by trial fits
+//' Runs evidence accumulation function (2 item case) for one trial condition
+//' \code{aevacc2_by_trial} Returns data.table with log likelihoods and corresponding parameter combinations
+//' @author Alexander Fengler, \email{alexanderfengler@@gmx.de}
+//' @title evidence accumulation (2 item case) by trial
+//' @return Returns a numeric variable that provides a success count (runs that predicted a reaction time in the correct rt-bin and simultaneously the correct decision)
+//' @export
+//' @param sd standard deviation used for drift diffusion process
+//' @param theta theta used for drift diffusion process
+//' @param non_decision_time non decision time used for drift diffusion process
+//' @param timestep timestep in ms associated with each step in the drift diffusion process
+//' @param nr_reps number of repitions (simulation runs)
+//' @param maxdur numeric variable that supplies the maximum reaction time considered a success in simulations
+//' @param mindur numeric variable that supplies the minimum reaction time considered a succes in simulations
+//' @param real_decision numeric variable that provides the empirical decision taken in trial
+//' @param maxdur maximum duration in ms that the process is allowed to simulate
+//' @param update Vector that stores the item valuations for the trial conditon simulated
+//' @param fixpos Vector that stores the locations for a supplied fixed fixation pathway
+//' @param fixdur Vector that stores the fixation durations for a supplied fixed fixation pathway
 
 #include <Rcpp.h>
 #include <Ziggurat.h>
@@ -16,16 +31,15 @@ static Ziggurat::Ziggurat::Ziggurat zigg;
 int aevacc2_by_trial(int nr_reps,
                      int maxdur,
                      int mindur,
-                     int cur_decision,
-                     float cur_sd,
+                     int real_decision,
+                     float sd,
                      float theta,
                      float drift,
                      int non_decision_time,
                      int timestep,
                      NumericVector update,
                      IntegerVector fixpos,
-                     IntegerVector fixdur,
-                     int nr_items){
+                     IntegerVector fixdur){
 
   // Set seed for random sampler --------------------------------------------------------------------
   NumericVector seed(1);
@@ -38,6 +52,7 @@ int aevacc2_by_trial(int nr_reps,
   // ------------------------------------------------------------------------------------------------
 
   // Initialize Variables need for model propagation ------------------------------------------------
+  int nr_items = update.size();
   float rdv = 0;
   bool decision = 1;
   int choice = 0;
@@ -80,7 +95,7 @@ int aevacc2_by_trial(int nr_reps,
         cur_rt += timestep;
 
         // accumulate evidence
-        rdv += (cur_update[0] - cur_update[1]) + cur_sd*zigg.norm();
+        rdv += (cur_update[0] - cur_update[1]) + sd*zigg.norm();
 
         // check whether decision made
         if (abs(rdv) >= 1){
@@ -113,7 +128,7 @@ int aevacc2_by_trial(int nr_reps,
       } else {
         choice = 1;
       }
-      if (choice - 1 == cur_decision){
+      if (choice - 1 == real_decision){
         if ((cur_rt + non_decision_time <= maxdur) && (cur_rt + non_decision_time >= mindur)){
           ++out;
         }
