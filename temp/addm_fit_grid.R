@@ -4,33 +4,28 @@
 
 # Several options: run by subject, run with fake dataset, run over all subjects
 
-addm_fit_grid = function(subjects,                    # Subject to be tested: -1 = Model testing with fake data // 0 = Fit over all subjects // > 0 fit by subject
-                         set.sizes,                   # Set sizes to be tested
-                         choice.dat,                  # Choice data - Needs: All item values per condition as seperate columns by item, item chosen,subject, set.sizes, trialid, RT
-                         eye.dat,                     # Fixation data - Needs: Fixation Locations, Fixation Durations, subject, set.sizes, trialid (sorted within trial according to fixation number)
-                         drifts,                      # Minimum Drift Rate we consider in grid
-                         thetas,                      # Minimum Theta we consider in grid
-                         sds,                         # Minimum SD we consider in grid
-                         non.decision.times,          # Minimum Non Decision Time
-                         timestep.ms,                 # Timestep-size in milliseconds for aDDM simulation propagation
-                         nr.reps,                     # Number of repitions used in simulation runs
-                         model.type,                  # Currently choice between model with memory effects, divided in no drift for items not seen ('mem') and no drift and no sd for items not seen ('memzeronoise') and without ('nomem')
-                         output.type,                 # Output type can be: "Opti" - Normal loglikelihood for model optimization, "FakeOpti" - loglikelihoods for optimization for artificially created data
-                         fixation.model,              # Fixation model used in simulations: "Normal" - Real Fixations used, "Random", "FakePath" - prespecified path for fixations
-                         allow.extension,             # Binary, whether we allow extensions of the grid in case we find corner-solution
-                         allow.fine.grid,             # Binary, whether we allow the fine-grid step in the grid search procedure
-                         generate){                   # Generate (binary) tells the aDDM function whether to spit out full data (1) or log likelihoods (0)
+addm_fit_grid = function(conditions = data.table(v1 = c(1,2,3),v2 = c(3,2,1),id = c(1,2,3)), # Choice data - Needs: All item values per condition as seperate columns by item, item chosen,subject, set.sizes, id, RT
+                         eye.dat = data.table(fixloc = 0,fixnr = 0, fixdur= 0, id = c(1,2,3)),                     # Fixation data - Needs: Fixation Locations, Fixation Durations, subject, set.sizes, id (sorted within trial according to fixation number)
+                         choice.dat = data.table(v1 = c(1,2,3),v2 = c(3,2,1),id = c(1,2,3), rt = c(0,0,0), decision = c(1,1,1)),
+                         drifts = seq(0.002,0.01,0.002),                      # Minimum Drift Rate we consider in grid
+                         thetas = seq(0.2,1,0.2),                      # Minimum Theta we consider in grid
+                         sds = seq(0.02,0.1,0.02),                         # Minimum SD we consider in grid
+                         non.decision.times = 0,          # Minimum Non Decision Time
+                         timestep.ms = 10,                 # Timestep-size in milliseconds for aDDM simulation propagation
+                         nr.reps = 2000,                     # Number of repitions used in simulation runs
+                         model.type = 'nomem',                  # Currently choice between model with memory effects, divided in no drift for items not seen ('mem') and no drift and no sd for items not seen ('memzeronoise') and without ('nomem')
+                         output.type = 'condition',                 # Output type can be: "Opti" - Normal loglikelihood for model optimization, "FakeOpti" - loglikelihoods for optimization for artificially created data
+                         fixation.model = 'FakePath',              # Fixation model used in simulations: "Normal" - Real Fixations used, "Random", "FakePath" - prespecified path for fixations
+                         allow.fine.grid = 0,             # Binary, whether we allow the fine-grid step in the grid search procedure
+                         generate = 0,
+                         logfile = "defaultlog.txt"){                   # Generate (binary) tells the aDDM function whether to spit out full data (1) or log likelihoods (0)
 
   # LOAD ALL PACKAGES AND FUNCTIONS NECESSARY ----------------------------------------------------
   # Load all high level functions needed
-  source('temp/addm_opti_supportfuns/generate_parameter_combinations.R')
-  source('temp/addm_opti_supportfuns/aDDM_gridsearch.R')
-  source('temp/addm_opti_supportfuns/check_grid_search_completeness.R')
-  source('temp/addm_opti_supportfuns/check_and_update_corners.R')
-  source('temp/addm_opti_supportfuns/generate_fine_grid.R')
+  source('temp/addm_opti_supportfuns/addm_support_compute_finegrid.R')
+  source('temp/addm_opti_supportfuns/addm_support_gridsearch_foreach.R')
+  source('temp/addm_support_scripts_packages.R')
 
-
-  source('temp/load_packages_scripts_aDDM.R')
   # Initialize all packages
   load.aDDM.packages()
 
@@ -40,19 +35,12 @@ addm_fit_grid = function(subjects,                    # Subject to be tested: -1
   # INITIALIZING VARIABLES THAT CAN BE MANIPULATED ------------------------------------------------
 
   # Initialize the logfile we are going to use for storing results from the gridsearch
-  cur.log.file = "temp/cur_log.txt"
+  cur.log.file = "temp/cur_addm_log.txt"
   writeLines(c(""),cur.log.file)
-
-  # In case we find corner solutions what parameter shift shall we allow per round (balance between degree of exploration and time spend computing)
-  drift.shift = (drifts[length(drifts)] - drifts[length(drifts)-1])*3
-  sd.shift = (sds[length(sds)] - sds[length(sds)-1])*3
-  non.decision.time.shift = (non.decision.times[length(non.decision.times)] -
-                               non.decision.times[length(non.decision.times)-1])*3
 
   # Parameters for fine grid search
   # Distance between two points on the grid by dimension (drift.rate,sd)
   coarse.to.fine.ratio = 5
-
   drift.step.fine = (drifts[length(drifts)] - drifts[length(drifts)-1])/coarse.to.fine.ratio
   theta.step.fine = (thetas[length(thetas)] - thetas[length(thetas)-1])/coarse.to.fine.ratio
   sd.step.fine = (sds[length(sds)] - sds[length(sds)-1])/coarse.to.fine.ratio
@@ -60,59 +48,34 @@ addm_fit_grid = function(subjects,                    # Subject to be tested: -1
                                    non.decision.times[length(non.decision.times)-1])/coarse.to.fine.ratio
   # -----------------------------------------------------------------------------------------------
 
-  for (cur.subject in subjects){
-    for (cur.set_size in set.sizes){
-      #
-      # GENERATING SUBSET OF DATA.FRAMES ----------------------------------------------------------
-
-      # EXTRACT RELEVANT VALUATIONS
-        if (cur.subject == -1){
-          cur.choice.dat = choice.dat
-        } else if (cur.subject == 0){
-          cur.choice.dat =  choice.dat[choice.dat$set_size == cur.set_size, names(choice.dat),with=FALSE]
-        } else {
-          cur.choice.dat =  choice.dat[choice.dat$subject == cur.subject &
-                                         choice.dat$set_size == cur.set_size, names(choice.dat),with=FALSE]
-        }
-      }
-
-      # EXTRACT RELEVANT FIXATIONS
-      if (cur.subject == -1) {
-        cur.eye.dat = eye.dat
-      } else if (cur.subject == 0){
-        cur.eye.dat = eye.dat[eye.dat$set_size == cur.set_size, list(fixloc,fixnr,fixdur,trialid)]
-      } else {
-        cur.eye.dat = eye.dat[eye.dat$subject == cur.subject &
-                                eye.dat$set_size == cur.set_size, list(fixloc,fixnr,fixdur,trialid)]
-      }
-
+      # Make choice.dat and eye.dat data.tables, in case they are not already
+      choice.dat = as.data.table(choice.dat)
+      eye.dat = as.data.table(eye.dat)
       # Set keys for the data.tables passed into function
-      setkey(cur.choice.dat,trialid)
-      setkey(cur.eye.dat,trialid)
+      setkey(choice.dat,id)
+      setkey(eye.dat,id)
       # ---------------------------------------------------------------------------------------------
 
       # GENERATE PARAMETER MATRIX -------------------------------------------------------------------
-      parameter.matrix = as.matrix(expand.grid(drifts,sds,thetas,non.decision.times))
+      parameter.matrix = as.matrix(expand.grid(drifts,thetas,sds,non.decision.times))
       # ---------------------------------------------------------------------------------------------
 
-      # RUN COARSE GRID SEARCH ----------------------------------------------------------------------
-      log.liks = aDDM.gridsearch(cur.choice.dat,
-                                 cur.eye.dat,
-                                 parameter.matrix,
-                                 cur.subject,
-                                 cur.set_size,
-                                 output.type,
-                                 nr.reps,
-                                 model.type,
-                                 fixation.model,
-                                 cur.log.file,
-                                 timestep.ms,
-                                 generate)
+      # RUN coarse GRID SEARCH ----------------------------------------------------------------------
+      log.liks = addm_gridsearch_foreach(conditions,
+                                         eye.dat,
+                                         choice.dat,
+                                         parameter.matrix,
+                                         output.type,
+                                         nr.reps,
+                                         model.type,
+                                         fixation.model,
+                                         cur.log.file,
+                                         timestep.ms,
+                                         generate)
       # ---------------------------------------------------------------------------------------------
 
       # UPDATE LOGLIKS ------------------------------------------------------------------------------
-      log.liks$Coarse = 1
-      log.liks$Extension = 0
+      log.liks$coarse = 1
       # ---------------------------------------------------------------------------------------------
 
       # IN CASE WE ALLOW FOR FINE GRID SEARCH -------------------------------------------------------
@@ -128,46 +91,31 @@ addm_fit_grid = function(subjects,                    # Subject to be tested: -1
         # ---------------------------------------------------------------------------------------------
 
         # RUN FINE GRID SEARCH ------------------------------------------------------------------------
-        fine.log.liks = aDDM.gridsearch(cur.choice.dat,
-                                        cur.eye.dat,
-                                        fine.parameter.matrix,
-                                        cur.subject,
-                                        cur.set_size,
-                                        output.type,
-                                        nr.reps,
-                                        model.type,
-                                        fixation.model,
-                                        cur.log.file,
-                                        timestep.ms,
-                                        generate)
+        fine.log.liks = addm_gridsearch_foreach(conditions,
+                                                eye.dat,
+                                                choice.dat,
+                                                fine.parameter.matrix,
+                                                output.type,
+                                                nr.reps,
+                                                model.type,
+                                                fixation.model,
+                                                cur.log.file,
+                                                timestep.ms,
+                                                generate)
         # ---------------------------------------------------------------------------------------------
 
         #
         # UPDATE LOGLIKS ------------------------------------------------------------------------------
-        fine.log.liks$Coarse = 0
-        fine.log.liks$Extension = 0
+        fine.log.liks$coarse = 0
         log.liks = rbind(log.liks,fine.log.liks)
         # ---------------------------------------------------------------------------------------------
       }
 
       # SAVE LOGLIKS ----------------------------------------------------------------------------------
-      if (cur.subject == -1){
-        cur.file = paste('temp/loglik_modeltest_',toString(cur.set_size), sep="")
-      }
-
-      if (cur.subject == 0){
-        cur.file = paste('temp/loglik_',model.type,'_all_setsize_', toString(cur.set_size), sep="")
-      }
-
-      if (cur.subject > 0){
-        cur.file = paste('temp/loglik_',model.type,'_subject_', toString(cur.subject), '_setsize_', toString(cur.set_size), sep="")
-      }
-
-      cur.file = paste(cur.file,".txt",sep="")
-      write.table(log.liks,cur.file,quote=FALSE,sep=" ", col.names=TRUE, row.names=FALSE)
+      write.table(log.liks,logfile,quote=FALSE, sep=" ", col.names=TRUE, row.names=FALSE)
 
       #Status
-      print(cur.file)
+      #print(paste(logfile,"done....",sep=': '))
       # ---------------------------------------------------------------------------------------------
-    }
-  }
+      return(log.liks)
+      }

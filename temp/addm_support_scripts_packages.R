@@ -25,7 +25,7 @@ load.aDDM.scripts = function(){
   sourceCpp(file="temp/aevacc_full_output_withmem_zeronoise.cpp")
 
   # aDDM wrapper functinos
-  source('temp/aDDM.R')
-  source('temp/aDDM_fast.R')
+  source('temp/addm_by_condition.R')
+  source('temp/addm_by_trial.R')
 }
 #-------------------------------------------------------------------------------------------------------------------------------------

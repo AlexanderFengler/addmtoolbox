@@ -37,7 +37,7 @@ NumericVector aevacc_full_output(int nr_reps,
    zigg.setSeed(seed[0]);
 
    // IntegerVector "out" collects all relevant information per repetition (Choice,RT,Nr. Fixations)
-   NumericVector out(22*nr_reps);
+   NumericVector out((6+(nr_items*2))*nr_reps);
 
   //int RT = 0;
   // Evid will be updated per ms ... it collects the current evidence for each item
@@ -47,37 +47,16 @@ NumericVector aevacc_full_output(int nr_reps,
    float temp = 0;
    bool decision = 1;
    int cur_rt = 0;
-   int out_cnt = -22;
    IntegerVector temp_fixpos(1);
    IntegerVector cur_fixdur(1);
-
 
    // Other relevant output variables
    int item_last_attended = 0;
    float value_last_attended = 0;
    int last_attended_chosen = 0;
 
-   NumericVector Durations(8);
-
-         Durations[0] = 0;
-         Durations[1] = 0;
-         Durations[2] = 0;
-         Durations[3] = 0;
-         Durations[4] = 0;
-         Durations[5] = 0;
-         Durations[6] = 0;
-         Durations[7] = 0;
-
-   NumericVector Fixations(8);
-
-         Fixations[0] = 0;
-         Fixations[1] = 0;
-         Fixations[2] = 0;
-         Fixations[3] = 0;
-         Fixations[4] = 0;
-         Fixations[5] = 0;
-         Fixations[6] = 0;
-         Fixations[7] = 0;
+   NumericVector Durations(nr_items);
+   NumericVector Fixations(nr_items);
 
    // Define the number of real fixations and respective durations for current condition
    int num_fixpos = fixpos.size();
@@ -107,12 +86,12 @@ NumericVector aevacc_full_output(int nr_reps,
         cur_update[i] = theta*update[i];
       }
 
-
+      int out_cnt = -6 - 2*nr_items - 1;
    // outer loop counts the simluations
      for (int rep_cnt = 0; rep_cnt < nr_reps;++rep_cnt){
          cur_rt = 0;
          cur_fix_cnt = 0;
-         out_cnt += 22;
+         out_cnt += 6 + 2*nr_items + 1;
 
 
          for (int i = 0; i < nr_items; ++i){
@@ -229,24 +208,13 @@ NumericVector aevacc_full_output(int nr_reps,
        out[out_cnt + 4] = value_last_attended;
        out[out_cnt + 5] = last_attended_chosen;
 
-       out[out_cnt + 6] = Durations[0];
-       out[out_cnt + 7] = Durations[1];
-       out[out_cnt + 8] = Durations[2];
-       out[out_cnt + 9] = Durations[3];
-       out[out_cnt + 10] = Durations[4];
-       out[out_cnt + 11] = Durations[5];
-       out[out_cnt + 12] = Durations[6];
-       out[out_cnt + 13] = Durations[7];
+       for(int i = 0: i < nr_items;i++){
+         out[out_cnt + 6 + i] = Durations[i];
+       }
 
-
-       out[out_cnt + 14] = Fixations[0];
-       out[out_cnt + 15] = Fixations[1];
-       out[out_cnt + 16] = Fixations[2];
-       out[out_cnt + 17] = Fixations[3];
-       out[out_cnt + 18] = Fixations[4];
-       out[out_cnt + 19] = Fixations[5];
-       out[out_cnt + 20] = Fixations[6];
-       out[out_cnt + 21] = Fixations[7];
+       for(int i = 0: i < nr_items;i++){
+         out[out_cnt + 6 + nr_items + i] = Fixations[i];
+       }
      }
    return out;
 }
