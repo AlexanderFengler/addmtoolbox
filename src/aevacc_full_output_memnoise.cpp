@@ -1,10 +1,4 @@
-// Author: Alexander Fengler
-// Date: Jan 25h 2015
-// Purpose: Full output version of the addm evidence accumulation function
-
-// This function now also allows for passing an R function that predicts next fixation locations and corresponding fixation durations
-// If no fixation pathways are supplied the function will completely simulate the fixation path!
-
+// [[Rcpp::depends(RcppZiggurat)]]
 #include <Rcpp.h>
 #include <algorithm>
 #include <stdlib.h>
@@ -12,9 +6,26 @@
 using namespace Rcpp;
 static Ziggurat::Ziggurat::Ziggurat zigg;
 
-// [[Rcpp::depends(RcppZiggurat)]]
+//' Runs evidence accumulation function (item general case) for one trial, and returns detailed model output
+//' @author Alexander Fengler, \email{alexanderfengler@@gmx.de}
+//' @title Evidence accumulation by condition (item general) with detailed output
+//' \code{aevacc_by_condition}
+//' @return Returns a vector that stores detailed output by simulation run
+//' @param sd standard deviation used for drift diffusion process
+//' @param theta theta used for drift diffusion process
+//' @param drift drift-rate used for drift diffusion process
+//' @param non_decision_time non decision time used for drift diffusion process
+//' @param timestep timestep in ms associated with each step in the drift diffusion process
+//' @param nr_reps number of repitions (simulation runs)
+//' @param maxdur maximum duration in ms that the process is allowed to simulate
+//' @param update Vector that stores the item valuations for the trial conditon simulated
+//' @param fixpos Vector that stores the locations for a supplied fixed fixation pathway
+//' @param fixdur Vector that stores the fixation durations for a supplied fixed fixation pathway
+//' @param fixdursamples Vector from which fixation duration can be sampled once supplied fixations run out
+//' @param fixation_model a user supplied fixation model that will be utilized to supply fixation locations and potentially fixation durations
+//' @export
 // [[Rcpp::export]]
-NumericVector aevacc_full_output_memnoise(float cur_sd,
+NumericVector aevacc_full_output_memnoise(float sd,
                                           float theta,
                                           float drift,
                                           int non_decision_time,
@@ -25,8 +36,7 @@ NumericVector aevacc_full_output_memnoise(float cur_sd,
                                           IntegerVector fixpos,
                                           IntegerVector fixdur,
                                           IntegerVector fixdursamples,
-                                          int nr_items,
-                                          Function s){
+                                          Function fixation_model){
 
   // Set seed for random sampler ------------------------------------------------------------------
   NumericVector seed(1);
@@ -35,6 +45,7 @@ NumericVector aevacc_full_output_memnoise(float cur_sd,
   // ----------------------------------------------------------------------------------------------
 
   // Output Collection Variables ------------------------------------------------------------------
+  int nr_items = update.size();
   NumericVector out((6+2*nr_items)*nr_reps);
   int maxpos = 0;
   bool decision = 1;
@@ -104,15 +115,15 @@ NumericVector aevacc_full_output_memnoise(float cur_sd,
         // Rationale: In case there is any "shorter-final-fixation" bias in the data, the algorithm should be given the chance to reproduce such an effect
         // NOT be supplied with such an effect !
         if (fix_cnt == num_fixpos - 1){
-          cur_fixdur = s(fixdursamples,1);
+          cur_fixdur = fixation_model(fixdursamples,1);
         }
       } else if (fix_cnt > (num_fixpos - 1)){
         temp_fixpos[0] = cur_fixpos[0];
         // use sample function
         while (cur_fixpos[0] == temp_fixpos[0]){
-          cur_fixpos = s(eligible,1);
+          cur_fixpos = fixation_model(eligible,1);
         }
-        cur_fixdur = s(fixdursamples,1);
+        cur_fixdur = fixation_model(fixdursamples,1);
       }
       // -----------------------------------------------------------------------------------------
 
@@ -147,7 +158,7 @@ NumericVector aevacc_full_output_memnoise(float cur_sd,
 
         // accumulate Evidence for timestep
         for (int i = 0; i < nr_items; ++i){
-          Evid[i] += temp_update[i] + cur_sd*zigg.norm()*items_seen_noise[i];
+          Evid[i] += temp_update[i] + sd*zigg.norm()*items_seen_noise[i];
         }
 
         //update RT

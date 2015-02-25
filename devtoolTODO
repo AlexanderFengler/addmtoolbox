@@ -14,3 +14,10 @@ TO DO
 OTHER
 
 1. Solve the fixation_model supply thing in aevaccs more elegantly
+
+
+
+
+MISC:
+
+exportPattern("^[^\\.]")

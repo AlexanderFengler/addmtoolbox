@@ -1,11 +1,19 @@
+// [[Rcpp::depends(RcppZiggurat)]]
+#include <Rcpp.h>
+#include <Ziggurat.h>
+#include <algorithm>
+#include <stdlib.h>
+using namespace Rcpp;
+static Ziggurat::Ziggurat::Ziggurat zigg;
+
 //' Runs evidence accumulation function (2 item case) for one trial condition
-//' \code{aevacc2_by_condition} Returns data.table with log likelihoods and corresponding parameter combinations
 //' @author Alexander Fengler, \email{alexanderfengler@@gmx.de}
 //' @title evidence accumulation (2 item case)
+//' \code{aevacc2_by_condition} Returns data.table with log likelihoods and corresponding parameter combinations
 //' @return Returns a vector that stores decisions and rts for each simulation run
-//' @export
 //' @param sd standard deviation used for drift diffusion process
 //' @param theta theta used for drift diffusion process
+//' @param drift drift-rate used for drift diffusion process
 //' @param non_decision_time non decision time used for drift diffusion process
 //' @param timestep timestep in ms associated with each step in the drift diffusion process
 //' @param nr_reps number of repitions (simulation runs)
@@ -15,18 +23,8 @@
 //' @param fixdur Vector that stores the fixation durations for a supplied fixed fixation pathway
 //' @param fixdursamples Vector from which fixation duration can be sampled once supplied fixations run out
 //' @param fixation_model a user supplied fixation model that will be utilized to supply fixation locations and potentially fixation durations
-
-#include <Rcpp.h>
-#include <Ziggurat.h>
-#include <algorithm>
-#include <stdlib.h>
-
-using namespace Rcpp;
-static Ziggurat::Ziggurat::Ziggurat zigg;
-
-// [[Rcpp::depends(RcppZiggurat)]]
+//' @export
 // [[Rcpp::export]]
-
 IntegerVector aevacc2_by_condition(float sd,
                                    float theta,
                                    float drift,

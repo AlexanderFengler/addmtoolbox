@@ -19,6 +19,7 @@
 #' @param fixation.model A string that indicates which fixation model will be utilized for simulations. 'random' for random fixations (implemented) 'fakepath' for following a predetermined fixation path with fixed durations (implemented).
 #' @param allow.fine.grid Binary variable that indicates whether we allow (1) a fine grid to be created an searched around the coarse grid minimum or not (0).
 #' @param log.file Filepath for storage of logs
+#' @param parallel Binary variable that tells whether to initialize local cluster on start (1) or not (0).
 
 addm_fit_grid = function(conditions.dat = data.table(v1 = c(1,2,3),v2 = c(3,2,1),id = c(1,2,3)),
                          eye.dat = data.table(fixloc = 0,fixnr = 0, fixdur= 0, id = c(1,2,3)),
@@ -34,21 +35,15 @@ addm_fit_grid = function(conditions.dat = data.table(v1 = c(1,2,3),v2 = c(3,2,1)
                          fit.type = 'condition',
                          fixation.model = 'fakepath',
                          allow.fine.grid = 0,
-                         log.file = "defaultlog.txt"){
+                         log.file = "defaultlog.txt",
+                         parallel = 1){
 
-  # LOAD ALL PACKAGES AND FUNCTIONS NECESSARY ----------------------------------------------------
-  # Load all high level functions needed
-  source('temp/addm_opti_supportfuns/addm_support_compute_finegrid.R')
-  source('temp/addm_opti_supportfuns/addm_support_gridsearch_foreach.R')
-  source('temp/addm_support_scripts_packages.R')
+  # INITIALIZIONS --------------------------------------------------------------------------------
 
-  # Initialize all packages
-  load.aDDM.packages()
-
-  # Initialize parameters, subjects, set_size
-  load.aDDM.scripts()
-
-  # INITIALIZING VARIABLES THAT CAN BE MANIPULATED ------------------------------------------------
+  if (parallel == 1){
+    cores = detectCores()
+    registerDoMC(cores)
+  }
 
   # Initialize the log.file we are going to use for storing results from the gridsearch
   cur.log.file = "temp/cur_addm_log.txt"
@@ -77,17 +72,17 @@ addm_fit_grid = function(conditions.dat = data.table(v1 = c(1,2,3),v2 = c(3,2,1)
       # ---------------------------------------------------------------------------------------------
 
       # RUN coarse GRID SEARCH ----------------------------------------------------------------------
-      log.liks = addm_gridsearch_foreach(conditions.dat,
-                                         eye.dat,
-                                         choice.dat,
-                                         parameter.matrix,
-                                         output.type,
-                                         nr.reps,
-                                         model.type,
-                                         fixation.model,
-                                         cur.log.file,
-                                         timestep,
-                                         generate)
+      log.liks = addm_support_gridsearch_foreach(conditions.dat,
+                                                 eye.dat,
+                                                 choice.dat,
+                                                 parameter.matrix,
+                                                 output.type,
+                                                 nr.reps,
+                                                 model.type,
+                                                 fixation.model,
+                                                 cur.log.file,
+                                                 timestep,
+                                                 generate)
       # ---------------------------------------------------------------------------------------------
 
       # UPDATE LOGLIKS ------------------------------------------------------------------------------

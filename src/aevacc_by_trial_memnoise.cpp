@@ -1,34 +1,42 @@
-// aDDM algorithm for model fitting
-// Output are simple "success counts" meaning whether the model spit out the right decision within the right RT-bin according to the original data as input
-// No further, more detailed, output provided
-
-// MODEL VARIANT: Theta 0 until item seen, then theta according to what is provided as input parameter
-
+// [[Rcpp::depends(RcppZiggurat)]]
 #include <Rcpp.h>
 #include <Ziggurat.h>
 #include <algorithm>
 #include <stdlib.h>
-
 using namespace Rcpp;
-
 static Ziggurat::Ziggurat::Ziggurat zigg;
 
-// [[Rcpp::depends(RcppZiggurat)]]
+//' Runs evidence accumulation for one trial (item general case). Flexible version allowing for memory effects.
+//' \code{aevacc_by_trial_memnoise} Returns success counts for model simulation
+//' @author Alexander Fengler, \email{alexanderfengler@@gmx.de}
+//' @title Flexible evidence accumulation (item general) allowing for memory effects
+//' @return Returns a numeric variable that provides a success count (runs that predicted a reaction time in the correct rt-bin and simultaneously the correct decision)
+//' @param sd standard deviation used for drift diffusion process
+//' @param theta theta used for drift diffusion process
+//' @param drift drift-rate used for drift diffusion process
+//' @param non_decision_time non decision time used for drift diffusion process
+//' @param timestep timestep in ms associated with each step in the drift diffusion process
+//' @param nr_reps number of repitions (simulation runs)
+//' @param maxdur numeric variable that supplies the maximum reaction time considered a success in simulations
+//' @param mindur numeric variable that supplies the minimum reaction time considered a succes in simulations
+//' @param cur_decision numeric variable that provides the empirical decision taken in trial
+//' @param update Vector that stores the item valuations for the trial conditon simulated
+//' @param fixpos Vector that stores the locations for a supplied fixed fixation pathway
+//' @param fixdur Vector that stores the fixation durations for a supplied fixed fixation pathway
+//' @export
 // [[Rcpp::export]]
-
 int aevacc_by_trial_memnoise(int nr_reps,
                              int maxdur,
                              int mindur,
                              int cur_decision,
-                             float cur_sd,
+                             float sd,
                              float theta,
                              float drift,
                              int non_decision_time,
                              int timestep,
                              NumericVector update,
                              IntegerVector fixpos,
-                             IntegerVector fixdur,
-                             int nr_items){
+                             IntegerVector fixdur){
 
   // Set seed for random sampler ------------------------------------------------------------------
   NumericVector seed(1);
@@ -42,6 +50,7 @@ int aevacc_by_trial_memnoise(int nr_reps,
 
 
   // Initialize Variables need for model propagation ----------------------------------------------
+  int nr_items = update.size();
   NumericVector Evid(nr_items);
   int maxpos = 0;
   float temp = 0;
@@ -104,7 +113,7 @@ int aevacc_by_trial_memnoise(int nr_reps,
         // accumulate Evidence --> In aDDM this happens through switch statement because fixation position matters
 
         for (int i = 0; i < nr_items; ++i){
-          Evid[i] += temp_update[i] + cur_sd*zigg.norm()*items_seen_noise[i];
+          Evid[i] += temp_update[i] + sd*zigg.norm()*items_seen_noise[i];
         }
 
         //update RT

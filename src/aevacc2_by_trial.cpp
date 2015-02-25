@@ -1,33 +1,31 @@
+// [[Rcpp::depends(RcppZiggurat)]]
+
+#include <Rcpp.h>
+#include <Ziggurat.h>
+#include <algorithm>
+#include <stdlib.h>
+using namespace Rcpp;
+static Ziggurat::Ziggurat::Ziggurat zigg;
+
 //' Runs evidence accumulation function (2 item case) for one trial condition
-//' \code{aevacc2_by_trial} Returns data.table with log likelihoods and corresponding parameter combinations
+//' \code{aevacc2_by_trial}
 //' @author Alexander Fengler, \email{alexanderfengler@@gmx.de}
 //' @title evidence accumulation (2 item case) by trial
 //' @return Returns a numeric variable that provides a success count (runs that predicted a reaction time in the correct rt-bin and simultaneously the correct decision)
-//' @export
 //' @param sd standard deviation used for drift diffusion process
 //' @param theta theta used for drift diffusion process
+//' @param drift drift-rate used for drift diffusion process
 //' @param non_decision_time non decision time used for drift diffusion process
 //' @param timestep timestep in ms associated with each step in the drift diffusion process
 //' @param nr_reps number of repitions (simulation runs)
 //' @param maxdur numeric variable that supplies the maximum reaction time considered a success in simulations
 //' @param mindur numeric variable that supplies the minimum reaction time considered a succes in simulations
 //' @param real_decision numeric variable that provides the empirical decision taken in trial
-//' @param maxdur maximum duration in ms that the process is allowed to simulate
 //' @param update Vector that stores the item valuations for the trial conditon simulated
 //' @param fixpos Vector that stores the locations for a supplied fixed fixation pathway
 //' @param fixdur Vector that stores the fixation durations for a supplied fixed fixation pathway
-
-#include <Rcpp.h>
-#include <Ziggurat.h>
-#include <algorithm>
-#include <stdlib.h>
-
-using namespace Rcpp;
-static Ziggurat::Ziggurat::Ziggurat zigg;
-
-// [[Rcpp::depends(RcppZiggurat)]]
+//' @export
 // [[Rcpp::export]]
-
 int aevacc2_by_trial(int nr_reps,
                      int maxdur,
                      int mindur,

@@ -10,7 +10,7 @@
 #' @param nr.reps An integer number that tells the function how many simulation runs to use.
 #' @param model.type A string that indicates which version of the model to run. 'standard' or 'memnoise' when memory effects shall be allowed.
 #' @param fixation.model A string that indicates which fixation model will be utilized for simulations. 'random' for random fixations (implemented) 'fakepath' for following a predetermined fixation path with fixed durations (implemented).
-
+#' @param core.parameters Vector that provide parameters used to generate artificial data from drift diffusion process. (drift,theta,sd,non deicision time)
 addm_generate_by_condition_artificial = function(set.size = 2,
                                                  possible.valuations = c(0,1,2,3),
                                                  timestep= 10,
@@ -21,7 +21,7 @@ addm_generate_by_condition_artificial = function(set.size = 2,
 
 # GENERATE MODEL INPUT DATA --------------------------------------------------------------------------------------------------------------
   # Conditions
-  val.dat = as.data.table(matrix(sample(possible_valuations,25*set_size,replace=TRUE),ncol=set_size))
+  val.dat = as.data.table(matrix(sample(possible.valuations,25*set_size,replace=TRUE),ncol=set_size))
   setnames(val.dat,names(val.dat),tolower(names(val.dat)))
   ids = data.table(id = 1:25)
   conditions =  cbind(val.dat, ids)

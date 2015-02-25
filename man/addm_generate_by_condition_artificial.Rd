@@ -21,6 +21,8 @@ addm_generate_by_condition_artificial(set.size = 2,
 \item{model.type}{A string that indicates which version of the model to run. 'standard' or 'memnoise' when memory effects shall be allowed.}
 
 \item{fixation.model}{A string that indicates which fixation model will be utilized for simulations. 'random' for random fixations (implemented) 'fakepath' for following a predetermined fixation path with fixed durations (implemented).}
+
+\item{core.parameters}{Vector that provide parameters used to generate artificial data from drift diffusion process. (drift,theta,sd,non deicision time)}
 }
 \value{
 returns a list of three components. A 'data.table' that stores all unique choice set conditions. A 'data.table' that stores eyetracking.data adjusted to be usable for by trial fits. A 'data.table' that stores by trial choice data. An id variable links all three data.tables.

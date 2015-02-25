@@ -18,7 +18,7 @@ addm_support_compute_finegrid(drift.step.fine, sd.step.fine, thetas,
 
 \item{coarse.to.fine.ratio}{Numeric Variable that stores the precision ratio between the coarse and fine grid for grid search fits.}
 
-\item{'data.table'}{that stores log likelihoods and corresponding parameter combinations resulting from coarse grid search.}
+\item{log.liks}{'data.table' that stores log likelihoods and corresponding parameter combinations resulting from coarse grid search.}
 }
 \value{
 Matrix storing parameter space

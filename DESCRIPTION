@@ -1,13 +1,18 @@
 Package: addmtools
-Title: What the Package Does (one line, title case)
+Title: addmtools: fit attentional drift diffusion models
 Version: 0.0.0.9000
 Authors@R: person("Alexander", "Fengler", , "alexanderfengler@gmx.de", role = c("aut", "cre"))
-Description: What the package does (one paragraph)
+Description: This Package provides a bunch of convernience functions that should make fitting of drift diffusion models significantly easier.
 Depends: R (>= 3.1.2)
 License: MIT
 LazyData: true
 Imports: data.table,
+    dplyr,
+    doMC,
+    foreach,
+    ggplot2,
+    iterators,
     Rcpp,
     RcppGSL,
-    RcppZiggurat,
-LinkingTo: Rcpp,RcppGSL,RcppZiggurat,
+    RcppZiggurat
+LinkingTo: Rcpp,RcppGSL,RcppZiggurat

@@ -9,7 +9,7 @@
 #' @param thetas Numeric variable storing testable thetas. The theta space is not changed in the fine parameter matrix.
 #' @param non.decision.time.step.fine Numeric variable storing precision with which non.decision.time space is searched in the fine grid parameter matrix.
 #' @param coarse.to.fine.ratio Numeric Variable that stores the precision ratio between the coarse and fine grid for grid search fits.
-#' @param 'data.table' that stores log likelihoods and corresponding parameter combinations resulting from coarse grid search.
+#' @param log.liks 'data.table' that stores log likelihoods and corresponding parameter combinations resulting from coarse grid search.
 
 
 addm_support_compute_finegrid = function(drift.step.fine,

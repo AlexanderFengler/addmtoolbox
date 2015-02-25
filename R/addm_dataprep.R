@@ -8,6 +8,8 @@
 #' @title Data Preparation for easy supply to fit functions
 #' @return returns a list of three components. A 'data.table' that stores all unique choice set conditions. A 'data.table' that stores eyetracking.data adjusted to be usable for by trial fits. A 'data.table' that stores by trial choice data. An id variable links all three data.tables.
 #' @export
+#' @useDynLib addmtools
+#' @importFrom Rcpp sourceCpp
 
 addm_dataprep = function(choice.dat =  data.table(v1 = c(1,2,3),v2 = c(3,2,1),id = c(1,2,3),rt = c(0,0,0), decision = c(0,0,0)),
                          eye.dat = data.table(fixloc = 0,fixnr = 1, fixdur= 0, id = c(1,2,3)),

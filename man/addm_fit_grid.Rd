@@ -12,7 +12,7 @@ addm_fit_grid(conditions.dat = data.table(v1 = c(1, 2, 3), v2 = c(3, 2, 1), id
   non.decision.times = 0, timestep = 10, nr.reps = 2000,
   model.type = "standard", output.type = "fit", fit.type = "condition",
   fixation.model = "fakepath", allow.fine.grid = 0,
-  log.file = "defaultlog.txt")
+  log.file = "defaultlog.txt", parallel = 1)
 }
 \arguments{
 \item{conditions.dat}{A 'data.frame' storing the item valuations (v1,v2...) by unique trial conditions. An id column (id) needs to be provided that matches by trial data.}
@@ -44,6 +44,8 @@ addm_fit_grid(conditions.dat = data.table(v1 = c(1, 2, 3), v2 = c(3, 2, 1), id
 \item{allow.fine.grid}{Binary variable that indicates whether we allow (1) a fine grid to be created an searched around the coarse grid minimum or not (0).}
 
 \item{log.file}{Filepath for storage of logs}
+
+\item{parallel}{Binary variable that tells whether to initialize local cluster on start (1) or not (0).}
 }
 \value{
 Returns data.table with log likelihoods by parameter combination
