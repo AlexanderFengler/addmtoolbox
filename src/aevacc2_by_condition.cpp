@@ -19,8 +19,6 @@ static Ziggurat::Ziggurat::Ziggurat zigg;
 //' @param nr_reps number of repitions (simulation runs)
 //' @param maxdur maximum duration in ms that the process is allowed to simulate
 //' @param update Vector that stores the item valuations for the trial conditon simulated
-//' @param fixpos Vector that stores the locations for a supplied fixed fixation pathway
-//' @param fixdur Vector that stores the fixation durations for a supplied fixed fixation pathway
 //' @param fixdursamples Vector from which fixation duration can be sampled once supplied fixations run out
 //' @param fixation_model a user supplied fixation model that will be utilized to supply fixation locations and potentially fixation durations
 //' @export
@@ -33,8 +31,6 @@ IntegerVector aevacc2_by_condition(float sd,
                                    int nr_reps,
                                    int maxdur,
                                    NumericVector update,
-                                   IntegerVector fixpos,
-                                   IntegerVector fixdur,
                                    IntegerVector fixdursamples,
                                    Function fixation_model){
 
@@ -55,22 +51,16 @@ IntegerVector aevacc2_by_condition(float sd,
   int cur_rt = 0;
   int out_cnt = -2; // index for output vector
   int out_plus = 0;
-  int num_fixpos = fixpos.size();
-  IntegerVector cur_fixpos(1);
-  IntegerVector cur_fixdur(1);
-  IntegerVector temp_fixpos(1);
   int cur_fix_cnt = 0;
   int cur_fixpos_indice = 0;
-
-  IntegerVector potential_fixpos(2);
-  potential_fixpos[0] = 1;
-  potential_fixpos[1] = 2;
 
   NumericVector cur_update(nr_items);
   for (int i = 0; i < nr_items; ++i){
     update[i] = update[i]*drift;
     cur_update[i] = theta*update[i];
   }
+
+  NumericMatrix fixdat = fixation_model(fixdursamples);
   // ------------------------------------------------------------------------------------------------
 
   // Outer loop cycles through simulation numbers --------------------------------------------------
@@ -84,42 +74,20 @@ IntegerVector aevacc2_by_condition(float sd,
     decision = 0;
     rdv = 0;
 
+    // Compute fixation path
+    fixdat = fixation_model(fixdursamples);
     // -------------------------------------------------------------------------------------------
 
     // Propagate model through simulation run --------------------------------------------------
     for (int fix_cnt = 0; fix_cnt < 1000; ++fix_cnt){  //
 
-      // Handle next fixation ------------------------------------------------------------------
-      // identifying current fixation position and duration
-      // If empirical fixations still to be supplied fine,
-      // otherwise sample from eligible fixations positions
-      // and sample duration from fixdursamples vector.
-      if (fix_cnt <= (num_fixpos - 1)){
-        cur_fixpos[0] = fixpos[fix_cnt];
-        cur_fixdur[0] = fixdur[fix_cnt];
-
-        // get fixation duration
-        if (fix_cnt == num_fixpos - 1){
-          cur_fixdur = fixation_model(fixdursamples,1);
-        }
-      } else if (fix_cnt > (num_fixpos - 1)){
-
-        temp_fixpos[0] = cur_fixpos[0];
-        // sample fixation and make sure the new fixation is not the same as the old one
-        while (cur_fixpos[0] == temp_fixpos[0]){
-          cur_fixpos = fixation_model(potential_fixpos,1);
-        }
-        cur_fixdur = fixation_model(fixdursamples,1);
-      }
-      // ---------------------------------------------------------------------------------------
-
       // Make updates according to new fixation location ---------------------------------------
-      cur_fixpos_indice = cur_fixpos[0] - 1;
+      cur_fixpos_indice = fixdat(fix_cnt,1) - 1;
       cur_update[cur_fixpos_indice] = update[cur_fixpos_indice];
       // ---------------------------------------------------------------------------------------
 
       // Propagate Model through current fixation ----------------------------------------------
-      for (int rt_cur_fix = 0; rt_cur_fix < fixdur[fix_cnt];rt_cur_fix += timestep){
+      for (int rt_cur_fix = 0; rt_cur_fix < fixdat(fix_cnt,2);rt_cur_fix += timestep){
 
         // Accumulate rdvence for current timestep
         rdv += (cur_update[0] - cur_update[1]) + sd*zigg.norm();
