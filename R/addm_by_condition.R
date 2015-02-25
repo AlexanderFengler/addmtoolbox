@@ -15,16 +15,16 @@
 #' @param timestep An integer number that provides the timestep-size that is used in the simulations (in ms).
 #' @param generate Binary variable that tells the function to return either log likelihood values (0) or rt, decision (1). Relevant only if model.type variable is 'fit'.
 
-addm_by_condition = function(conditions.dat,
-                             eye.dat,
-                             choice.dat,
-                             model.parameters,
-                             nr.reps,
-                             model.type,
-                             output.type,
-                             fixation.model,
-                             timestep,
-                             generate){
+addm_by_condition = function(conditions.dat = data.table(v1 = 0, v2 = 0, id = 0),
+                             eye.dat = data.table(fixloc = 0, fixdur = 0, fixnr = 1, id = 0),
+                             choice.dat = data.table(decision = 0, rt = 0, id = 0),
+                             model.parameters = c(0.006,0.6,0.06,0),
+                             nr.reps = 2000,
+                             model.type = 'standard',
+                             output.type = 'fit',
+                             fixation.model = 'fakepath',
+                             timestep = 10,
+                             generate = 0){
 
   # INITIALIZATION OF PARAMETERS AND RELEVANT SUBSETS OF DATA FRAMES--------------------------------------------------------------------
   # Initialize model parameters
@@ -37,7 +37,7 @@ addm_by_condition = function(conditions.dat,
   # SOME MISCELLANEOUS VARIABLES THAT ARE UTILIZED LATER--------------------------------------------------------------------------------
 
   # First we need to define max.RT
-  cur.max.RT = 40000 %/% timestep
+  cur.max.RT = 40000
 
   # Generating column that provides a cutted (binned) version of reaction times
   increment.distances = 100

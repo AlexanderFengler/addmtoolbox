@@ -4,10 +4,9 @@
 \alias{addm_dataprep}
 \title{Data Preparation for easy supply to fit functions}
 \usage{
-addm_dataprep(choice.dat = data.table(v1 = c(1, 2, 3), v2 = c(3, 2, 1), id =
-  c(1, 2, 3), rt = c(0, 0, 0), decision = c(0, 0, 0)),
-  eye.dat = data.table(fixloc = 0, fixnr = 1, fixdur = 0, id = c(1, 2, 3)),
-  timestep = 10, rtbinsize = 100)
+addm_dataprep(choice.dat = data.table(v1 = 0, v2 = 0, id = 0, rt = 0, decision
+  = 0, id = 0), eye.dat = data.table(fixloc = 0, fixnr = 1, fixdur = 0, id =
+  0), timestep = 10, rtbinsize = 100)
 }
 \arguments{
 \item{choice.dat}{A 'data.frame' or  'data.table' storing the item valuations (v1,v2...) , reaction times in ms (rt), decisions as decision and an id column (id). A by trial form is assumed.}

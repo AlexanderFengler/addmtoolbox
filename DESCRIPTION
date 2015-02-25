@@ -1,8 +1,8 @@
-Package: addmtools
-Title: addmtools: fit attentional drift diffusion models
+Package: addmtoolbox
+Title: addmtoolbox: fit attentional drift diffusion models
 Version: 0.0.0.9000
 Authors@R: person("Alexander", "Fengler", , "alexanderfengler@gmx.de", role = c("aut", "cre"))
-Description: This Package provides a bunch of convernience functions that should make fitting of drift diffusion models significantly easier.
+Description: This Package provides a bunch of convenience functions that should make fitting of drift diffusion models significantly easier.
 Depends: R (>= 3.1.2)
 License: MIT
 LazyData: true

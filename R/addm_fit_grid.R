@@ -21,9 +21,9 @@
 #' @param log.file Filepath for storage of logs
 #' @param parallel Binary variable that tells whether to initialize local cluster on start (1) or not (0).
 
-addm_fit_grid = function(conditions.dat = data.table(v1 = c(1,2,3),v2 = c(3,2,1),id = c(1,2,3)),
-                         eye.dat = data.table(fixloc = 0,fixnr = 0, fixdur= 0, id = c(1,2,3)),
-                         choice.dat = data.table(v1 = c(1,2,3),v2 = c(3,2,1),id = c(1,2,3), rt = c(0,0,0), decision = c(1,1,1)),
+addm_fit_grid = function(conditions.dat = data.table(v1 = 0, v2 = 0, id = 0),
+                         eye.dat = data.table(fixloc = 0,fixnr = 1, fixdur= 0, id = 0),
+                         choice.dat = data.table(v1 = 0,v2 = 0, rt = 0, decision = 0, id = 0),
                          drifts = seq(0.002,0.01,0.002),
                          thetas = seq(0.2,1,0.2),
                          sds = seq(0.02,0.1,0.02),
@@ -45,8 +45,8 @@ addm_fit_grid = function(conditions.dat = data.table(v1 = c(1,2,3),v2 = c(3,2,1)
     registerDoMC(cores)
   }
 
-  # Initialize the log.file we are going to use for storing results from the gridsearch
-  cur.log.file = "temp/cur_addm_log.txt"
+  # Initialize the log.file we are going to use for storing intermediate results from the gridsearch
+  cur.log.file = "cur_addm_log.txt"
   writeLines(c(""),cur.log.file)
 
   # Parameters for fine grid search
@@ -128,5 +128,6 @@ addm_fit_grid = function(conditions.dat = data.table(v1 = c(1,2,3),v2 = c(3,2,1)
       #Status
       #print(paste(log.file,"done....",sep=': '))
       # ---------------------------------------------------------------------------------------------
+      file.remove('cur_addm_log.txt')
       return(log.liks)
       }

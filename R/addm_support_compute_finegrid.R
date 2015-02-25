@@ -12,12 +12,12 @@
 #' @param log.liks 'data.table' that stores log likelihoods and corresponding parameter combinations resulting from coarse grid search.
 
 
-addm_support_compute_finegrid = function(drift.step.fine,
-                                         sd.step.fine,
-                                         thetas,
-                                         non.decision.time.step.fine,
-                                         coarse.to.fine.ratio,
-                                         log.liks){
+addm_support_compute_finegrid = function(drift.step.fine = 0,
+                                         sd.step.fine = 0,
+                                         thetas = 0,
+                                         non.decision.time.step.fine = 0,
+                                         coarse.to.fine.ratio = 0,
+                                         log.liks = data.table(drift = 0, theta = 0, sd = 0, non.decision.time = 0, nr.reps = 0, loglik = 0)){
 
   # Get parameter values at minimum log likelihood -------------------------------------------------------------------
   max.val = max(log.liks$Log.Likelihood)

@@ -4,15 +4,14 @@
 \alias{addm_fit_grid}
 \title{Run Gridsearch over supplied parameter space}
 \usage{
-addm_fit_grid(conditions.dat = data.table(v1 = c(1, 2, 3), v2 = c(3, 2, 1), id
-  = c(1, 2, 3)), eye.dat = data.table(fixloc = 0, fixnr = 0, fixdur = 0, id =
-  c(1, 2, 3)), choice.dat = data.table(v1 = c(1, 2, 3), v2 = c(3, 2, 1), id =
-  c(1, 2, 3), rt = c(0, 0, 0), decision = c(1, 1, 1)), drifts = seq(0.002,
-  0.01, 0.002), thetas = seq(0.2, 1, 0.2), sds = seq(0.02, 0.1, 0.02),
-  non.decision.times = 0, timestep = 10, nr.reps = 2000,
-  model.type = "standard", output.type = "fit", fit.type = "condition",
-  fixation.model = "fakepath", allow.fine.grid = 0,
-  log.file = "defaultlog.txt", parallel = 1)
+addm_fit_grid(conditions.dat = data.table(v1 = 0, v2 = 0, id = 0),
+  eye.dat = data.table(fixloc = 0, fixnr = 1, fixdur = 0, id = 0),
+  choice.dat = data.table(v1 = 0, v2 = 0, rt = 0, decision = 0, id = 0),
+  drifts = seq(0.002, 0.01, 0.002), thetas = seq(0.2, 1, 0.2),
+  sds = seq(0.02, 0.1, 0.02), non.decision.times = 0, timestep = 10,
+  nr.reps = 2000, model.type = "standard", output.type = "fit",
+  fit.type = "condition", fixation.model = "fakepath",
+  allow.fine.grid = 0, log.file = "defaultlog.txt", parallel = 1)
 }
 \arguments{
 \item{conditions.dat}{A 'data.frame' storing the item valuations (v1,v2...) by unique trial conditions. An id column (id) needs to be provided that matches by trial data.}

@@ -4,8 +4,10 @@
 \alias{addm_by_trial}
 \title{Model run by trial}
 \usage{
-addm_by_trial(choice.dat, eye.dat, model.parameters, nr.reps, model.type,
-  timestep)
+addm_by_trial(choice.dat = data.table(v1 = 0, v2 = 0, id = 0),
+  eye.dat = data.table(fixloc = 0, fixdur = 0, fixnr = 1, id = 0),
+  model.parameters = c(0.006, 0.6, 0.06, 0), nr.reps = 2000,
+  model.type = "standard", timestep = 10)
 }
 \arguments{
 \item{choice.dat}{A 'data.frame' or  'data.table' storing the item valuations (v1,v2...) , reaction times in ms (rt), decisions as decision and an id column (id). A by trial form is assumed.}

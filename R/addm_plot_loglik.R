@@ -6,7 +6,7 @@
 #' @export
 #' @param logliks 'data.frame' or 'data.table' storing parameter values and corresponding log likelihoods as a result of a model fit.
 
-addm_plot_loglik = function(logliks){
+addm_plot_loglik = function(logliks = data.table(drift = 0, theta = 0, sd = 0, non.decision.time = 0, nr.reps = 0, loglik = 0)){
 
 logliks = as.data.table(logliks)
 setkey(logliks,loglik)

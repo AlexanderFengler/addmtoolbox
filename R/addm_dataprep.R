@@ -11,8 +11,8 @@
 #' @useDynLib addmtools
 #' @importFrom Rcpp sourceCpp
 
-addm_dataprep = function(choice.dat =  data.table(v1 = c(1,2,3),v2 = c(3,2,1),id = c(1,2,3),rt = c(0,0,0), decision = c(0,0,0)),
-                         eye.dat = data.table(fixloc = 0,fixnr = 1, fixdur= 0, id = c(1,2,3)),
+addm_dataprep = function(choice.dat =  data.table(v1 = 0,v2 = 0,id = 0,rt = 0, decision = 0, id = 0),
+                         eye.dat = data.table(fixloc = 0,fixnr = 1, fixdur= 0, id = 0),
                          timestep = 10,
                          rtbinsize = 100){
 

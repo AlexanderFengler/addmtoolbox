@@ -4,8 +4,10 @@
 \alias{addm_support_compute_finegrid}
 \title{Generate fine grid around best parameter combination}
 \usage{
-addm_support_compute_finegrid(drift.step.fine, sd.step.fine, thetas,
-  non.decision.time.step.fine, coarse.to.fine.ratio, log.liks)
+addm_support_compute_finegrid(drift.step.fine = 0, sd.step.fine = 0,
+  thetas = 0, non.decision.time.step.fine = 0, coarse.to.fine.ratio = 0,
+  log.liks = data.table(drift = 0, theta = 0, sd = 0, non.decision.time = 0,
+  nr.reps = 0, loglik = 0))
 }
 \arguments{
 \item{drift.step.fine}{Numeric variable storing precision with which drift rate space is searched in the fine grid parameter matrix.}

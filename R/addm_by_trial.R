@@ -11,12 +11,12 @@
 #' @param model.type A string that indicates which version of the model to run. 'standard' or 'memnoise' when memory effects shall be allowed.
 #' @param timestep An integer number that provides the timestep-size that is used in the simulations (in ms).
 
-addm_by_trial = function(choice.dat,
-                         eye.dat,
-                         model.parameters,
-                         nr.reps,
-                         model.type,
-                         timestep){
+addm_by_trial = function(choice.dat = data.table(v1 = 0,v2 = 0, id = 0),
+                         eye.dat = data.table(fixloc = 0, fixdur = 0, fixnr = 1, id = 0),
+                         model.parameters = c(0.006,0.6,0.06,0),
+                         nr.reps = 2000,
+                         model.type = 'standard',
+                         timestep = 10){
 
   # INITIALIZATION OF PARAMETERS -------------------------------------------------------------------------------------------------------
   drift.rate = model.parameters[1]

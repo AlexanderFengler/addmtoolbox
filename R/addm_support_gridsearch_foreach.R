@@ -7,16 +7,16 @@
 #' @inheritParams addm_fit_grid
 #' @param parameter.matrix Matrix that represents the parameter space which is looped over. (drift,theta,sd,non.decision.time)
 
-addm_support_gridsearch_foreach = function(conditions,dat,
-                                           eye.dat,
-                                           choice.dat,
-                                           parameter.matrix,
-                                           fit.type,
-                                           nr.reps,
-                                           model.type,
-                                           fixation.model,
-                                           log.file,
-                                           timestep){
+addm_support_gridsearch_foreach = function(conditions,dat = data.table(v1 = 0, v2 = 0, id = 0),
+                                           eye.dat = data.table(fixloc = 0, fixdur = 0, fixnr = 1, id = 0),
+                                           choice.dat = data.table(v1 = 0, v2 = 0, rt = 0, decision = 0, id = 0),
+                                           parameter.matrix = c(0.006,0.6,0.06,0),
+                                           fit.type = 'condition',
+                                           nr.reps = 2000,
+                                           model.type = 'standard',
+                                           fixation.model = 'fakepath',
+                                           log.file = 'defaultlog.txt',
+                                           timestep = 10){
 
   # Initialize iterator and output list --------------------------------------------------------------------------------------------------
   out = list(0)
