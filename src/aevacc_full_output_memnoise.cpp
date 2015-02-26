@@ -164,7 +164,7 @@ NumericVector aevacc_full_output_memnoise(float sd,
           break;
         }
       }
-      // ----------------------------------------------------------------------------------------------
+      // -----------------------------------------------------------------------------------------------
 
       // revert back cur_update to neutral state (times theta for update everywhere)
       cur_update[cur_fixpos_indice] = cur_update[cur_fixpos_indice]*theta;
