@@ -33,7 +33,7 @@ This can be easily done by typing ```install.packages("devtools")``` in the ***R
 
 Now type ```install_github('AlexanderFengler/addmtoolbox')``` to install the ***addmtoolbox*** package and make it available in your ***R Session*** with ```library(addmtoolbox)```.
 
-You should be able to use the provided functions now.
+*You should be able to use the provided functions now.*
 
 
 
