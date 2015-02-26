@@ -43,6 +43,6 @@ Below a list of ***R packages*** that are used in the source code. In case you w
 2. [data.table](http://cran.r-project.org/web/packages/data.table/vignettes/datatable-intro.pdf) (for high performance versions of data.frames, especially the ***setkey()*** function) 
 3. [foreach](http://cran.r-project.org/web/packages/foreach/vignettes/foreach.pdf) (parallel for loops)
 4. [Rcpp](http://adv-r.had.co.nz/Rcpp.html) (linking ***c++*** with ***R***) 
-5. [RcppZiggurat](http://cran.r-project.org/web/packages/RcppZiggurat/vignettes/RcppZiggurat.pdf) (faster version of ```rnorm()```)
+5. [RcppZiggurat](http://cran.r-project.org/web/packages/RcppZiggurat/vignettes/RcppZiggurat.pdf) (faster version of ```rnorm()``` )
 
 
