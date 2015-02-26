@@ -7,7 +7,7 @@ The basic drift diffusion process is implemented in a highly optimized ***c++***
 The package is in an early development stage.
 
 
-# Installing the package
+# Installation
 
 The following guide is specifically for Mac OS systems. Windows systems have not yet been tested. On Linux/Ubuntu system, directly follow up with step ***Installing addmtoolbox from github*** as gsl is often/always included in the distribution. 
 
