@@ -82,11 +82,11 @@ NumericVector aevacc_full_output_memnoise(float sd,
     cur_update[i] = theta*update[i];
     items_seen_noise[i] = items_seen_noise_scalar;
   }
-  // ----------------------------------------------------------------------------------------------
+  // ------------------------------------------------------------------------------------------------
 
-  // Loop cycling through simulations -------------------------------------------------------------
+  // Loop cycling through simulations ---------------------------------------------------------------
   for (int rep_cnt = 0; rep_cnt < nr_reps;++rep_cnt){
-    // reset ----------------------------------------------------------------------------------
+    // reset ----------------------------------------------------------------------------------------
     cur_rt = 0;
     cur_fix_cnt = 0;
     out_cnt += 7 + 2*nr_items;
@@ -96,15 +96,15 @@ NumericVector aevacc_full_output_memnoise(float sd,
       Durations[i] = 0;
       Fixations[i] = 0;
     }
-    // -----------------------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------
 
-    // Generate fixations for current simulation run -------------------------------------------
+    // Generate fixations for current simulation run -------------------------------------------------
     fixdat = fixation_model();
-    // -----------------------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------
 
-    // Enter simulation run --------------------------------------------------------------------
+    // Enter simulation run --------------------------------------------------------------------------
     for (int fix_cnt = 0; fix_cnt < 1000; ++fix_cnt){  // the < 1000 condition is arbitrary, "maxdur" is used to break out of loop
-      // Make updates according to new fixation location -----------------------------------------
+      // Make updates according to new fixation location ---------------------------------------------
 
       // adjust cur_update vector to reflect current fixation position
       cur_fixpos_indice = (fixdat(fix_cnt,0) - 1);
@@ -122,10 +122,10 @@ NumericVector aevacc_full_output_memnoise(float sd,
 
       // Update Fixations vector
       Fixations[fixdat(fix_cnt,0)-1]++;
-      // -----------------------------------------------------------------------------------------
+      // -----------------------------------------------------------------------------------------------
 
 
-      // Propagate Model -------------------------------------------------------------------------
+      // Propagate Model -------------------------------------------------------------------------------
       for (int rt_cur_fix = 0; rt_cur_fix < fixdat(fix_cnt,1);rt_cur_fix += timestep){
         // update Duration on Item
         Durations[fixdat(fix_cnt,0)-1] += timestep;
@@ -164,7 +164,7 @@ NumericVector aevacc_full_output_memnoise(float sd,
           break;
         }
       }
-      // ---------------------------------------------------------------------------------------
+      // ----------------------------------------------------------------------------------------------
 
       // revert back cur_update to neutral state (times theta for update everywhere)
       cur_update[cur_fixpos_indice] = cur_update[cur_fixpos_indice]*theta;
@@ -183,9 +183,9 @@ NumericVector aevacc_full_output_memnoise(float sd,
         break;
       }
     }
-    // ------------------------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------------
 
-    // Storing output -----------------------------------------------------------------------------
+    // Storing output -----------------------------------------------------------------------------------
     out[out_cnt] = maxpos + 1;
     out[out_cnt+1] = cur_fix_cnt;
 
@@ -204,9 +204,9 @@ NumericVector aevacc_full_output_memnoise(float sd,
       out[out_cnt + 6 + i] = Durations[i];
       out[out_cnt + 6 + nr_items + i] = Fixations[i];
     }
-    // --------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------------
   }
-  // ----------------------------------------------------------------------------------------------
+  // -----------------------------------------------------------------------------------------------------
   return out;
 }
 
