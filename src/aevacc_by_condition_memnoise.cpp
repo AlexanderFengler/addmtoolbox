@@ -26,7 +26,6 @@ static Ziggurat::Ziggurat::Ziggurat zigg;
 //' @param fixation_model a user supplied fixation model that will be utilized to supply fixation locations and potentially fixation durations
 //' @export
 // [[Rcpp::export]]
-
 IntegerVector aevacc_by_condition_memnoise(float sd,
                                            float theta,
                                            float drift,
