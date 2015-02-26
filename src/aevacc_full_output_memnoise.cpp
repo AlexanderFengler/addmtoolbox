@@ -9,7 +9,7 @@ static Ziggurat::Ziggurat::Ziggurat zigg;
 //' Runs evidence accumulation function (item general case) for one trial, and returns detailed model output
 //' @author Alexander Fengler, \email{alexanderfengler@@gmx.de}
 //' @title Evidence accumulation by condition (item general) with detailed output
-//' \code{aevacc_by_condition}
+//' \code{aevacc_full_output_memnoise}
 //' @return Returns a vector that stores detailed output by simulation run
 //' @param sd standard deviation used for drift diffusion process
 //' @param theta theta used for drift diffusion process
