@@ -16,6 +16,6 @@ Below is a step by step guide to installing the [GNU GSL scientific library](htt
 
 2. Go to the terminal and navigate to the directory to which you downloaded the ***gsl library***. (useful terminal commands: cd, ls)
 
-3. Type '''code'''
+3. Type ```code```
 
 
