@@ -1,4 +1,4 @@
-# addmtoolbox
+# ***addmtoolbox***
 
 The ***addmtoolbox*** package provides a set of functions that facilitate the process of fitting (attentional) drift diffusion models to epxerimental data.
 
