@@ -75,7 +75,7 @@ NumericVector aevacc_full_output_memnoise(float sd,
   for(int i = 0; i < nr_items; ++i){
     items_seen[i] = 1;
   }
-  // --------------------------------------------------------
+  // ------------------------------------------------------------------------------------------------
 
   for (int i = 0; i < nr_items; ++i){
     update[i] = update[i]*drift;
