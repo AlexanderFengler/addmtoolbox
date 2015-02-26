@@ -16,3 +16,5 @@ Imports: data.table,
     RcppGSL,
     RcppZiggurat
 LinkingTo: Rcpp,RcppGSL,RcppZiggurat
+Suggests: knitr
+VignetteBuilder: knitr
