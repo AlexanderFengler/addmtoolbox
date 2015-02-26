@@ -11,7 +11,7 @@ The package is in an early development stage.
 
 The following guide is specifically for Mac OS systems. Windows systems have not yet been tested. On Linux/Ubuntu system, directly follow up with step ***Installing addmtoolbox from github*** as gsl is often/always included in the distribution as well as all utilities that you gain on Macs by installing [***Xcode***](https://developer.apple.com/xcode/). 
 
-## Dependencies
+## Installation relevant dependencies
 The ***addmtoolbox*** package depends notably on the ***RcppZiggurat*** package which in turn depends on the ***RcppGSL*** package. For the ***RcppGSL*** package to work, we need to install the [***GNU GSL scientific library***](http://www.gnu.org/software/gsl/). 
 
 Moreover, you need to have [***Xcode***](https://developer.apple.com/xcode/) installed on your system, which if not present can be downloaded for free from the [***Apple Appstore***](https://itunes.apple.com/de/app/xcode/id497799835?mt=12).
@@ -35,7 +35,7 @@ Now type ```install_github('AlexanderFengler/addmtoolbox')``` to install the ***
 
 *You should be able to use the provided functions now.*
 
-# Uselful R packages to know for understanding the source code
+# Other package dependencies
 
 Below a list of ***R packages*** that are used in the source code. In case you would like to contribute to the codebase, it may be useful to understand the basics of the utilities these packages offer, in order to have an easier time understanding the soruce code of the ***addmtoolbox*** package.
 
