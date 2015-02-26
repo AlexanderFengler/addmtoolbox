@@ -1,6 +1,6 @@
 # ***addmtoolbox***
 
-The ***addmtoolbox*** package provides a set of functions that facilitate the process of fitting (attentional) drift diffusion models to epxerimental data.
+The ***addmtoolbox*** package provides a set of functions that facilitate the process of fitting (attentional) drift diffusion models to experimental data.
 
 The basic drift diffusion process is implemented in a highly optimized ***c++*** function, which is complemented with a host of ***R*** functions that help with *data preparation*, facilitation of *parameter optimization* and *parallelization*.
 
@@ -9,7 +9,7 @@ The package is in an early development stage.
 
 # Installation
 
-The following guide is specifically for Mac OS systems. Windows systems have not yet been tested. On Linux/Ubuntu system, directly follow up with step ***Installing addmtoolbox from github*** as gsl is often/always included in the distribution. 
+The following guide is specifically for Mac OS systems. Windows systems have not yet been tested. On Linux/Ubuntu system, directly follow up with step ***Installing addmtoolbox from github*** as gsl is often/always included in the distribution as well as all utilities that you gain on Macs by installing [***Xcode***](https://developer.apple.com/xcode/). 
 
 ## Dependencies
 The ***addmtoolbox*** package depends notably on the ***RcppZiggurat*** package which in turn depends on the ***RcppGSL*** package. For the ***RcppGSL*** package to work, we need to install the [***GNU GSL scientific library***](http://www.gnu.org/software/gsl/). 
@@ -35,5 +35,14 @@ Now type ```install_github('AlexanderFengler/addmtoolbox')``` to install the ***
 
 *You should be able to use the provided functions now.*
 
+# Uselful R packages to know for understanding the source code
+
+Below a list of ***R packages*** that are used in the source code. In case you would like to contribute to the codebase, it may be useful to understand the basics of the utilities these packages offer, in order to have an easier time understanding the soruce code of the ***addmtoolbox*** package.
+
+1. [dplyr](http://cran.rstudio.com/web/packages/dplyr/vignettes/introduction.html) (for summarising data.frames)
+2. [data.table](http://cran.r-project.org/web/packages/data.table/vignettes/datatable-intro.pdf) (for high performance versions of data.frames, especially the ***setkey()*** function) 
+3. [foreach](http://cran.r-project.org/web/packages/foreach/vignettes/foreach.pdf) (parallel for loops)
+4. [Rcpp](http://adv-r.had.co.nz/Rcpp.html) (linking ***c++*** with ***R***) 
+5. [RcppZiggurat](http://cran.r-project.org/web/packages/RcppZiggurat/vignettes/RcppZiggurat.pdf) (faster version of ```rnorm()```)
 
 
