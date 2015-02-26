@@ -6,7 +6,7 @@
 \code{aevacc2_by_condition} Returns data.table with log likelihoods and corresponding parameter combinations}
 \usage{
 aevacc2_by_condition(sd, theta, drift, non_decision_time, timestep, nr_reps,
-  maxdur, update, fixpos, fixdur, fixdursamples, fixation_model)
+  maxdur, update, fixation_model)
 }
 \arguments{
 \item{sd}{standard deviation used for drift diffusion process}
@@ -24,12 +24,6 @@ aevacc2_by_condition(sd, theta, drift, non_decision_time, timestep, nr_reps,
 \item{maxdur}{maximum duration in ms that the process is allowed to simulate}
 
 \item{update}{Vector that stores the item valuations for the trial conditon simulated}
-
-\item{fixpos}{Vector that stores the locations for a supplied fixed fixation pathway}
-
-\item{fixdur}{Vector that stores the fixation durations for a supplied fixed fixation pathway}
-
-\item{fixdursamples}{Vector from which fixation duration can be sampled once supplied fixations run out}
 
 \item{fixation_model}{a user supplied fixation model that will be utilized to supply fixation locations and potentially fixation durations}
 }

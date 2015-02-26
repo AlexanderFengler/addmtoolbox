@@ -10,7 +10,7 @@ addm_fit_grid(conditions.dat = data.table(v1 = 0, v2 = 0, id = 0),
   drifts = seq(0.002, 0.01, 0.002), thetas = seq(0.2, 1, 0.2),
   sds = seq(0.02, 0.1, 0.02), non.decision.times = 0, timestep = 10,
   nr.reps = 2000, model.type = "standard", output.type = "fit",
-  fit.type = "condition", fixation.model = "fakepath",
+  fit.type = "condition", fixation.model = "fixedpath",
   allow.fine.grid = 0, log.file = "defaultlog.txt", parallel = 1)
 }
 \arguments{
@@ -38,7 +38,7 @@ addm_fit_grid(conditions.dat = data.table(v1 = 0, v2 = 0, id = 0),
 
 \item{fit.type}{A string indicating either 'condition' for fits by unique trial conditions or 'trial' for fits by trial.}
 
-\item{fixation.model}{A string that indicates which fixation model will be utilized for simulations. 'random' for random fixations (implemented) 'fakepath' for following a predetermined fixation path with fixed durations (implemented).}
+\item{fixation.model}{A string that indicates which fixation model will be utilized for simulations. 'random' for random fixations (implemented) 'fixedpath' for following a predetermined fixation path with fixed durations (implemented).}
 
 \item{allow.fine.grid}{Binary variable that indicates whether we allow (1) a fine grid to be created an searched around the coarse grid minimum or not (0).}
 

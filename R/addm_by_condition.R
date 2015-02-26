@@ -94,7 +94,7 @@ addm_by_condition = function(conditions.dat = data.table(v1 = 0, v2 = 0, id = 0)
           aevacc = aevacc_by_condition
       }
     } else if (output.type == "full"){
-      aevacc = aevacc_full_output
+      aevacc = aevacc_full_output_memnoise
     }
   } else if (model.type == "memnoise"){
     if (output.type == "fit"){

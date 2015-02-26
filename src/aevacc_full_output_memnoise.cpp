@@ -19,9 +19,6 @@ static Ziggurat::Ziggurat::Ziggurat zigg;
 //' @param nr_reps number of repitions (simulation runs)
 //' @param maxdur maximum duration in ms that the process is allowed to simulate
 //' @param update Vector that stores the item valuations for the trial conditon simulated
-//' @param fixpos Vector that stores the locations for a supplied fixed fixation pathway
-//' @param fixdur Vector that stores the fixation durations for a supplied fixed fixation pathway
-//' @param fixdursamples Vector from which fixation duration can be sampled once supplied fixations run out
 //' @param fixation_model a user supplied fixation model that will be utilized to supply fixation locations and potentially fixation durations
 //' @export
 // [[Rcpp::export]]
@@ -33,9 +30,6 @@ NumericVector aevacc_full_output_memnoise(float sd,
                                           int nr_reps,
                                           int maxdur,
                                           NumericVector update,
-                                          IntegerVector fixpos,
-                                          IntegerVector fixdur,
-                                          IntegerVector fixdursamples,
                                           Function fixation_model){
 
   // Set seed for random sampler ------------------------------------------------------------------
@@ -55,17 +49,15 @@ NumericVector aevacc_full_output_memnoise(float sd,
   int last_attended_chosen = 0;
   NumericVector Durations(nr_items);
   NumericVector Fixations(nr_items);
+
+  NumericMatrix fixdat = fixation_model();
   // ----------------------------------------------------------------------------------------------
 
   // Initialization of Varibales needed in loop ---------------------------------------------------
   NumericVector Evid(nr_items);
   int out_cnt = -7+2*nr_items;           // output counter
   float temp = 0;                        // loop internal (used at point of current-rdv calculation)
-  int num_fixpos = fixpos.size();        // number of real fixations supplied
-  IntegerVector temp_fixpos(1);
-  IntegerVector cur_fixpos(1);           // storing current fixation position
   int cur_fixpos_indice;                 // storing indice of current fixation (-1 to make it vector indice)
-  IntegerVector cur_fixdur(1);           // storing current fixation duration
   int cur_fix_cnt = 0;                   // counts number of fixations used
   IntegerVector eligible(nr_items);      // binary indication of which fixation position is valid for sampling
 
@@ -77,8 +69,13 @@ NumericVector aevacc_full_output_memnoise(float sd,
   NumericVector temp_update(nr_items);   // storing current updates adjusted for items_seen and items_seen noise
   NumericVector items_seen(nr_items);    // vector that scales drift for unseen items
   NumericVector items_seen_noise(nr_items); // vector than scales noise for unseen items
-  float items_seen_noise_scalar = 0;
 
+  // temporarily not include any effect of item seen
+  float items_seen_noise_scalar = 1;
+  for(int i = 0; i < nr_items; ++i){
+    items_seen[i] = 1;
+  }
+  // --------------------------------------------------------
 
   for (int i = 0; i < nr_items; ++i){
     update[i] = update[i]*drift;
@@ -101,36 +98,16 @@ NumericVector aevacc_full_output_memnoise(float sd,
     }
     // -----------------------------------------------------------------------------------------
 
+    // Generate fixations for current simulation run -------------------------------------------
+    fixdat = fixation_model();
+    // -----------------------------------------------------------------------------------------
+
     // Enter simulation run --------------------------------------------------------------------
     for (int fix_cnt = 0; fix_cnt < 1000; ++fix_cnt){  // the < 1000 condition is arbitrary, "maxdur" is used to break out of loop
-
-      // Get next fixation positions -----------------------------------------------------------
-      // identifying current fixation position and duration
-      // If empirical fixations still to be supplied, fine otherwise sample from eligible fixation positions
-      // and sample duration from fixdursamples vector
-      if (fix_cnt <= (num_fixpos - 1)){
-        cur_fixpos[0] = fixpos[fix_cnt];
-        cur_fixdur[0] = fixdur[fix_cnt];
-        // If we reached the last fixation, here we actually sample the duration from normal refixations!
-        // Rationale: In case there is any "shorter-final-fixation" bias in the data, the algorithm should be given the chance to reproduce such an effect
-        // NOT be supplied with such an effect !
-        if (fix_cnt == num_fixpos - 1){
-          cur_fixdur = fixation_model(fixdursamples,1);
-        }
-      } else if (fix_cnt > (num_fixpos - 1)){
-        temp_fixpos[0] = cur_fixpos[0];
-        // use sample function
-        while (cur_fixpos[0] == temp_fixpos[0]){
-          cur_fixpos = fixation_model(eligible,1);
-        }
-        cur_fixdur = fixation_model(fixdursamples,1);
-      }
-      // -----------------------------------------------------------------------------------------
-
       // Make updates according to new fixation location -----------------------------------------
 
       // adjust cur_update vector to reflect current fixation position
-      cur_fixpos_indice = (cur_fixpos[0] - 1);
+      cur_fixpos_indice = (fixdat(fix_cnt,0) - 1);
       cur_update[cur_fixpos_indice] = update[cur_fixpos_indice];
 
 
@@ -144,14 +121,14 @@ NumericVector aevacc_full_output_memnoise(float sd,
       }
 
       // Update Fixations vector
-      Fixations[(cur_fixpos[0]-1)]++;
+      Fixations[fixdat(fix_cnt,0)-1]++;
       // -----------------------------------------------------------------------------------------
 
 
       // Propagate Model -------------------------------------------------------------------------
-      for (int rt_cur_fix = 0; rt_cur_fix < cur_fixdur[0];++rt_cur_fix){
+      for (int rt_cur_fix = 0; rt_cur_fix < fixdat(fix_cnt,1);rt_cur_fix += timestep){
         // update Duration on Item
-        Durations[(cur_fixpos[0]-1)]++;
+        Durations[fixdat(fix_cnt,0)-1] += timestep;
 
         // update decision_term --> performance isues lead me to solve the decision_taken issue this way
         decision = 1;
@@ -162,7 +139,7 @@ NumericVector aevacc_full_output_memnoise(float sd,
         }
 
         //update RT
-        cur_rt++;
+        cur_rt += timestep;
 
         // Find signal with maximum value
         for (int j = 0; j < nr_items; ++j){
@@ -197,8 +174,8 @@ NumericVector aevacc_full_output_memnoise(float sd,
 
       // Check whether decision has been taken or maximum duration has been reached at this point
       if ((decision == 1) || (cur_rt >= maxdur)){
-        item_last_attended = cur_fixpos[0];
-        value_last_attended = update[(cur_fixpos[0] - 1)];
+        item_last_attended = fixdat(fix_cnt,0);
+        value_last_attended = update[fixdat(fix_cnt,0) - 1];
         last_attended_chosen = 0;
         if (item_last_attended == (maxpos + 1)){
           last_attended_chosen = 1;
@@ -224,7 +201,7 @@ NumericVector aevacc_full_output_memnoise(float sd,
     out[out_cnt + 5] = last_attended_chosen;
 
     for(int i = 0; i < nr_items;i++){
-      out[out_cnt + 6 + i] = Durations[i]*timestep;
+      out[out_cnt + 6 + i] = Durations[i];
       out[out_cnt + 6 + nr_items + i] = Fixations[i];
     }
     // --------------------------------------------------------------------------------------------

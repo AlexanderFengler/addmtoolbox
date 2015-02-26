@@ -14,13 +14,10 @@
 #' @param nr_reps number of repitions (simulation runs)
 #' @param maxdur maximum duration in ms that the process is allowed to simulate
 #' @param update Vector that stores the item valuations for the trial conditon simulated
-#' @param fixpos Vector that stores the locations for a supplied fixed fixation pathway
-#' @param fixdur Vector that stores the fixation durations for a supplied fixed fixation pathway
-#' @param fixdursamples Vector from which fixation duration can be sampled once supplied fixations run out
 #' @param fixation_model a user supplied fixation model that will be utilized to supply fixation locations and potentially fixation durations
 #' @export
-aevacc2_by_condition <- function(sd, theta, drift, non_decision_time, timestep, nr_reps, maxdur, update, fixpos, fixdur, fixdursamples, fixation_model) {
-    .Call('addmtoolbox_aevacc2_by_condition', PACKAGE = 'addmtoolbox', sd, theta, drift, non_decision_time, timestep, nr_reps, maxdur, update, fixpos, fixdur, fixdursamples, fixation_model)
+aevacc2_by_condition <- function(sd, theta, drift, non_decision_time, timestep, nr_reps, maxdur, update, fixation_model) {
+    .Call('addmtoolbox_aevacc2_by_condition', PACKAGE = 'addmtoolbox', sd, theta, drift, non_decision_time, timestep, nr_reps, maxdur, update, fixation_model)
 }
 
 #' Runs evidence accumulation function (2 item case) for one trial condition

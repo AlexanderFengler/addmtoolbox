@@ -8,7 +8,7 @@ addm_support_gridsearch_foreach(conditions, dat = data.table(v1 = 0, v2 = 0,
   id = 0), eye.dat = data.table(fixloc = 0, fixdur = 0, fixnr = 1, id = 0),
   choice.dat = data.table(v1 = 0, v2 = 0, rt = 0, decision = 0, id = 0),
   parameter.matrix = c(0.006, 0.6, 0.06, 0), fit.type = "condition",
-  nr.reps = 2000, model.type = "standard", fixation.model = "fakepath",
+  nr.reps = 2000, model.type = "standard", fixation.model = "fixedpath",
   log.file = "defaultlog.txt", timestep = 10)
 }
 \arguments{
@@ -24,7 +24,7 @@ addm_support_gridsearch_foreach(conditions, dat = data.table(v1 = 0, v2 = 0,
 
 \item{model.type}{A string that indicates which version of the model to run. 'standard' or 'memnoise' when memory effects shall be allowed.}
 
-\item{fixation.model}{A string that indicates which fixation model will be utilized for simulations. 'random' for random fixations (implemented) 'fakepath' for following a predetermined fixation path with fixed durations (implemented).}
+\item{fixation.model}{A string that indicates which fixation model will be utilized for simulations. 'random' for random fixations (implemented) 'fixedpath' for following a predetermined fixation path with fixed durations (implemented).}
 
 \item{log.file}{Filepath for storage of logs}
 

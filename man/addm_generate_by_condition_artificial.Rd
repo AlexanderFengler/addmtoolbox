@@ -6,7 +6,7 @@
 \usage{
 addm_generate_by_condition_artificial(set.size = 2,
   possible.valuations = c(0, 1, 2, 3), timestep = 10, nr.reps = 2000,
-  model.type = "standard", fixation.model = "fakepath",
+  model.type = "standard", fixation.model = "fixedpath",
   core.parameters = c(0.006, 0.6, 0.06, 0))
 }
 \arguments{
@@ -20,7 +20,7 @@ addm_generate_by_condition_artificial(set.size = 2,
 
 \item{model.type}{A string that indicates which version of the model to run. 'standard' or 'memnoise' when memory effects shall be allowed.}
 
-\item{fixation.model}{A string that indicates which fixation model will be utilized for simulations. 'random' for random fixations (implemented) 'fakepath' for following a predetermined fixation path with fixed durations (implemented).}
+\item{fixation.model}{A string that indicates which fixation model will be utilized for simulations. 'random' for random fixations (implemented) 'fixedpath' for following a predetermined fixation path with fixed durations (implemented).}
 
 \item{core.parameters}{Vector that provide parameters used to generate artificial data from drift diffusion process. (drift,theta,sd,non deicision time)}
 }

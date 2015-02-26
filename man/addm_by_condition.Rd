@@ -9,7 +9,7 @@ addm_by_condition(conditions.dat = data.table(v1 = 0, v2 = 0, id = 0),
   choice.dat = data.table(decision = 0, rt = 0, id = 0),
   model.parameters = c(0.006, 0.6, 0.06, 0), nr.reps = 2000,
   model.type = "standard", output.type = "fit",
-  fixation.model = "fakepath", timestep = 10, generate = 0)
+  fixation.model = "fixedpath", timestep = 10, generate = 0)
 }
 \arguments{
 \item{conditions.dat}{A 'data.frame' storing the item valuations (v1,v2...) by unique trial conditions. An id column (id) needs to be provided that matches by trial data.}
@@ -26,7 +26,7 @@ addm_by_condition(conditions.dat = data.table(v1 = 0, v2 = 0, id = 0),
 
 \item{output.type}{A string that indicates what output the model shall produce. 'full' for detailed model output, 'fit' for sparse output (rt,decision) by id variable.}
 
-\item{fixation.model}{A string that indicates which fixation model will be utilized for simulations. 'random' for random fixations (implemented) 'fakepath' for following a predetermined fixation path with fixed durations (implemented)}
+\item{fixation.model}{A string that indicates which fixation model will be utilized for simulations. 'random' for random fixations (implemented) 'fixedpath' for following a predetermined fixation path with fixed durations (implemented) or 'user' for a user supplied fixation model (function name: user_fixation_model)}
 
 \item{timestep}{An integer number that provides the timestep-size that is used in the simulations (in ms).}
 

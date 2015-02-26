@@ -80,12 +80,12 @@ IntegerVector aevacc2_by_condition(float sd,
     for (int fix_cnt = 0; fix_cnt < 1000; ++fix_cnt){  //
 
       // Make updates according to new fixation location ---------------------------------------
-      cur_fixpos_indice = fixdat(fix_cnt,1) - 1;
+      cur_fixpos_indice = fixdat(fix_cnt,0) - 1;
       cur_update[cur_fixpos_indice] = update[cur_fixpos_indice];
       // ---------------------------------------------------------------------------------------
 
       // Propagate Model through current fixation ----------------------------------------------
-      for (int rt_cur_fix = 0; rt_cur_fix < fixdat(fix_cnt,2);rt_cur_fix += timestep){
+      for (int rt_cur_fix = 0; rt_cur_fix < fixdat(fix_cnt,1);rt_cur_fix += timestep){
 
         // Accumulate rdvence for current timestep
         rdv += (cur_update[0] - cur_update[1]) + sd*zigg.norm();
