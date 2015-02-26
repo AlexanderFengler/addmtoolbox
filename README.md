@@ -13,9 +13,8 @@ The ***addmtoolbox*** package depends notably on the ***RcppZiggurat*** package 
 Below is a step by step guide to installing the [GNU GSL scientific library](http://www.gnu.org/software/gsl/).
 
 1. First [download](http://mirrors.ibiblio.org/gnu/ftp/gnu/gsl/) the current version and unpack it if not done automatically. (choose the file which has the highest version number: ***gsl-1.16.tar.gz*** at the time of writing)
-
 2. Go to the terminal and navigate to the directory to which you downloaded the ***gsl library***. (useful terminal commands: cd, ls)
+3. Type ```./configure``` wait until the the execution finished and then type ```make``` to install the library. (you can find these instructions in the ***INSTALL*** file inside of the downloaded ***gsl*** folder). The build process takes a while now.
 
-3. Type ```code```
-
+By now we can proceed by opening ***RStudio***.
 
