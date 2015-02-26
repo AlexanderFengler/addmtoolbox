@@ -37,7 +37,7 @@ Now type ```install_github('AlexanderFengler/addmtoolbox')``` to install the ***
 
 # Other package dependencies
 
-Below a list of ***R packages*** that are used in the source code. In case you would like to contribute to the codebase, it may be useful to understand the basics of the utilities these packages offer, in order to have an easier time understanding the soruce code of the ***addmtoolbox*** package.
+Below a list of ***R packages*** that are used in the source code. In case you would like to really understand and contribute to the codebase, it may be useful to understand the basics of the utilities these packages offer.
 
 1. [dplyr](http://cran.rstudio.com/web/packages/dplyr/vignettes/introduction.html) (for summarising data.frames)
 2. [data.table](http://cran.r-project.org/web/packages/data.table/vignettes/datatable-intro.pdf) (for high performance versions of data.frames, especially the ***setkey()*** function) 
