@@ -1,5 +1,10 @@
 # addmtoolbox
-Collection of Tools for fitting attentional drift diffusion models (standard drift diffusion models included)
+
+The ***addmtoolbox*** package provides a set of functions that facilitate the process of fitting (attentional) drift diffusion models to epxerimental data.
+
+The basic drift diffusion process is implemented in a highly optimized ***c++*** function, which is complemented with a host of ***R*** functions that help with *data preparation*, facilitation of *parameter optimization* and *parallelization*.
+
+The package is in an early development stage.
 
 
 # Installing the package
@@ -8,6 +13,8 @@ The following guide is specifically for Mac OS systems. Windows systems have not
 
 ## Dependencies
 The ***addmtoolbox*** package depends notably on the ***RcppZiggurat*** package which in turn depends on the ***RcppGSL*** package. For the ***RcppGSL*** package to work, we need to install the [GNU GSL scientific library](http://www.gnu.org/software/gsl/). 
+
+Moreover, you need to have [***Xcode***](https://developer.apple.com/xcode/) installed on your system, which if not present can be downloaded for free from the [***Apple Appstore***](https://itunes.apple.com/de/app/xcode/id497799835?mt=12).
 
 ## Installing GSL Library
 Below is a step by step guide to installing the [GNU GSL scientific library](http://www.gnu.org/software/gsl/).
