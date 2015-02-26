@@ -133,7 +133,7 @@ aevacc_by_trial_memnoise <- function(nr_reps, maxdur, mindur, cur_decision, sd, 
 #' Runs evidence accumulation function (item general case) for one trial, and returns detailed model output
 #' @author Alexander Fengler, \email{alexanderfengler@@gmx.de}
 #' @title Evidence accumulation by condition (item general) with detailed output
-#' \code{aevacc_by_condition}
+#' \code{aevacc_full_output_memnoise}
 #' @return Returns a vector that stores detailed output by simulation run
 #' @param sd standard deviation used for drift diffusion process
 #' @param theta theta used for drift diffusion process
@@ -143,12 +143,9 @@ aevacc_by_trial_memnoise <- function(nr_reps, maxdur, mindur, cur_decision, sd, 
 #' @param nr_reps number of repitions (simulation runs)
 #' @param maxdur maximum duration in ms that the process is allowed to simulate
 #' @param update Vector that stores the item valuations for the trial conditon simulated
-#' @param fixpos Vector that stores the locations for a supplied fixed fixation pathway
-#' @param fixdur Vector that stores the fixation durations for a supplied fixed fixation pathway
-#' @param fixdursamples Vector from which fixation duration can be sampled once supplied fixations run out
 #' @param fixation_model a user supplied fixation model that will be utilized to supply fixation locations and potentially fixation durations
 #' @export
-aevacc_full_output_memnoise <- function(sd, theta, drift, non_decision_time, timestep, nr_reps, maxdur, update, fixpos, fixdur, fixdursamples, fixation_model) {
-    .Call('addmtoolbox_aevacc_full_output_memnoise', PACKAGE = 'addmtoolbox', sd, theta, drift, non_decision_time, timestep, nr_reps, maxdur, update, fixpos, fixdur, fixdursamples, fixation_model)
+aevacc_full_output_memnoise <- function(sd, theta, drift, non_decision_time, timestep, nr_reps, maxdur, update, fixation_model) {
+    .Call('addmtoolbox_aevacc_full_output_memnoise', PACKAGE = 'addmtoolbox', sd, theta, drift, non_decision_time, timestep, nr_reps, maxdur, update, fixation_model)
 }
 

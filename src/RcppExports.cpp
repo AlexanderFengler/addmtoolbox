@@ -160,8 +160,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // aevacc_full_output_memnoise
-NumericVector aevacc_full_output_memnoise(float sd, float theta, float drift, int non_decision_time, int timestep, int nr_reps, int maxdur, NumericVector update, IntegerVector fixpos, IntegerVector fixdur, IntegerVector fixdursamples, Function fixation_model);
-RcppExport SEXP addmtoolbox_aevacc_full_output_memnoise(SEXP sdSEXP, SEXP thetaSEXP, SEXP driftSEXP, SEXP non_decision_timeSEXP, SEXP timestepSEXP, SEXP nr_repsSEXP, SEXP maxdurSEXP, SEXP updateSEXP, SEXP fixposSEXP, SEXP fixdurSEXP, SEXP fixdursamplesSEXP, SEXP fixation_modelSEXP) {
+NumericVector aevacc_full_output_memnoise(float sd, float theta, float drift, int non_decision_time, int timestep, int nr_reps, int maxdur, NumericVector update, Function fixation_model);
+RcppExport SEXP addmtoolbox_aevacc_full_output_memnoise(SEXP sdSEXP, SEXP thetaSEXP, SEXP driftSEXP, SEXP non_decision_timeSEXP, SEXP timestepSEXP, SEXP nr_repsSEXP, SEXP maxdurSEXP, SEXP updateSEXP, SEXP fixation_modelSEXP) {
 BEGIN_RCPP
     SEXP __sexp_result;
     {
@@ -174,11 +174,8 @@ BEGIN_RCPP
         Rcpp::traits::input_parameter< int >::type nr_reps(nr_repsSEXP );
         Rcpp::traits::input_parameter< int >::type maxdur(maxdurSEXP );
         Rcpp::traits::input_parameter< NumericVector >::type update(updateSEXP );
-        Rcpp::traits::input_parameter< IntegerVector >::type fixpos(fixposSEXP );
-        Rcpp::traits::input_parameter< IntegerVector >::type fixdur(fixdurSEXP );
-        Rcpp::traits::input_parameter< IntegerVector >::type fixdursamples(fixdursamplesSEXP );
         Rcpp::traits::input_parameter< Function >::type fixation_model(fixation_modelSEXP );
-        NumericVector __result = aevacc_full_output_memnoise(sd, theta, drift, non_decision_time, timestep, nr_reps, maxdur, update, fixpos, fixdur, fixdursamples, fixation_model);
+        NumericVector __result = aevacc_full_output_memnoise(sd, theta, drift, non_decision_time, timestep, nr_reps, maxdur, update, fixation_model);
         PROTECT(__sexp_result = Rcpp::wrap(__result));
     }
     UNPROTECT(1);
