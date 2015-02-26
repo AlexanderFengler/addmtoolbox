@@ -19,7 +19,6 @@ static Ziggurat::Ziggurat::Ziggurat zigg;
 //' @param nr_reps number of repitions (simulation runs)
 //' @param maxdur maximum duration in ms that the process is allowed to simulate
 //' @param update Vector that stores the item valuations for the trial conditon simulated
-//' @param fixdursamples Vector from which fixation duration can be sampled once supplied fixations run out
 //' @param fixation_model a user supplied fixation model that will be utilized to supply fixation locations and potentially fixation durations
 //' @export
 // [[Rcpp::export]]
@@ -31,7 +30,6 @@ IntegerVector aevacc2_by_condition(float sd,
                                    int nr_reps,
                                    int maxdur,
                                    NumericVector update,
-                                   IntegerVector fixdursamples,
                                    Function fixation_model){
 
   // Set seed for random sampler ------------------------------------------------------------------
@@ -60,7 +58,7 @@ IntegerVector aevacc2_by_condition(float sd,
     cur_update[i] = theta*update[i];
   }
 
-  NumericMatrix fixdat = fixation_model(fixdursamples);
+  NumericMatrix fixdat = fixation_model();
   // ------------------------------------------------------------------------------------------------
 
   // Outer loop cycles through simulation numbers --------------------------------------------------
@@ -75,7 +73,7 @@ IntegerVector aevacc2_by_condition(float sd,
     rdv = 0;
 
     // Compute fixation path
-    fixdat = fixation_model(fixdursamples);
+    fixdat = fixation_model();
     // -------------------------------------------------------------------------------------------
 
     // Propagate model through simulation run --------------------------------------------------

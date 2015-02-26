@@ -11,7 +11,7 @@
 #' @param nr.reps An integer number that tells the function how many simulation runs to use.
 #' @param model.type A string that indicates which version of the model to run. 'standard' or 'memnoise' when memory effects shall be allowed.
 #' @param output.type A string that indicates what output the model shall produce. 'full' for detailed model output, 'fit' for sparse output (rt,decision) by id variable.
-#' @param fixation.model A string that indicates which fixation model will be utilized for simulations. 'random' for random fixations (implemented) 'fakepath' for following a predetermined fixation path with fixed durations (implemented)
+#' @param fixation.model A string that indicates which fixation model will be utilized for simulations. 'random' for random fixations (implemented) 'fixedpath' for following a predetermined fixation path with fixed durations (implemented) or 'user' for a user supplied fixation model (function name: user_fixation_model)
 #' @param timestep An integer number that provides the timestep-size that is used in the simulations (in ms).
 #' @param generate Binary variable that tells the function to return either log likelihood values (0) or rt, decision (1). Relevant only if model.type variable is 'fit'.
 
@@ -22,7 +22,7 @@ addm_by_condition = function(conditions.dat = data.table(v1 = 0, v2 = 0, id = 0)
                              nr.reps = 2000,
                              model.type = 'standard',
                              output.type = 'fit',
-                             fixation.model = 'fakepath',
+                             fixation.model = 'fixedpath',
                              timestep = 10,
                              generate = 0){
 
@@ -106,20 +106,16 @@ addm_by_condition = function(conditions.dat = data.table(v1 = 0, v2 = 0, id = 0)
   #-------------------------------------------------------------------------------------------------------------------------------------
 
   # INITIALIZE FIXATION PATHWAYS -------------------------------------------------------------------------------------------------------
-  if (fixation.model == "fakepath"){
-    duration.length = 400
-    amount.fixations = ceiling(cur.max.RT / duration.length)
-    repetitions.of.sequence = ceiling(amount.fixations / cur.set_size)
-
-    cur.fixations = rep(1:cur.set_size, repetitions.of.sequence)
-    cur.durations = rep(duration.length, amount.fixations)
-    fixdur.vec = duration.length
+  if (fixation.model == "fixedpath"){
+    fixation_model = addm2_fixation_model_fixedpath
   }
 
   if (fixation.model == "random"){
-    cur.fixations = as.numeric()
-    cur.durations = 0
-    fixdur.vec = 0
+    fixation_model = addm2_fixation_model_random
+  }
+
+  if (fixation.model == "user"){
+    fixation_model = user_fixation_model
   }
   #-------------------------------------------------------------------------------------------------------------------------------------
 
@@ -138,11 +134,7 @@ addm_by_condition = function(conditions.dat = data.table(v1 = 0, v2 = 0, id = 0)
                       nr.reps,
                       cur.max.RT,
                       valuations[,cnt],
-                      cur.fixations,
-                      cur.durations,
-                      fixdur.vec,
-                      cur.set_size,
-                      sample)
+                      fixation_model)
 
     addm.output[output.row.min:output.row.max,output.cols] = matrix(output,nrow=nr.reps,ncol=nr.output.cols,byrow=TRUE)
     output.row.min[1] = sum(output.row.min,nr.reps)

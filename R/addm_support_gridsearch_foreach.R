@@ -14,7 +14,7 @@ addm_support_gridsearch_foreach = function(conditions,dat = data.table(v1 = 0, v
                                            fit.type = 'condition',
                                            nr.reps = 2000,
                                            model.type = 'standard',
-                                           fixation.model = 'fakepath',
+                                           fixation.model = 'fixedpath',
                                            log.file = 'defaultlog.txt',
                                            timestep = 10){
 

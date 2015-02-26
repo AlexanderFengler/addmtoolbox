@@ -6,12 +6,12 @@
 #' @export
 #' @param fixdur.vec Vector of fixation-durations to sample from
 
-addm2_fixation_model_fixedpath = function(fixdur.vec = c(400,400)){
+addm2_fixation_model_fixedpath = function(){
 
   # Get fixation durations and location for simulation run -------------------------------------
   x = matrix(rep(0,500),ncol=2)
   x[,1] = rep(c(1,2),125)
-  x[,2] = sample(fixdur.vec,250,replace=TRUE)
+  x[,2] = rep(400,250)
   # --------------------------------------------------------------------------------------------
   return(x)
 }

@@ -16,7 +16,7 @@
 #' @param model.type A string that indicates which version of the model to run. 'standard' or 'memnoise' when memory effects shall be allowed.
 #' @param output.type A string that indicates what output the model shall produce. 'full' for detailed model output, 'fit' for sparse output (rt,decision) by id variable.
 #' @param fit.type A string indicating either 'condition' for fits by unique trial conditions or 'trial' for fits by trial.
-#' @param fixation.model A string that indicates which fixation model will be utilized for simulations. 'random' for random fixations (implemented) 'fakepath' for following a predetermined fixation path with fixed durations (implemented).
+#' @param fixation.model A string that indicates which fixation model will be utilized for simulations. 'random' for random fixations (implemented) 'fixedpath' for following a predetermined fixation path with fixed durations (implemented).
 #' @param allow.fine.grid Binary variable that indicates whether we allow (1) a fine grid to be created an searched around the coarse grid minimum or not (0).
 #' @param log.file Filepath for storage of logs
 #' @param parallel Binary variable that tells whether to initialize local cluster on start (1) or not (0).
@@ -33,7 +33,7 @@ addm_fit_grid = function(conditions.dat = data.table(v1 = 0, v2 = 0, id = 0),
                          model.type = 'standard',
                          output.type = 'fit',
                          fit.type = 'condition',
-                         fixation.model = 'fakepath',
+                         fixation.model = 'fixedpath',
                          allow.fine.grid = 0,
                          log.file = "defaultlog.txt",
                          parallel = 1){
