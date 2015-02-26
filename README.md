@@ -5,4 +5,4 @@ Collection of Tools for fitting attentional drift diffusion models (standard dri
 # Installing the package
 
 ## Dependencies
-The *_addmtoolbox_* package depends 
+The *addmtoolbox* package depends 
