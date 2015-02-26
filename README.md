@@ -14,7 +14,8 @@ Below is a step by step guide to installing the [GNU GSL scientific library](htt
 
 1. First [download](http://mirrors.ibiblio.org/gnu/ftp/gnu/gsl/) the current version and unpack it if not done automatically. (choose the file which has the highest version number: ***gsl-1.16.tar.gz*** at the time of writing)
 2. Go to the terminal and navigate to the directory to which you downloaded the ***gsl library***. (useful terminal commands: cd, ls)
-3. Type ```./configure``` wait until the the execution finished and then type ```make``` to install the library. (you can find these instructions in the ***INSTALL*** file inside of the downloaded ***gsl*** folder). The build process takes a while now.
+3. Type ```./configure``` wait until the the execution finished and then type ```make``` to build the library. (you can find these instructions in the ***INSTALL*** file inside of the downloaded ***gsl*** folder). The build process takes a while now.
+4. Lastly type ```make install```, which will finally install the library on your system. It is likely that you have to use ```sudo make install```, as the default folder which the library is installed in requires superuser access.
 
 By now we can proceed by opening [***RStudio***](http://www.rstudio.com/).
 
@@ -22,6 +23,10 @@ By now we can proceed by opening [***RStudio***](http://www.rstudio.com/).
 
 To install the ***addmtoolbox*** package from github, first the ***devtools*** package must be loaded in R.
 This can be easily done by typing ```install.packages("devtools")``` in the ***R Console*** to install the package and the typing ```library(devtools)``` to load it.
+
+Now type ```install_github('AlexanderFengler/addmtoolbox')``` to install the ***addmtoolbox*** package and make it available in your ***R Session*** with ```library(addmtoolbox)```.
+
+You should be able to use the provided functions now.
 
 
 
