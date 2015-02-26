@@ -1,4 +1,5 @@
 # ***addmtoolbox***
+---
 
 The ***addmtoolbox*** package provides a set of functions that facilitate the process of fitting (attentional) drift diffusion models to experimental data.
 
@@ -8,7 +9,7 @@ The package is in an early development stage.
 
 
 ## Installation
-
+---
 The following guide is specifically for Mac OS systems. Windows systems have not yet been tested. On Linux/Ubuntu system, directly follow up with step ***Installing addmtoolbox from github*** as gsl is often/always included in the distribution as well as all utilities that you gain on Macs by installing [***Xcode***](https://developer.apple.com/xcode/). 
 
 ### Installation relevant dependencies
@@ -36,7 +37,7 @@ Now type ```install_github('AlexanderFengler/addmtoolbox')``` to install the ***
 *You should be able to use the provided functions now.*
 
 ## Other package dependencies
-
+---
 Below a list of ***R packages*** that are used in the source code. In case you would like to really understand and contribute to the codebase, it may be useful to understand the basics of the utilities these packages offer.
 
 1. [dplyr](http://cran.rstudio.com/web/packages/dplyr/vignettes/introduction.html) (for summarising data.frames)
