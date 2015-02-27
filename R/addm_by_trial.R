@@ -27,11 +27,13 @@ addm_by_trial = function(choice.dat = data.table(v1 = 0,v2 = 0, id = 0),
 
   # OTHER INITIALIZATIONS --------------------------------------------------------------------------------------------------------------
   # Get set size of current data set
-  cur.set_size = length(grep("^v[0-9]$",names(choice.dat))) # this works only if the item columns are supplied according to the correct naming (v1,v2 etc.)
+  cur.set_size = length(grep("^v[0-9]$",names(choice.dat)))
 
-  # valuation is a matrix that already takes into account the drift rate to describe the per-timestep mean shift by item for each trial
-  # is then supplied to the evidence accumulation function below
-  valuations=matrix(rep(0,len.trials*cur.set_size),nrow=cur.set_size,ncol=length(choice.dat[,trialid]))
+  # Initialize amount of trials supplied
+  len.trials = length(choice.dat[,id])
+
+  # Matrix that stores all valuations by trial
+  valuations=matrix(rep(0,len.trials*cur.set_size),nrow=cur.set_size,ncol=length(choice.dat[,id]))
 
   # Define position of vector where valuations start
   start.pos = which(names(choice.dat) == "v1")
@@ -41,7 +43,7 @@ addm_by_trial = function(choice.dat = data.table(v1 = 0,v2 = 0, id = 0),
     valuations[i,] = choice.dat[[start.pos + i - 1]]
   }
 
-  # Denerate a decisions vector and adjust the number to accomodate difference in indexing between R and C++
+  # Decision Vector
   decisions = choice.dat[,decision] - 1 # Minus one because in C++ vectorsstart at indice zero
   #-------------------------------------------------------------------------------------------------------------------------------------
 
@@ -58,17 +60,17 @@ addm_by_trial = function(choice.dat = data.table(v1 = 0,v2 = 0, id = 0),
   # ------------------------------------------------------------------------------------------------------------------------------------
 
   # RUN MODEL --------------------------------------------------------------------------------------------------------------------------
-  success.counts = rep(0,length(choice.dat[,trialid]))
+  success.counts = rep(0,len.trials)
   cnt = 1
 
   cur.rtbin.up = choice.dat[,rtup]
   cur.rtbin.down = choice.dat[,rtdown]
-  trialids = choice.dat[,trialid]
+  ids = choice.dat[,id]
 
-  for (trial in trialids){
+  for (trial in ids){
     # Extract Empirical Fixations and Fixations Durations
-    cur.fixations = cur.eye.dat[J(trial),fixloc]
-    cur.durations = cur.eye.dat[J(trial),fixdur]
+    cur.fixations = eye.dat[J(trial),fixloc]
+    cur.durations = eye.dat[J(trial),fixdur]
 
     # Run Model
     success.counts[cnt] = aevacc(nr.reps,
@@ -82,8 +84,7 @@ addm_by_trial = function(choice.dat = data.table(v1 = 0,v2 = 0, id = 0),
                                  timestep,
                                  valuations[,cnt],
                                  cur.fixations,
-                                 cur.durations,
-                                 cur.set_size)
+                                 cur.durations)
 
     cnt[1] = cnt + 1
   }

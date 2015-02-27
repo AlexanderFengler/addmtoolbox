@@ -53,7 +53,7 @@ int aevacc2_by_trial(int nr_reps,
   int nr_items = update.size();
   float rdv = 0;
   bool decision = 1;
-  int choice = 0;
+  int maxpos = 0;
   int cur_rt = 0;
   int cur_fixpos_indice = 0;
   int num_fixpos = fixpos.size();
@@ -122,11 +122,11 @@ int aevacc2_by_trial(int nr_reps,
     // determine whether outcome is success (correct rt and decision) -------------------------------
     if (decision == 1){
       if (rdv < 0){
-        choice = 2;
+        maxpos = 1;
       } else {
-        choice = 1;
+        maxpos = 0;
       }
-      if (choice - 1 == real_decision){
+      if (maxpos == real_decision){
         if ((cur_rt + non_decision_time <= maxdur) && (cur_rt + non_decision_time >= mindur)){
           ++out;
         }

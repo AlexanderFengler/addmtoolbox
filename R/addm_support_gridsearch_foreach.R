@@ -7,7 +7,7 @@
 #' @inheritParams addm_fit_grid
 #' @param parameter.matrix Matrix that represents the parameter space which is looped over. (drift,theta,sd,non.decision.time)
 
-addm_support_gridsearch_foreach = function(conditions,dat = data.table(v1 = 0, v2 = 0, id = 0),
+addm_support_gridsearch_foreach = function(conditions.dat = data.table(v1 = 0, v2 = 0, id = 0),
                                            eye.dat = data.table(fixloc = 0, fixdur = 0, fixnr = 1, id = 0),
                                            choice.dat = data.table(v1 = 0, v2 = 0, rt = 0, decision = 0, id = 0),
                                            parameter.matrix = c(0.006,0.6,0.06,0),
@@ -15,7 +15,7 @@ addm_support_gridsearch_foreach = function(conditions,dat = data.table(v1 = 0, v
                                            nr.reps = 2000,
                                            model.type = 'standard',
                                            fixation.model = 'fixedpath',
-                                           log.file = 'defaultlog.txt',
+                                           log.file = "defaultlog.txt",
                                            timestep = 10){
 
   # Initialize iterator and output list --------------------------------------------------------------------------------------------------
@@ -24,7 +24,7 @@ addm_support_gridsearch_foreach = function(conditions,dat = data.table(v1 = 0, v
   # --------------------------------------------------------------------------------------------------------------------------------------
 
   # RUN FIT ------------------------------------------------------------------------------------------------------------------------------
-  sink(cur.log.file,append=TRUE)
+  sink(log.file,append=TRUE)
 
   if (fit.type == "trial"){
     out[[1]] = foreach (i = ita,.combine='rbind') %dopar% addm_by_trial(choice.dat,
@@ -32,7 +32,6 @@ addm_support_gridsearch_foreach = function(conditions,dat = data.table(v1 = 0, v
                                                                         i,
                                                                         nr.reps,
                                                                         model.type,
-                                                                        fixation.model,
                                                                         timestep)
 
   } else if (fit.type == 'condition'){
@@ -58,6 +57,7 @@ addm_support_gridsearch_foreach = function(conditions,dat = data.table(v1 = 0, v
   # --------------------------------------------------------------------------------------------------------------------------------------
 
   # Format and return output -------------------------------------------------------------------------------------------------------------
+  print(out)
   temp = do.call(rbind,out)
   out = data.table(drift = temp[,1],
                    theta = temp[,2],

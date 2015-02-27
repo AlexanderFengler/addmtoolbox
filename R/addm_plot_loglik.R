@@ -26,7 +26,7 @@ return(list(plot.coarse.grid = p.coarse,
             plot.fine.grid = p.fine))
 }
 
-return(list(plot.coarse.grid = p.coare,
+return(list(plot.coarse.grid = p.coarse,
             plot.fine.grid = 'Fine grid not supplied because absent in model fit'))
 
 }

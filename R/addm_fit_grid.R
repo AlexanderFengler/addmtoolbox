@@ -39,7 +39,6 @@ addm_fit_grid = function(conditions.dat = data.table(v1 = 0, v2 = 0, id = 0),
                          parallel = 1){
 
   # INITIALIZIONS --------------------------------------------------------------------------------
-
   if (parallel == 1){
     cores = detectCores()
     registerDoMC(cores)
@@ -76,13 +75,12 @@ addm_fit_grid = function(conditions.dat = data.table(v1 = 0, v2 = 0, id = 0),
                                                  eye.dat,
                                                  choice.dat,
                                                  parameter.matrix,
-                                                 output.type,
+                                                 fit.type,
                                                  nr.reps,
                                                  model.type,
                                                  fixation.model,
-                                                 cur.log.file,
-                                                 timestep,
-                                                 generate)
+                                                 log.file,
+                                                 timestep)
       # ---------------------------------------------------------------------------------------------
 
       # UPDATE LOGLIKS ------------------------------------------------------------------------------
@@ -102,17 +100,16 @@ addm_fit_grid = function(conditions.dat = data.table(v1 = 0, v2 = 0, id = 0),
         # ---------------------------------------------------------------------------------------------
 
         # RUN FINE GRID SEARCH ------------------------------------------------------------------------
-        fine.log.liks = addm_gridsearch_foreach(conditions.dat,
-                                                eye.dat,
-                                                choice.dat,
-                                                fine.parameter.matrix,
-                                                output.type,
-                                                nr.reps,
-                                                model.type,
-                                                fixation.model,
-                                                cur.log.file,
-                                                timestep,
-                                                generate)
+        fine.log.liks = addm_support_gridsearch_foreach(conditions.dat,
+                                                        eye.dat,
+                                                        choice.dat,
+                                                        fine.parameter.matrix,
+                                                        fit.type,
+                                                        nr.reps,
+                                                        model.type,
+                                                        fixation.model,
+                                                        log.file = cur.log.file,
+                                                        timestep)
         # ---------------------------------------------------------------------------------------------
 
         #

@@ -88,7 +88,7 @@ addm_by_condition = function(conditions.dat = data.table(v1 = 0, v2 = 0, id = 0)
   # DEFINE CORRCT EVIDENCE ACCUMULATION FUNCTION GIVEN INPUTS---------------------------------------------------------------------------
   if (model.type == "standard"){
     if (output.type == "fit"){
-      if (cur.set_size ==2){
+      if (cur.set_size == 2){
         aevacc = aevacc2_by_condition
         } else {
           aevacc = aevacc_by_condition
@@ -170,7 +170,7 @@ addm_by_condition = function(conditions.dat = data.table(v1 = 0, v2 = 0, id = 0)
   } else if (output.type == "fit"){
 
     addm.output.frame = data.table(decision=addm.output[,1],
-                                   rt=addm.output[,2]*timestep,
+                                   rt=addm.output[,2],
                                    id=rep(ids,each=nr.reps))
 
     if (generate == 1){

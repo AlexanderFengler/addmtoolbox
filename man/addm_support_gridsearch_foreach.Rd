@@ -4,14 +4,16 @@
 \alias{addm_support_gridsearch_foreach}
 \title{Run grid search parallel}
 \usage{
-addm_support_gridsearch_foreach(conditions, dat = data.table(v1 = 0, v2 = 0,
-  id = 0), eye.dat = data.table(fixloc = 0, fixdur = 0, fixnr = 1, id = 0),
+addm_support_gridsearch_foreach(conditions.dat = data.table(v1 = 0, v2 = 0, id
+  = 0), eye.dat = data.table(fixloc = 0, fixdur = 0, fixnr = 1, id = 0),
   choice.dat = data.table(v1 = 0, v2 = 0, rt = 0, decision = 0, id = 0),
   parameter.matrix = c(0.006, 0.6, 0.06, 0), fit.type = "condition",
   nr.reps = 2000, model.type = "standard", fixation.model = "fixedpath",
   log.file = "defaultlog.txt", timestep = 10)
 }
 \arguments{
+\item{conditions.dat}{A 'data.frame' storing the item valuations (v1,v2...) by unique trial conditions. An id column (id) needs to be provided that matches by trial data.}
+
 \item{eye.dat}{A 'data.frame' or 'data.table' storing eyetracking data by trial. Fixation location (fixloc), Fixation number (fixnr), Fixation duration (fixdur) and an id column (id). Can all be initialized as zero columns when a by condition fit is attempted.}
 
 \item{choice.dat}{A 'data.frame' or  'data.table' storing the item valuations (v1,v2...) , reaction times in ms (rt), decisions as decision and an id column (id). A by trial form is assumed.}
