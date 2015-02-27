@@ -1,0 +1,71 @@
+---
+title: "addmtoolbox: general info"
+author: "Alexander Fengler"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+
+vignette: >
+  %\VignetteIndexEntry{addmtoolbox: general info}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+# Intro
+
+This Vignette is designed to show all major functions of the ***addmtoolbox*** package, by walking through a toy ***aDDM*** model fit. The intro serves to provide some context and to expose the logic of the set of functions provided, in terms of the use-case that I had in mind when putting together the package.
+
+## Primer of fitting (a)DDMs
+
+There are essentially three (actually four, but as you will see the fourth is purely a programming artefact) aspects to be considered when fitting an ***aDDM***. 
+
+### What parameters to use 
+
+There are several candidate parameters that can be changed in the model fitting process. Below are two lists. The list of currently implemented parameters and for completeness a list of candidate parameters that are planned to be implemented in the future.
+
+#### Implemented parameters
+
+1. **Drift Rate** *(drift in the diffusion process // by timestep)* 
+2. **Standard Deviation** *(scalar for gaussian noise in the diffusion process // by timestep)*
+3. **Theta** *(scalar that biases drift towards momentarily attended item)*
+4. **Non Decision Time** *(time in ms that will be added to the simulated reaction times)*
+
+#### Planned
+
+5. **Boundary Shape** *(allowing the boundary to take arbitrary functional form over time)*
+6. **Starting Point** *(allowing systematic/random deviation of starting points)*
+7. **Flexible Drift Rates** *(attention independent by timestep implementation of drift rate)*
+
+### By trial or by condition approach to simulations?
+
+Another question, which is especially important when fitting attentional drift diffusion models, however not when fitting traditional drift diffusion models, is whether to fit the model by trial or by condition.
+
+#### Motivation to fit by trial...
+
+What makes fitting attentional drift diffusions complicated and computationally demanding is the fact that our fit depends on the fixation process, in addition to the traditional reaction time and decision based fits. This introduces two sources of inefficiency. 
+
+**First**, the fixation process traditionally had to be modelled such that the property of the artificially created fixation process (location and duration) closely match the real fixation patterns. Every source of error will bias the model fits.
+
+**Second**, model fits will become more unstable for a given amount of simulation runs due to the (potentially / fixation-model dependent) random effects of fixations on predictions.
+
+While, as will be clear later on, fitting the ***aDDM*** by trial does not ultimately relieve us from having to find a suitable fixation model for our attentional data, it does reduce the number of simulation runs needed to get stable parameter estimates. This is especially true when the amount of unique trial conditions (unique displays that can occur in a given behavioral experiment) approach the number of trials. Such a case is quickly rached when following randomized experimental design with multiple unique items on the screen.
+
+#### Where does the purchase come from?
+
+The ultimate motivation to fit by trial, is that it allows us to use the empirical fixation patterns exhibited by experiment participants on a by trial basis. This takes out the random effect of generated fixation-models, and tightly couples our fitting procedure to the exact fixation patterns used in conjunction to corresponding reaction times and decisions. This help to 
+
+1. Make parameter estimates more stable by eliminating noise coming from random fixation pathways
+2. Allow us to tightly couple the simulation runs to observed reaction times (therefore prevent runaway processes without punishment)
+
+#### Costs?
+
+Once we have fit our model and extracted the optimal set of parameters, we still need some fixation model that we use to generate a simulated dataset. 
+This means that,
+
+1. We do actually not save ourselves building a fixation model
+2. We disintegrate the fixation model used for fitting parameters from the fixation model used to simulate data
+
+The benefits of this procedure become greater with increasing choice set sizes (and potential unique fixation paths), and may not materialize when fitting the model to a simple two-item choice.
+
+##### What does addmtoolbox implement?
+
+Discussed in more detail in the model-fit vignette, the addmtoolbox package you can choose to fit either by condition or by trial. The fundamental difference is only that, when fitting by condition, you are going to need a fixation model that is supplied for the fitting procedure, while when fitting by trial, you can go through the fitting procedure with purely your (a tiny bit preprocessed but basically raw)  empirical data.

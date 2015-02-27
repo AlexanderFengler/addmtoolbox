@@ -6,7 +6,7 @@
 \usage{
 addm_dataprep(choice.dat = data.table(v1 = 0, v2 = 0, id = 0, rt = 0, decision
   = 0, id = 0), eye.dat = data.table(fixloc = 0, fixnr = 1, fixdur = 0, id =
-  0), timestep = 10, rtbinsize = 100)
+  0), timestep = 10, rtbinsize = 100, fit.type = "condition")
 }
 \arguments{
 \item{choice.dat}{A 'data.frame' or  'data.table' storing the item valuations (v1,v2...) , reaction times in ms (rt), decisions as decision and an id column (id). A by trial form is assumed.}
@@ -16,6 +16,8 @@ addm_dataprep(choice.dat = data.table(v1 = 0, v2 = 0, id = 0, rt = 0, decision
 \item{timestep}{An integer number that provides the timestep-size that is used in the simulations (in ms).}
 
 \item{rtbinsize}{An integer number that provides the binsize that is used for binning reaction time data (in ms).}
+
+\item{fit.type}{String defined as 'condition' or 'trial' for the respective model fits}
 }
 \value{
 returns a list of three components. A 'data.table' that stores all unique choice set conditions. A 'data.table' that stores eyetracking.data adjusted to be usable for by trial fits. A 'data.table' that stores by trial choice data. An id variable links all three data.tables.
