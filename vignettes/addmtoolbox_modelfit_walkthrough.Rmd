@@ -122,25 +122,27 @@ When you choose to fit by **condition**, it is important to note that `addm_data
 
 # Fitting the model
 
+
+## The `addm_fit_grid()` function
 Now that our data is prepared for usage with the main functions of the ***addmtoolbox** package, we can call the `addm_fit_grid()` function. This function has quite some parameters, and you find detailed information what each one stands for in the function/pckage documentation. Lets look at the default setting of all parameters below to get an overview.
 
 ```{r, eval=FALSE}
- addm_fit_grid(conditions.dat = data.table(v1 = 0, v2 = 0, id = 0),
-               eye.dat = data.table(fixloc = 0,fixnr = 1, fixdur= 0, id = 0),
-               choice.dat = data.table(v1 = 0,v2 = 0, rt = 0, decision = 0, id = 0),
-               drifts = seq(0.002,0.01,0.002),
-               thetas = seq(0.2,1.0,0.2),
-               sds = seq(0.02,0.1,0.02),
-               non.decision.times = 0,
-               timestep = 10,
-               nr.reps = 2000,
-               model.type = 'standard',
-               output.type = 'fit',
-               fit.type = 'condition',
-               fixation.model = 'fixedpath',
-               allow.fine.grid = 0,
-               log.file = "defaultlog.txt",
-               parallel = 1)
+addm_fit_grid = function(conditions.dat = data.table(v1 = 0, v2 = 0, id = 0),
+                         eye.dat = data.table(fixloc = 0,fixnr = 1, fixdur= 0, id = 0),
+                         choice.dat = data.table(v1 = 0,v2 = 0, rt = 0, decision = 0, id = 0),
+                         drifts = seq(0.001,0.003,0.0005),
+                         thetas = seq(0.0,1,0.2),
+                         sds = seq(0.025,0.2,0.025),
+                         non.decision.times = 0,
+                         timestep = 10,
+                         nr.reps = 2000,
+                         model.type = 'standard',
+                         output.type = 'fit',
+                         fit.type = 'condition',
+                         fixation.model = 'fixedpath',
+                         allow.fine.grid = 0,
+                         log.file = "defaultlog.txt",
+                         parallel = 1)
 ```
 
 
@@ -154,5 +156,9 @@ To highlight a few of the non-obvious options;
 
 4. `allow.fine.grid` tells the grid search procedure whether the maximum likelihood found with during the coarse grid search (using all parameter combinations that can be formed from the possible parameter values you supplied) should be taken as the centerpoint of a new, finer grid search in the near neighboorhood of these parameter combination. **0** if you don't want this behavior.
 
-5. `log.file` is where the outcome list will be stored as a file. If you don't supply a name, it will still store it under **"defualtlog.txt"**, so you will not use your data. This file however, will be overwritten when you start a new grid search.
+5. `log.file` is where the outcome list will be stored as a file. If you don't supply a name, it will still store it under **"defualtlog.txt"**, so you will not loose your data. This file however, will be overwritten when you start a new grid search.
+
+## Let's do it once
+
+
 
