@@ -9,7 +9,7 @@ library(foreign)
 # Read in Data / rename / extract important information -------------------------------------------------
 dat = as.data.table(read.dta("temp/fixations_final.dta"))
 dat$id = paste(dat$subject,dat$trial,sep='_')
-dat$choice = dat$choice + 1
+dat[choice == 0,choice:=2]
 
 dat = dat %>% select(-computed_rt,-temp,-corr_fix_duration,-rev_fix_num,-num_fixations,-subject,-trial)
 dat = dat %>% group_by(id) %>% mutate(rt = sum(event_duration))
