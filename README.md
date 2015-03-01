@@ -5,7 +5,9 @@ The ***addmtoolbox*** package provides a set of functions that facilitate the pr
 
 The basic drift diffusion process is implemented in a highly optimized ***c++*** function, which is complemented with a host of ***R*** functions that help with *data preparation*, facilitation of *parameter optimization* and *parallelization*.
 
-The package is in an early development stage.
+The package is in an early development stage, but basic functionality is in working condition. Make sure to read the **Documentation** section for info how to use the package. Content that is mentioned in the **package vignettes** is currently the safest to run. 
+
+Having that said, the package will improve dramatically in the next weeks/month so don't be put off by a few bugs in the meanwhile.
 
 
 ## Installation
