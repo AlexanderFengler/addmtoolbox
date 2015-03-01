@@ -90,7 +90,7 @@ addm_by_trial = function(choice.dat = data.table(v1 = 0,v2 = 0, id = 0),
   }
 
   # CONTINUE BY CALCULATING LOG LIKELIHOOD----------------------------------------------------------------------------------------------
-  success.counts[success.counts == 0] = 0.99
+  success.counts[success.counts == 0] = nr.reps/(nr.reps + 1)
 
   total.log.lik = c(drift.rate,
                     theta,

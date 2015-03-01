@@ -24,9 +24,9 @@
 addm_fit_grid = function(conditions.dat = data.table(v1 = 0, v2 = 0, id = 0),
                          eye.dat = data.table(fixloc = 0,fixnr = 1, fixdur= 0, id = 0),
                          choice.dat = data.table(v1 = 0,v2 = 0, rt = 0, decision = 0, id = 0),
-                         drifts = seq(0.0,0.003,0.0005),
+                         drifts = seq(0.0005,0.003,0.0005),
                          thetas = seq(0.0,1,0.25),
-                         sds = seq(0.05,0.15,0.025),
+                         sds = seq(0.05,0.09,0.01),
                          non.decision.times = 0,
                          timestep = 10,
                          nr.reps = 2000,
@@ -50,7 +50,7 @@ addm_fit_grid = function(conditions.dat = data.table(v1 = 0, v2 = 0, id = 0),
 
   # Parameters for fine grid search
   # Distance between two points on the grid by dimension (drift.rate,sd)
-  coarse.to.fine.ratio = 5
+  coarse.to.fine.ratio = 4
   drift.step.fine = (drifts[length(drifts)] - drifts[length(drifts)-1])/coarse.to.fine.ratio
   theta.step.fine = (thetas[length(thetas)] - thetas[length(thetas)-1])/coarse.to.fine.ratio
   sd.step.fine = (sds[length(sds)] - sds[length(sds)-1])/coarse.to.fine.ratio

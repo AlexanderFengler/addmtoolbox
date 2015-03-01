@@ -94,7 +94,7 @@ IntegerVector aevacc2_by_condition(float sd,
         cur_rt += timestep;
 
         // check whether decision made
-        if (abs(rdv) >= 1){
+        if (rdv >= 1 || rdv <= -1){
           decision = 1;
         }
 

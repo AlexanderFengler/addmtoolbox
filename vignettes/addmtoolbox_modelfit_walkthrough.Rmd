@@ -9,7 +9,7 @@ vignette: >
   \usepackage[utf8]{inputenc}
 ---
 
-### Intro
+# Intro
 
 This vignette illustrates the process of fitting (attentional) drift diffusion models to experimental choice and reaction time data (and fixation data). We are going to walk through a model fit that is done *by unique experiment condition* using only the functionality provided by the ***addmtoolbox*** package in ***R***.
 
@@ -46,11 +46,11 @@ pander::pandoc.table(head(addm_data_choice))
 ```
 We can see that `addm_data_choice` has **five** columns. 
 
-- **id** which provides a unique key per observed trial
-- **v1** providing the valuation of the left item on the screen
-- **v2** providing the valuation of the right item on the screen
-- **decision** providing the decision taken in a specific trial (1 = left, 2 = right)
-- **rt** the reaction time in a given trial
+1.  **id**: which provides a unique key per observed trial
+2. **v1**: providing the valuation of the left item on the screen
+3. **v2**: providing the valuation of the right item on the screen
+4. **decision**: providing the decision taken in a specific trial (1 = left, 2 = right)
+5. **rt**: the reaction time in a given trial
 
 ### Fixation Data
 
@@ -65,10 +65,10 @@ We can see that `addm_data_choice` has **five** columns.
 
 We can see that `addm_data_eye` has **four** columns.
 
-- **fixloc** the fixation location of a given fixation (coded as referring to item attended)
-- **fixdur** the duration of a given fixation
-- **fixnr** the within trial number of a fixation
-- **id** a unique trial identifier that **importantly** matches the id of `addm_data_choice`
+1. **fixloc**: the fixation location of a given fixation (coded as referring to item attended)
+2. **fixdur**: the duration of a given fixation
+3. **fixnr**: the within trial number of a fixation
+4. **id**: a unique trial identifier that **importantly** matches the id of `addm_data_choice`
 
 ## Pre Processing 
 
@@ -77,51 +77,37 @@ The two **data.frames** supplied in the ***addmtoolbox*** package serve as an il
 Once our data is in shape we can continue to use the `addm_dataprep()` function, like so:
 
 ```{r, results='hide'}
- our.dat = addm_dataprep(choice.dat = addm_data_choice,
+ my.dat = addm_dataprep(choice.dat = addm_data_choice,
                          eye.dat = addm_data_eye,
                          timestep = 10,
                          rtbinsize = 100,
                          fit.type = 'condition')  
 ```
 
-Lets quickly go through the arguments that need to be supplied to `addm_dataprep()`:    
+You can look at detailed descriptions of the input parameters directly in the package documentation. Click on the package name in your **RStudio** package window or type `?addmtoolbox`.    
 
-- `choice.dat` and `eye.dat` refer trivially to two **data.frames** (**data.tables**) in the exact shape as our example **data.frames**.      
-- `timestep` refers to the size of timesteps that you would like to apply in your model fit (in milliseconds). We need to supply this for our data preparation, because fixation times and reaction times will be rounded according to the timestep-size applied for model simulations.      
-- `rtbinsize` is needed to bin our reaction-time data (in milliseconds). `addm_dataprep()` will take over this binning for you and makes sure the data is in a format that these bins will be consistently applied for the rest of the modelling process.       
-- Lastly, we need to supply a `fit.type`. Two fit types are currently implemented. `"condition"` and `"trial"` which refer simply to fitting of the model by trial, or by unique trial conditions. Dependent on what you supply here, the `addm_dataprep()` will return different output.   
+Nevertheless, lets not some important details here: <br> <br> 
 
-For `fit.type = "condition"` the return value is a list of two elements.     
+When **fitting by condition**, the model will assume that you are providing a fixation model yourself, and therefore does not need a separate eyetracking dataframe. Therefore we have no element for eyetracking data in the returned list. <br> <br>
 
-1. **conditions.dat**
-2. **choice.dat**    
 
-For `fit.type ="trial"` the return value is a list of two elements.    
-
-1. **choice.dat**
-2. **eye.dat**    
-
-When **fitting by condition**, the model will assume that you are providing a fixation model yourself, and therefore does not need a separate eyetracking dataframe. Therefore we have no element for eyetracking data in the returned list    
-
-When **fitting by trial**, the model needs empirical eyetracking data by trial, however a data.frame providing information about unique conditions is obsolete. Therefore we have a return element for eyetracking data, but none for conditions. 
+When **fitting by trial**, the model needs empirical eyetracking data by trial, however a data.frame providing information about unique conditions is obsolete. Therefore we have a return element for eyetracking data, but none for conditions. <br> <br>
 
 Lets look at the output that we have generated with out call to `addm_dataprep()`:
 
 ```{r, echo=FALSE}
- our.dat
+ my.dat
 ```
 
-**Note**, that the id variable has changed from the one we originally supplied, to an identifier for unique trial conditions. A simple rule is applied here. The values that appear in every trial display are simply concatenated as a string and separated by "_". 
+**Note,** that the **id variable** has changed from the one we originally supplied, to an identifier for unique trial conditions. A simple rule is applied here. The values that appear in every trial display are simply concatenated as a string and separated by "_". 
 
-***Important***
----------
+####***Important***
 
 `addm_dataprep()` expects you to supply an id-variable that is a unique identifier of each trial for each subject (that means that trial 1 for subject 1 has a different key than trial 1 for subject 2). Note, that row.numbers are not sufficient, because **consistency** is demanded between ***trial-identifiers of the choice data.frame*** and ***trial-identifiers of the eye data.frame***.    
 
-When you choose to fit by **condition**, it is important to note that `addm_dataprep()` is actually ***changing the trial-identifiers for you into condition identifiers***. STILL, `addm_dataprep()` expects you to supply the data with identifiers by trial first.
+When you choose to **fit by condition**, it is important to note that `addm_dataprep()` is actually ***changing the trial-identifiers for you into condition identifiers***. **STILL**, `addm_dataprep()` expects you to supply the data with identifiers by trial first. <br><br><br>     
 
-# Fitting the model
-
+# Fitting the model **(by condition)**
 
 ## The `addm_fit_grid()` function
 Now that our data is prepared for usage with the main functions of the ***addmtoolbox** package, we can call the `addm_fit_grid()` function. This function has quite some parameters, and you find detailed information what each one stands for in the function/pckage documentation. Lets look at the default setting of all parameters below to get an overview.
@@ -148,17 +134,99 @@ addm_fit_grid = function(conditions.dat = data.table(v1 = 0, v2 = 0, id = 0),
 
 To highlight a few of the non-obvious options;
 
-1. `model.type` which defaults to **"standard"**, lets you choose **"memnoise"** as an alternative. This is a version of the model which, given bigger set sizes than 2, lets you scale down/up noise and evidence accumulation separately for seen and unseen items. 
+1. `model.type` which defaults to **"standard"**, lets you choose **"memnoise"** as an alternative. This is a version of the model which, given bigger set sizes than 2, lets you scale down/up noise and evidence accumulation separately for seen and unseen items. <br> <br>
 
-2. `fixation.model` is important when fitting by condition. I supply two simple fixation models with the package which are specific for the two item version for now. `addm2_fixation_model_fixedpath()` a model that spits out exactly the same fixation pathway everytime it is called (fixation duration of 400ms), which you utilize when entering **"fixedpath"** (the default). `addm2_fixation_model_random()` a model that randomly changes the starting sequence (either locations 1 then 2 or location 2 then 1), which you utilize when entering **"random"**. Most importantly, `fixation.model` can be initialized as **"user"**. This allows you to supply your own fixation model, which will be called to fill in a fixation location and a fixation duration vector at the beginning of each simulation run. You will have to supply your fixation model as a function with the name `user_fixation_model()` so that the package knows where to find it when running. 
+2. `fixation.model` is important when fitting by condition. I supply two simple fixation models with the package which are specific for the two item version for now. `addm2_fixation_model_fixedpath()` a model that spits out exactly the same fixation pathway everytime it is called (fixation duration of 400ms), which you utilize when entering **"fixedpath"** (the default). `addm2_fixation_model_random()` a model that randomly changes the starting sequence (either locations 1 then 2 or location 2 then 1), which you utilize when entering **"random"**. Most importantly, `fixation.model` can be initialized as **"user"**. This allows you to supply your own fixation model, which will be called to fill in a fixation location and a fixation duration vector at the beginning of each simulation run. You will have to supply your fixation model as a function with the name `user_fixation_model()` so that the package knows where to find it when running. <br> <br>
 
-3. `parallel` is initialized as **1**, which means that the function runs on all cores that your local system has. Supply **0** to use only one core. 
+3. `parallel` is initialized as **1**, which means that the function runs on all cores that your local system has. Supply **0** to use only one core. <br> <br>
 
-4. `allow.fine.grid` tells the grid search procedure whether the maximum likelihood found with during the coarse grid search (using all parameter combinations that can be formed from the possible parameter values you supplied) should be taken as the centerpoint of a new, finer grid search in the near neighboorhood of these parameter combination. **0** if you don't want this behavior.
+4. `allow.fine.grid` tells the grid search procedure whether the maximum likelihood found with during the coarse grid search (using all parameter combinations that can be formed from the possible parameter values you supplied) should be taken as the centerpoint of a new, finer grid search in the near neighboorhood of these parameter combination. **0** if you don't want this behavior. <br> <br>
 
-5. `log.file` is where the outcome list will be stored as a file. If you don't supply a name, it will still store it under **"defualtlog.txt"**, so you will not loose your data. This file however, will be overwritten when you start a new grid search.
+5. `log.file` is where the outcome list will be stored as a file. If you don't supply a name, it will still store it under **"defualtlog.txt"**, so you will not loose your data. This file however, will be overwritten when you start a new grid search. <br> <br>
 
 ## Let's do it once
 
+Lets take our prepared data.frames and fit the model once ourselves. I chose defaults so that reasonable outcomes will be returned for the example data-set. We will be fine in calling the function with default values for all but the `conditions_dat` and `choice_dat` variables, where we fit in the corresponding data.tables we retrieved from `addm_dataprep()` earlier. Note that for your own datasets you likely want to adjust the search-grid etc..
+
+```{r, eval=FALSE}
+my.log.liks = addm_fit_grid = function(conditions.dat = my.dat$conditions,
+                                    choice.dat = my.dat$choice)
+```
+
+In this vignette I am not going to run the code, but instead show you the resulting data.table that stores the loglikelihood values and corresponding model-parameters from a precomputed model-fit.
+
+```{r}
+  head(addm_data_loglik_condition)
+```
+
+You can see that all model parameters are stored along with a variable `coarse` which can be ignored for now. This variable is needed when plotting the loglikelihoods, separate for the coarse and fine grid search. In the defaults we are not using a fine grid, so we will not bother with this for now. <br> <br> <br> 
 
 
+# Plotting Model Fit Results
+
+The package included as convenience function, that visualizes the log likelihood data.table, so that the behavior of the loglikelihood across the parameter space can be analized. Note in the output below that the function automatically prints out the best parameter combination and corresponding likelihood. We can use this function like so:
+
+```{r, fig.align = 'center',fig.width = 6, fig.height = 5}
+  # Note that in your case you will use 'my.log.liks' here !
+  out = addm_plot_loglik(addm_data_loglik_condition)  
+  out$plot.coarse.grid
+```
+
+ <br> <br> <br> 
+ 
+# Detailed model output 
+
+After fitting the model, the next natural step is to take the best parameter-combination and simulate the model with detailed monitor output, to plot various predictions of the model against real data.
+The **addmtoolbox** can do this with the **addm_by_condition()** function. You need to change the parameter `output.type` from its default **"fit"** to **"full"**, which tells the function to provide detailed output, instead of the barebones output needed to simply generate a log likelihood. Lets do it once:
+
+```{r}
+  # Generate vector with optimal parameters (as seen above)
+  # Order: sd,theta,drift,non_decision_time
+  our.best.parameters = c(0.07,1,0.0015,0)
+  
+  # Now call addm_by_condition() function
+  detailed.output = addm_by_condition(conditions.dat = my.dat$conditions.dat, 
+                                      choice.dat = my.dat$choice.dat, 
+                                      output.type = 'full', 
+                                      nr.reps = 50, 
+                                      model.parameters = our.best.parameters)
+```
+<br>
+
+Lets look at the output we generated:      
+
+```{r}
+  head(detailed.output)
+```
+
+All variables are quite self-explanatory. Note that in this output the "id" variable refers to conditions instead of trials as expected when you first supply your experimental data.
+As a hint, here is how to get **by condition** id's for your original data. <br> <br> 
+
+Let's look at the initial state of the example choice data.
+```{r}
+    head(addm_data_choice)
+```  
+<br>
+
+Now we convert the existing id variable, which indicates unique trials, to an id variable which indicates unique trial-condition. Note that I am not changing the original, but create a copy.
+
+```{r}
+    temporary.example = addm_data_choice
+    temporary.example$id = do.call(paste,
+                                   c(temporary.example[,grep("^v[1-9]*",names(temporary.example),
+                                                             value = TRUE)],
+                                     sep='_'))
+```
+<br>
+
+Let's look at the data.frame again.
+
+```{r}
+   head(temporary.example) 
+```
+<br> <br>
+
+# DONE
+
+**That's it.** You did your first model-fit with the **addmtoolbox** package, plotted the likelihood functions, generated detailed output and are now ready to explore plotting opportunities.
+Be sure to update the [addmtoolbox package](https://github.com/AlexanderFengler/addmtoolbox) regularly, since it is in a very early development stage and please provide [feedback](https://github.com/AlexanderFengler/addmtoolbox/issues) such as **bugreports** or **suggestions** for useful additions to the functionality of the package.

@@ -25,17 +25,20 @@ addm_dataprep = function(choice.dat =  data.table(v1 = 0,v2 = 0,id = 0,rt = 0, d
   # Eyetracking data only needed for fit.type 'trial'
   if (fit.type == 'trial'){
     eye = as.data.table(eye.dat)
+    setkey(eye,id,fixnr)
     setkey(eye,id)
   }
   # ----------------------------------------------------------------------------------------------
 
   # IN CASE FIT.TYPE IS 'condition' WE NEED CHOICES AND CONDITIONS TABLES ONLY -------------------
-  conditions = choice %>% select(-rt,-decision,-id) %>% distinct()
-  conditions = as.data.table(conditions)
+
 
   # Assumed is that id variable is provided by trial
   # This is adjusted towards a by condition id variable here
   if (fit.type == 'condition'){
+    conditions = choice %>% select(-rt,-decision,-id) %>% distinct()
+    conditions = as.data.table(conditions)
+
     conditions$id = do.call(paste,c(conditions[,names(conditions),with=FALSE],sep='_'))
     choice$id = do.call(paste,c(choice[,grep("^v[1-9]*",names(choice),value = TRUE),with=FALSE],sep='_'))
 
@@ -61,20 +64,12 @@ addm_dataprep = function(choice.dat =  data.table(v1 = 0,v2 = 0,id = 0,rt = 0, d
     # ----------------------------------------------------------------------------------------------
 
     # ADJUST LAST FIXATION TIMES SO THAT WE HAVE DATA UNTIL UPPER BOUND OF RT BIN ------------------
-    # Step 1: get difference between current RT and end of RT-Bin
-    choice$rt.add.last = choice$rtup - choice$rt
-    temp  = choice %>% select(id,rt.add.last)
-    setkey(temp,id)
-    eye = eye[temp]
-
-    # Step 2: Adjust length of last fixation to allow for length of rtbinsize
+    # We simply add rtbinsize to any last fixation, which ensures data to upper bound
     eye = eye %>% group_by(id) %>% mutate(max.fix = n())
-    eye$last.fix = 0
+    #eye$last.fix = 0
     eye[fixnr == max.fix,last.fix:= 1]
-    eye[last.fix == 1,fixdur := last.fix + rt.add.last + rtbinsize]
-    eye = eye %>% select(-rt.add.last,-max.fix,-last.fix)
-
-    choice = choice %>% select(-rt.add.last)
+    eye[last.fix == 1,fixdur := fixdur + rtbinsize]
+    eye = eye %>% select(-max.fix,-last.fix)
     # ----------------------------------------------------------------------------------------------
 
     # RETURN LIST WITH PREPARED CHOICE AND EYE DATA ------------------------------------------------

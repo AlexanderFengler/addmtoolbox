@@ -93,10 +93,10 @@ int aevacc2_by_trial(int nr_reps,
         cur_rt += timestep;
 
         // accumulate evidence
-        rdv += (cur_update[0] - cur_update[1]) + sd*zigg.norm();
+        rdv += cur_update[0] - cur_update[1] + sd*zigg.norm();
 
         // check whether decision made
-        if (abs(rdv) >= 1){
+        if (rdv >= 1 || rdv <= -1){
           decision = 1;
         }
 

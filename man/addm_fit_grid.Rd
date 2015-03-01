@@ -7,8 +7,8 @@
 addm_fit_grid(conditions.dat = data.table(v1 = 0, v2 = 0, id = 0),
   eye.dat = data.table(fixloc = 0, fixnr = 1, fixdur = 0, id = 0),
   choice.dat = data.table(v1 = 0, v2 = 0, rt = 0, decision = 0, id = 0),
-  drifts = seq(0, -0.002, -5e-04), thetas = seq(0, 1, 0.25),
-  sds = seq(0.05, 0.15, 0.05), non.decision.times = 0, timestep = 10,
+  drifts = seq(5e-04, 0.003, 5e-04), thetas = seq(0, 1, 0.25),
+  sds = seq(0.05, 0.09, 0.01), non.decision.times = 0, timestep = 10,
   nr.reps = 2000, model.type = "standard", output.type = "fit",
   fit.type = "condition", fixation.model = "fixedpath",
   allow.fine.grid = 0, log.file = "defaultlog.txt", parallel = 1)

@@ -32,6 +32,7 @@ addm_by_condition = function(conditions.dat = data.table(v1 = 0, v2 = 0, id = 0)
   theta = model.parameters[2]
   cur.sd = model.parameters[3]
   non.decision.time = model.parameters[4]
+
   #-------------------------------------------------------------------------------------------------------------------------------------
 
   # SOME MISCELLANEOUS VARIABLES THAT ARE UTILIZED LATER--------------------------------------------------------------------------------
@@ -71,7 +72,7 @@ addm_by_condition = function(conditions.dat = data.table(v1 = 0, v2 = 0, id = 0)
   }
 
   if (output.type == "full"){
-    addm.output = matrix(rep(-1,nr_rows*(5 + 6 +(2*cur.set_size)),nrow=nr_rows,ncol=5 + 6 +(2*cur.set_size)))
+    addm.output = matrix(rep(-1,nr_rows*(4 + 6 +(2*cur.set_size))),nrow = nr_rows, ncol = 4 + 6 +(2*cur.set_size))
 
     addm.output[,1] = drift.rate
     addm.output[,2] = theta
@@ -80,7 +81,7 @@ addm_by_condition = function(conditions.dat = data.table(v1 = 0, v2 = 0, id = 0)
 
     # output cols are the columns in which the output (Choices and RT's) will be stored
     output = rep(0,(6+(2*cur.set_size))*nr.reps)
-    output.cols = seq(5,5 + 6 +(2*cur.set_size))
+    output.cols = seq(5,4 + 6 +(2*cur.set_size))
     nr.output.cols = length(output.cols)
   }
   #-------------------------------------------------------------------------------------------------------------------------------------
@@ -94,7 +95,11 @@ addm_by_condition = function(conditions.dat = data.table(v1 = 0, v2 = 0, id = 0)
           aevacc = aevacc_by_condition
       }
     } else if (output.type == "full"){
-      aevacc = aevacc_full_output_memnoise
+      if (cur.set_size == 2){
+        aevacc = aevacc2_full_output
+      } else {
+        aevacc = aevacc_full_output_memnoise
+      }
     }
   } else if (model.type == "memnoise"){
     if (output.type == "fit"){
@@ -163,9 +168,8 @@ addm_by_condition = function(conditions.dat = data.table(v1 = 0, v2 = 0, id = 0)
       output.names[namelen + cur.set_size + i] = paste("nr.fix.",toString(i),sep='')
     }
 
-    addm.output.frame = cbind(as.data.table(addm.output),as.data.table(id = rep(ids,each=nr.reps)))
+    addm.output.frame = cbind(data.table(id = rep(ids,each=nr.reps)),as.data.table(addm.output))
     setnames(addm.output.frame,output.names)
-
     return(addm.output.frame)
   } else if (output.type == "fit"){
 
