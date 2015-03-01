@@ -12,7 +12,7 @@ Having that said, the package will improve dramatically in the next weeks/month 
 
 ## Installation
 ---
-The following guide is specifically for Mac OS systems. Windows systems have not yet been tested. On Linux/Ubuntu system, directly follow up with step: *Installing addmtoolbox from github*,  as gsl is often/always included in the distribution as well as all utilities that you gain on Macs by installing [***Xcode***](https://developer.apple.com/xcode/). This guide will carry you through the complete installation process, starting from the installation of the ***R progamming language*** on your system.
+The following guide is specifically for Mac OS systems. Windows systems have not yet been tested. On Linux/Ubuntu system, directly follow up with step: *"Installing addmtoolbox from github"*,  as gsl is often/always included in the distribution as well as all utilities that you gain on Macs by installing [***Xcode***](https://developer.apple.com/xcode/). This guide will carry you through the complete installation process, starting from the installation of the ***R progamming language*** on your system.
 
 ### R
 As the ***addmtoolbox*** is designed for ***R***, we should start with getting the ***R*** programming language ready for usage on our system (if not present). The package is built under ***R Version 3.1.2.*** and I strongly suggest to [install this](http://cran.cnr.berkeley.edu) or (if present) a later version.
