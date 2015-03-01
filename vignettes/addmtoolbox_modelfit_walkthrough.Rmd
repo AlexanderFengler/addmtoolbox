@@ -200,30 +200,19 @@ Lets look at the output we generated:
 ```
 
 All variables are quite self-explanatory. Note that in this output the "id" variable refers to conditions instead of trials as expected when you first supply your experimental data.
-As a hint, here is how to get **by condition** id's for your original data. <br> <br> 
+This is no issue when you chose to fit your data by condition, since then you already have your choice.data with an **id** variable that is referencing conditions. If you did your fits **by trial** however, you should re-run `addm_dataprep()` and use `fit.type = 'condition` to get **conditions data** and your **choice data** with **id** variable reference by conditions. Use this then as a supply to `addm_by_condition()` as shown above.  
 
-Let's look at the initial state of the example choice data.
-```{r}
-    head(addm_data_choice)
-```  
-<br>
+### Why by condition?
 
-Now we convert the existing id variable, which indicates unique trials, to an id variable which indicates unique trial-condition. Note that I am not changing the original, but create a copy.
+For generating fake choice data, you need two components. 
 
-```{r}
-    temporary.example = addm_data_choice
-    temporary.example$id = do.call(paste,
-                                   c(temporary.example[,grep("^v[1-9]*",names(temporary.example),
-                                                             value = TRUE)],
-                                     sep='_'))
-```
-<br>
+1. Unique trial conditions
+2. A fixation model
 
-Let's look at the data.frame again.
+Lets assume you would want to fit every unique trial (note the difference between unique trial and unique trial condition).... <br> <br>
+What would you learn in addition? The model makes exactly the same predictions about a specific trial condition, whether it was encountered the first or second time or whether it was encountered in the context of the experimental session of subject one or two. There is no need to run the model over each trial to generate a simulated data set. Even if you actually fit the model by trial.
 
-```{r}
-   head(temporary.example) 
-```
+
 <br> <br>
 
 # DONE
