@@ -57,7 +57,7 @@ To open the vignette, type ```vignette("addmtoolbox_general_info")```. This vign
 
 ## Useful Background
 ---
-Below a list of ***R packages*** that are used in the source code. In case you would like to really understand and contribute to the codebase, it may be useful to understand the basics of the utilities these packages offer.
+Below a list of ***R packages*** that are used in the source code. In case you would like to really understand and contribute to the codebase, I think it will make it considerably easier if you first familiarize yourself with the basic utilities these packages offer (in case you have not already), as they are used quite heavily.
 
 1. [dplyr](http://cran.rstudio.com/web/packages/dplyr/vignettes/introduction.html) (for summarising data.frames)
 2. [data.table](http://cran.r-project.org/web/packages/data.table/vignettes/datatable-intro.pdf) (for high performance versions of data.frames, especially the ***setkey()*** function) 
