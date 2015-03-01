@@ -97,7 +97,7 @@ addm_by_trial = function(choice.dat = data.table(v1 = 0,v2 = 0, id = 0),
                     cur.sd,
                     non.decision.time,
                     nr.reps,
-                    sum(log(success.counts/nr.reps)))
+                    (-1)*sum(log(success.counts/nr.reps)))
 
   print(total.log.lik)
   return(total.log.lik)

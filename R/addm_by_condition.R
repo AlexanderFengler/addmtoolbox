@@ -198,7 +198,7 @@ addm_by_condition = function(conditions.dat = data.table(v1 = 0, v2 = 0, id = 0)
     temp.table = addm.choice.table[real.choice.table]
     temp.table[is.na(choice.p),choice.p:=1/(nr.reps + 1)]
     temp.table[,log.lik:=log(choice.p)]
-    LogLik = sum(temp.table[,log.lik])
+    LogLik = (-1)*sum(temp.table[,log.lik])
     # -----------------------------------------------------------------------------------------------------------------------------------
 
     # STORE AND RETURN ------------------------------------------------------------------------------------------------------------------
