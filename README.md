@@ -12,7 +12,14 @@ Having that said, the package will improve dramatically in the next weeks/month 
 
 ## Installation
 ---
-The following guide is specifically for Mac OS systems. Windows systems have not yet been tested. On Linux/Ubuntu system, directly follow up with step ***Installing addmtoolbox from github*** as gsl is often/always included in the distribution as well as all utilities that you gain on Macs by installing [***Xcode***](https://developer.apple.com/xcode/). 
+The following guide is specifically for Mac OS systems. Windows systems have not yet been tested. On Linux/Ubuntu system, directly follow up with step ***Installing addmtoolbox from github*** as gsl is often/always included in the distribution as well as all utilities that you gain on Macs by installing [***Xcode***](https://developer.apple.com/xcode/). This guide will carry you through the complete installation process, starting from the installation of the ***R progamming language*** on your system.
+
+### R
+As the ***addmtoolbox*** is designed for ***R***, we should start with getting the ***R*** programming language ready for usage on our system (if not present). The package is built under ***R Version 3.1.2.*** and I strongly suggest to [install this](http://cran.cnr.berkeley.edu) or (if present) a later version.
+
+### RStudio
+The de-facto standard ***IDE*** for ***R*** programming. I strongly suggest that you download [this version](http://www.rstudio.com/products/rstudio/download/preview/). In the following I assume that you use [***RStudio***](http://www.rstudio.com/) as your ***IDE***.
+
 
 ### Installation relevant dependencies
 The ***addmtoolbox*** package depends notably on the ***RcppZiggurat*** package which in turn depends on the ***RcppGSL*** package. For the ***RcppGSL*** package to work, we need to install the [***GNU GSL scientific library***](http://www.gnu.org/software/gsl/). 
