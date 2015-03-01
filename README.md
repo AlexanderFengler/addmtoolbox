@@ -32,11 +32,21 @@ By now we can proceed by opening [***RStudio***](http://www.rstudio.com/).
 To install the ***addmtoolbox*** package from github, first the ***devtools*** package must be loaded in R.
 This can be easily done by typing ```install.packages("devtools")``` in the ***R Console*** to install the package and the typing ```library(devtools)``` to load it.
 
-Now type ```install_github('AlexanderFengler/addmtoolbox')``` to install the ***addmtoolbox*** package and make it available in your ***R Session*** with ```library(addmtoolbox)```.
+Now type ```install_github('AlexanderFengler/addmtoolbox', build_vignettes=TRUE)``` to install the ***addmtoolbox*** package and make it available in your ***R Session*** with ```library(addmtoolbox)```.
 
 *You should be able to use the provided functions now.*
 
-## Other package dependencies
+## Documentation
+
+Besides the standard documentation you will find in the help window in [***RStudio***](http://www.rstudio.com/), the package come with vignettes, one of which carries you through a complete model-fit. 
+
+Be sure to include the ```build_vignettes = TRUE``` parameter when installing the package, otherwise the following instruction will not work.
+
+To list the vignettes of the ***addmtoolbox*** package, type ```vignette(package = "addmtoolbox")```. This lets you see the names of the vignette-documents that come with package. Most importantly you are going to see **addmtoolbox_modelfit_walkthrough** vignette.
+
+To open the vignette, type ```vignette("addmtoolbox_general_info")```. This vignette will carry you through a model-fit to get you started with the package.
+
+## Useful Background
 ---
 Below a list of ***R packages*** that are used in the source code. In case you would like to really understand and contribute to the codebase, it may be useful to understand the basics of the utilities these packages offer.
 
