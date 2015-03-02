@@ -5,7 +5,6 @@
 #' \code{addm_run_by_condition} Returns either log likelihoods, a simple id,decision,rt data frame or a detailed model output
 #' @export
 #' @param conditions.dat A 'data.frame' storing the item valuations (v1,v2...) by unique trial conditions. An id column (id) needs to be provided that matches by trial data.
-#' @param eye.dat A 'data.frame' or 'data.table' storing eyetracking data by trial. Fixation location (fixloc), Fixation number (fixnr), Fixation duration (fixdur) and an id column (id). Can all be initialized as zero columns when a by condition fit is attempted.
 #' @param choice.dat A 'data.frame' or  'data.table' storing the item valuations (v1,v2...) , reaction times in ms (rt), decisions as decision and an id column (id). A by trial form is assumed.
 #' @param model.parameters A vector with the four core addm parameters in order (drift.rate,theta,sd,non.decision.time).
 #' @param nr.reps An integer number that tells the function how many simulation runs to use.
@@ -16,7 +15,6 @@
 #' @param generate Binary variable that tells the function to return either log likelihood values (0) or rt, decision (1). Relevant only if model.type variable is 'fit'.
 
 addm_run_by_condition = function(choice.dat = data.table(decision = 0, rt = 0, condition_id = 0),
-                                 eye.dat = data.table(fixloc = 0, fixdur = 0, fixnr = 1, condition_id = 0),
                                  conditions.dat = data.table(v1 = 0, v2 = 0, condition_id = 0),
                                  model.parameters = c(0.006,0.6,0.06,0),
                                  nr.reps = 2000,
@@ -32,7 +30,6 @@ addm_run_by_condition = function(choice.dat = data.table(decision = 0, rt = 0, c
   theta = model.parameters[2]
   cur.sd = model.parameters[3]
   non.decision.time = model.parameters[4]
-
   #-------------------------------------------------------------------------------------------------------------------------------------
 
   # SOME MISCELLANEOUS VARIABLES THAT ARE UTILIZED LATER--------------------------------------------------------------------------------
@@ -190,6 +187,7 @@ addm_run_by_condition = function(choice.dat = data.table(decision = 0, rt = 0, c
 
     choice.dat$rtbins = cut(choice.dat$rt,cur.breaks,include.lowest = TRUE)
     real.choice.table = choice.dat %>% select(condition_id,decision,rtbins)
+    #-------------------------------------------------------------------------------------------------------------------------------------
 
     # CALCULATE LOGLIKELIHOOD  ----------------------------------------------------------------------------------------------------------
     setkey(addm.choice.table,condition_id,decision,rtbins)

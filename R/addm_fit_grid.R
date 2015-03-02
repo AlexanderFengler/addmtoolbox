@@ -4,9 +4,7 @@
 #' @return Returns data.table with log likelihoods by parameter combination
 #' \code{addm_fit_grid} Returns data.table with log likelihoods by parameter combination
 #' @export
-#' @param eye.dat A 'data.frame' or 'data.table' storing eyetracking data by trial. Fixation location (fixloc), Fixation number (fixnr), Fixation duration (fixdur) and an id column (id). Can all be initialized as zero columns when a by condition fit is attempted.
-#' @param choice.dat A 'data.frame' or  'data.table' storing the item valuations (v1,v2...) , reaction times in ms (rt), decisions as decision and an id column (id). A by trial form is assumed.
-#' @param conditions.dat A 'data.frame' storing the item valuations (v1,v2...) by unique trial conditions. An id column (id) needs to be provided that matches by trial data.
+#' @param data A list of three data.tables of each: choice data, eyetracking data, conditions data (as created by addm_dataprep)
 #' @param drifts Vector of all driftrate values to be tested.
 #' @param thetas Vector of all theta to be tested (between 0 and 1).
 #' @param sds Vector of all standard deviation values to be tested.
@@ -22,9 +20,7 @@
 #' @param parallel Binary variable that tells whether to initialize local cluster on start (1) or not (0).
 #' @param coarse.to.fine.ratio Integer number deifining the ratio between parameter steps in the coarse vs. the fine grid. Defaults to 4.
 
-addm_fit_grid = function(choice.dat = data.table(v1 = 0,v2 = 0, rt = 0, decision = 0, id = 0),
-                         eye.dat = data.table(fixloc = 0,fixnr = 1, fixdur= 0, id = 0),
-                         conditions.dat = data.table(v1 = 0, v2 = 0, id = 0),
+addm_fit_grid = function(data = list(choice.dat = NULL, eye.dat = NULL, conditions.dat = NULL),
                          drifts = seq(0.0005,0.003,0.0005),
                          thetas = seq(0.0,1,0.25),
                          sds = seq(0.05,0.09,0.01),
@@ -41,6 +37,10 @@ addm_fit_grid = function(choice.dat = data.table(v1 = 0,v2 = 0, rt = 0, decision
                          parallel = 1){
 
   # INITIALIZIONS --------------------------------------------------------------------------------
+  choice.dat = data$choice.dat
+  eye.dat = data$eye.dat
+  conditions.dat = data$conditions.dat
+
   if (parallel == 1){
     cores = detectCores()
     registerDoMC(cores)

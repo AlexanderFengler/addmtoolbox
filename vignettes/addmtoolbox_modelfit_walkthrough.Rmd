@@ -112,9 +112,7 @@ When you choose to **fit by condition**, it is important to note that `addm_data
 Now that our data is prepared for usage with the main functions of the ***addmtoolbox** package, we can call the `addm_fit_grid()` function. This function has quite some parameters, and you find detailed information what each one stands for in the function/pckage documentation. Lets look at the default setting of all parameters below to get an overview.
 
 ```{r, eval=FALSE}
-addm_fit_grid = function(choice.dat = data.table(v1 = 0,v2 = 0, rt = 0, decision = 0, id = 0),
-                         eye.dat = data.table(fixloc = 0,fixnr = 1, fixdur= 0, id = 0),
-                         conditions.dat = data.table(v1 = 0, v2 = 0, id = 0),
+addm_fit_grid = function(data = list(choice.dat = NULL, eye.dat = NULL, conditions.dat = NULL)
                          drifts = seq(0,0.002,0.0005),
                          thetas = seq(0.0,1,0.2),
                          sds = seq(0.05,0.15,0.025),
@@ -148,8 +146,7 @@ To highlight a few of the non-obvious options;
 Lets take our prepared data.frames and fit the model once ourselves. I chose defaults so that reasonable outcomes will be returned for the example data-set. We will be fine in calling the function with default values for all but the `conditions_dat` and `choice_dat` variables, where we fit in the corresponding data.tables we retrieved from `addm_dataprep()` earlier. Note that for your own datasets you likely want to adjust the search-grid etc..
 
 ```{r, eval=FALSE}
-my.log.liks = addm_fit_grid = function(conditions.dat = my.dat$conditions,
-                                    choice.dat = my.dat$choice)
+my.log.liks = addm_fit_grid(my.dat)
 ```
 
 In this vignette I am not going to run the code, but instead show you the resulting data.table that stores the loglikelihood values and corresponding model-parameters from a precomputed model-fit.

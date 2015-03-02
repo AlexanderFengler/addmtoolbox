@@ -36,7 +36,6 @@ addm_support_gridsearch_foreach = function(choice.dat = data.table(v1 = 0, v2 = 
 
   } else if (fit.type == 'condition'){
     out[[1]] = foreach (i = ita,.combine='rbind') %dopar% addm_run_by_condition(choice.dat,
-                                                                                eye.dat,
                                                                                 conditions.dat,
                                                                                 i,
                                                                                 nr.reps,
