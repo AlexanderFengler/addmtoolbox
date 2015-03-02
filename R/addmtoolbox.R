@@ -19,7 +19,7 @@
 #'
 #' @docType package
 #' @name addmtoolbox
-#' @import data.table dplyr Rcpp RcppGSL RcppZiggurat doMC foreach iterators ggplot2 pander rmarkdown parallel
+#' @import data.table dplyr Rcpp RcppGSL RcppZiggurat parallel doMC foreach iterators ggplot2 pander rmarkdown
 #' @useDynLib addmtoolbox
 #' @importFrom Rcpp sourceCpp
 NULL
