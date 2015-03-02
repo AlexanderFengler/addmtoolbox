@@ -12,6 +12,7 @@ Imports: data.table,
     foreach,
     ggplot2,
     iterators,
+    parallel,
     Rcpp,
     RcppGSL,
     RcppZiggurat
