@@ -4,21 +4,22 @@
 \alias{addm_fit_grid}
 \title{Run Gridsearch over supplied parameter space}
 \usage{
-addm_fit_grid(conditions.dat = data.table(v1 = 0, v2 = 0, id = 0),
-  eye.dat = data.table(fixloc = 0, fixnr = 1, fixdur = 0, id = 0),
-  choice.dat = data.table(v1 = 0, v2 = 0, rt = 0, decision = 0, id = 0),
-  drifts = seq(5e-04, 0.003, 5e-04), thetas = seq(0, 1, 0.25),
-  sds = seq(0.05, 0.09, 0.01), non.decision.times = 0, timestep = 10,
-  nr.reps = 2000, model.type = "standard", output.type = "fit",
-  fit.type = "condition", fixation.model = "fixedpath",
-  allow.fine.grid = 0, log.file = "defaultlog.txt", parallel = 1)
+addm_fit_grid(choice.dat = data.table(v1 = 0, v2 = 0, rt = 0, decision = 0, id
+  = 0), eye.dat = data.table(fixloc = 0, fixnr = 1, fixdur = 0, id = 0),
+  conditions.dat = data.table(v1 = 0, v2 = 0, id = 0), drifts = seq(5e-04,
+  0.003, 5e-04), thetas = seq(0, 1, 0.25), sds = seq(0.05, 0.09, 0.01),
+  non.decision.times = 0, nr.reps = 2000, timestep = 10,
+  model.type = "standard", output.type = "fit",
+  fixation.model = "fixedpath", fit.type = "condition",
+  allow.fine.grid = 0, coarse.to.fine.ratio = 4,
+  log.file = "defaultlog.txt", parallel = 1)
 }
 \arguments{
-\item{conditions.dat}{A 'data.frame' storing the item valuations (v1,v2...) by unique trial conditions. An id column (id) needs to be provided that matches by trial data.}
+\item{choice.dat}{A 'data.frame' or  'data.table' storing the item valuations (v1,v2...) , reaction times in ms (rt), decisions as decision and an id column (id). A by trial form is assumed.}
 
 \item{eye.dat}{A 'data.frame' or 'data.table' storing eyetracking data by trial. Fixation location (fixloc), Fixation number (fixnr), Fixation duration (fixdur) and an id column (id). Can all be initialized as zero columns when a by condition fit is attempted.}
 
-\item{choice.dat}{A 'data.frame' or  'data.table' storing the item valuations (v1,v2...) , reaction times in ms (rt), decisions as decision and an id column (id). A by trial form is assumed.}
+\item{conditions.dat}{A 'data.frame' storing the item valuations (v1,v2...) by unique trial conditions. An id column (id) needs to be provided that matches by trial data.}
 
 \item{drifts}{Vector of all driftrate values to be tested.}
 
@@ -28,19 +29,21 @@ addm_fit_grid(conditions.dat = data.table(v1 = 0, v2 = 0, id = 0),
 
 \item{non.decision.times}{Vector of all non decision times to be tested (in ms).}
 
-\item{timestep}{An integer number that provides the timestep-size that is used in the simulations (in ms).}
-
 \item{nr.reps}{An integer number that tells the function how many simulation runs to use.}
+
+\item{timestep}{An integer number that provides the timestep-size that is used in the simulations (in ms).}
 
 \item{model.type}{A string that indicates which version of the model to run. 'standard' or 'memnoise' when memory effects shall be allowed.}
 
 \item{output.type}{A string that indicates what output the model shall produce. 'full' for detailed model output, 'fit' for sparse output (rt,decision) by id variable.}
 
-\item{fit.type}{A string indicating either 'condition' for fits by unique trial conditions or 'trial' for fits by trial.}
-
 \item{fixation.model}{A string that indicates which fixation model will be utilized for simulations. 'random' for random fixations (implemented) 'fixedpath' for following a predetermined fixation path with fixed durations (implemented).}
 
+\item{fit.type}{A string indicating either 'condition' for fits by unique trial conditions or 'trial' for fits by trial.}
+
 \item{allow.fine.grid}{Binary variable that indicates whether we allow (1) a fine grid to be created an searched around the coarse grid minimum or not (0).}
+
+\item{coarse.to.fine.ratio}{Integer number deifining the ratio between parameter steps in the coarse vs. the fine grid. Defaults to 4.}
 
 \item{log.file}{Filepath for storage of logs}
 

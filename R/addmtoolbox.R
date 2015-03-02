@@ -20,4 +20,6 @@
 #' @docType package
 #' @name addmtoolbox
 #' @import data.table dplyr Rcpp RcppGSL RcppZiggurat doMC foreach iterators ggplot2
+#' @useDynLib addmtoolbox
+#' @importFrom Rcpp sourceCpp
 NULL

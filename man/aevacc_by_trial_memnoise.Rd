@@ -4,18 +4,11 @@
 \alias{aevacc_by_trial_memnoise}
 \title{Flexible evidence accumulation (item general) allowing for memory effects}
 \usage{
-aevacc_by_trial_memnoise(nr_reps, maxdur, mindur, cur_decision, sd, theta,
-  drift, non_decision_time, timestep, update, fixpos, fixdur)
+aevacc_by_trial_memnoise(sd, theta, drift, non_decision_time, items_seen_bias,
+  items_seen_noise_bias, maxdur, mindur, cur_decision, update, fixpos, fixdur,
+  nr_reps, timestep)
 }
 \arguments{
-\item{nr_reps}{number of repitions (simulation runs)}
-
-\item{maxdur}{numeric variable that supplies the maximum reaction time considered a success in simulations}
-
-\item{mindur}{numeric variable that supplies the minimum reaction time considered a succes in simulations}
-
-\item{cur_decision}{numeric variable that provides the empirical decision taken in trial}
-
 \item{sd}{standard deviation used for drift diffusion process}
 
 \item{theta}{theta used for drift diffusion process}
@@ -24,13 +17,25 @@ aevacc_by_trial_memnoise(nr_reps, maxdur, mindur, cur_decision, sd, theta,
 
 \item{non_decision_time}{non decision time used for drift diffusion process}
 
-\item{timestep}{timestep in ms associated with each step in the drift diffusion process}
+\item{items_seen_bias}{Numeric Variable storing the relative amount of drift that unseen items receive}
+
+\item{items_seen_noise_bias}{Numeric Variable storing the relative noise sd that unseen items receive}
+
+\item{maxdur}{numeric variable that supplies the maximum reaction time considered a success in simulations}
+
+\item{mindur}{numeric variable that supplies the minimum reaction time considered a succes in simulations}
+
+\item{cur_decision}{numeric variable that provides the empirical decision taken in trial}
 
 \item{update}{Vector that stores the item valuations for the trial conditon simulated}
 
 \item{fixpos}{Vector that stores the locations for a supplied fixed fixation pathway}
 
 \item{fixdur}{Vector that stores the fixation durations for a supplied fixed fixation pathway}
+
+\item{nr_reps}{number of repitions (simulation runs)}
+
+\item{timestep}{timestep in ms associated with each step in the drift diffusion process}
 }
 \value{
 Returns a numeric variable that provides a success count (runs that predicted a reaction time in the correct rt-bin and simultaneously the correct decision)

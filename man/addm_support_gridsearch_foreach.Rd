@@ -4,33 +4,33 @@
 \alias{addm_support_gridsearch_foreach}
 \title{Run grid search parallel}
 \usage{
-addm_support_gridsearch_foreach(conditions.dat = data.table(v1 = 0, v2 = 0, id
-  = 0), eye.dat = data.table(fixloc = 0, fixdur = 0, fixnr = 1, id = 0),
-  choice.dat = data.table(v1 = 0, v2 = 0, rt = 0, decision = 0, id = 0),
-  parameter.matrix = c(0.006, 0.6, 0.06, 0), fit.type = "condition",
-  nr.reps = 2000, model.type = "standard", fixation.model = "fixedpath",
-  log.file = "defaultlog.txt", timestep = 10)
+addm_support_gridsearch_foreach(choice.dat = data.table(v1 = 0, v2 = 0, rt =
+  0, decision = 0, id = 0), eye.dat = data.table(fixloc = 0, fixdur = 0, fixnr
+  = 1, id = 0), conditions.dat = data.table(v1 = 0, v2 = 0, id = 0),
+  parameter.matrix = c(0.006, 0.6, 0.06, 0), nr.reps = 2000,
+  timestep = 10, model.type = "standard", fixation.model = "fixedpath",
+  fit.type = "condition", log.file = "defaultlog.txt")
 }
 \arguments{
-\item{conditions.dat}{A 'data.frame' storing the item valuations (v1,v2...) by unique trial conditions. An id column (id) needs to be provided that matches by trial data.}
+\item{choice.dat}{A 'data.frame' or  'data.table' storing the item valuations (v1,v2...) , reaction times in ms (rt), decisions as decision and an id column (id). A by trial form is assumed.}
 
 \item{eye.dat}{A 'data.frame' or 'data.table' storing eyetracking data by trial. Fixation location (fixloc), Fixation number (fixnr), Fixation duration (fixdur) and an id column (id). Can all be initialized as zero columns when a by condition fit is attempted.}
 
-\item{choice.dat}{A 'data.frame' or  'data.table' storing the item valuations (v1,v2...) , reaction times in ms (rt), decisions as decision and an id column (id). A by trial form is assumed.}
+\item{conditions.dat}{A 'data.frame' storing the item valuations (v1,v2...) by unique trial conditions. An id column (id) needs to be provided that matches by trial data.}
 
 \item{parameter.matrix}{Matrix that represents the parameter space which is looped over. (drift,theta,sd,non.decision.time)}
 
-\item{fit.type}{A string indicating either 'condition' for fits by unique trial conditions or 'trial' for fits by trial.}
-
 \item{nr.reps}{An integer number that tells the function how many simulation runs to use.}
+
+\item{timestep}{An integer number that provides the timestep-size that is used in the simulations (in ms).}
 
 \item{model.type}{A string that indicates which version of the model to run. 'standard' or 'memnoise' when memory effects shall be allowed.}
 
 \item{fixation.model}{A string that indicates which fixation model will be utilized for simulations. 'random' for random fixations (implemented) 'fixedpath' for following a predetermined fixation path with fixed durations (implemented).}
 
-\item{log.file}{Filepath for storage of logs}
+\item{fit.type}{A string indicating either 'condition' for fits by unique trial conditions or 'trial' for fits by trial.}
 
-\item{timestep}{An integer number that provides the timestep-size that is used in the simulations (in ms).}
+\item{log.file}{Filepath for storage of logs}
 }
 \value{
 Returns data.table with log likelihoods and corresponding parameter combinations

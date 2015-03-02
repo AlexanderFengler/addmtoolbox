@@ -5,18 +5,18 @@
 \title{Generate artificial dataset}
 \usage{
 addm_generate_by_condition_artificial(set.size = 2,
-  possible.valuations = c(0, 1, 2, 3), timestep = 10, nr.reps = 2000,
-  model.type = "standard", fixation.model = "fixedpath",
-  core.parameters = c(0.006, 0.6, 0.06, 0))
+  possible.valuations = c(0, 1, 2, 3), model.parameters = c(0.006, 0.6,
+  0.06, 0), nr.reps = 2000, timestep = 10, model.type = "standard",
+  fixation.model = "fixedpath")
 }
 \arguments{
 \item{set.size}{Indicates the number of items that are allowed.}
 
 \item{possible.valuations}{Vector storing valuations that single items can hold in a choice set.}
 
-\item{timestep}{An integer number that provides the timestep-size that is used in the simulations (in ms).}
-
 \item{nr.reps}{An integer number that tells the function how many simulation runs to use.}
+
+\item{timestep}{An integer number that provides the timestep-size that is used in the simulations (in ms).}
 
 \item{model.type}{A string that indicates which version of the model to run. 'standard' or 'memnoise' when memory effects shall be allowed.}
 

@@ -5,8 +5,9 @@
 \title{Flexible Evidence accumulation by condition (item general)
 \code{aevacc_by_condition_memnoise}}
 \usage{
-aevacc_by_condition_memnoise(sd, theta, drift, non_decision_time, timestep,
-  nr_reps, maxdur, update, fixpos, fixdur, fixdursamples, fixation_model)
+aevacc_by_condition_memnoise(sd, theta, drift, non_decision_time,
+  items_seen_bias, items_seen_noise_bias, maxdur, update, fixation_model,
+  nr_reps, timestep)
 }
 \arguments{
 \item{sd}{standard deviation used for drift diffusion process}
@@ -17,21 +18,25 @@ aevacc_by_condition_memnoise(sd, theta, drift, non_decision_time, timestep,
 
 \item{non_decision_time}{non decision time used for drift diffusion process}
 
-\item{timestep}{timestep in ms associated with each step in the drift diffusion process}
+\item{items_seen_bias}{Numeric Variable storing the relative amount of drift that unseen items receive}
 
-\item{nr_reps}{number of repitions (simulation runs)}
+\item{items_seen_noise_bias}{Numeric Variable storing the relative noise sd that unseen items receive}
 
 \item{maxdur}{maximum duration in ms that the process is allowed to simulate}
 
 \item{update}{Vector that stores the item valuations for the trial conditon simulated}
+
+\item{fixation_model}{a user supplied fixation model that will be utilized to supply fixation locations and potentially fixation durations}
+
+\item{nr_reps}{number of repitions (simulation runs)}
+
+\item{timestep}{timestep in ms associated with each step in the drift diffusion process}
 
 \item{fixpos}{Vector that stores the locations for a supplied fixed fixation pathway}
 
 \item{fixdur}{Vector that stores the fixation durations for a supplied fixed fixation pathway}
 
 \item{fixdursamples}{Vector from which fixation duration can be sampled once supplied fixations run out}
-
-\item{fixation_model}{a user supplied fixation model that will be utilized to supply fixation locations and potentially fixation durations}
 }
 \value{
 Returns a vector that stores decisions and rts for each simulation run

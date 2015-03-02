@@ -5,8 +5,9 @@
 \title{Evidence accumulation by condition (item general) with detailed output
 \code{aevacc_full_output_memnoise}}
 \usage{
-aevacc_full_output_memnoise(sd, theta, drift, non_decision_time, timestep,
-  nr_reps, maxdur, update, fixation_model)
+aevacc_full_output_memnoise(sd, theta, drift, non_decision_time,
+  items_seen_bias, items_seen_noise_bias, maxdur, update, fixation_model,
+  nr_reps, timestep)
 }
 \arguments{
 \item{sd}{standard deviation used for drift diffusion process}
@@ -17,15 +18,19 @@ aevacc_full_output_memnoise(sd, theta, drift, non_decision_time, timestep,
 
 \item{non_decision_time}{non decision time used for drift diffusion process}
 
-\item{timestep}{timestep in ms associated with each step in the drift diffusion process}
+\item{items_seen_bias}{Numeric Variable storing the relative amount of drift that unseen items receive}
 
-\item{nr_reps}{number of repitions (simulation runs)}
+\item{items_seen_noise_bias}{Numeric Variable storing the relative noise sd that unseen items receive}
 
 \item{maxdur}{maximum duration in ms that the process is allowed to simulate}
 
 \item{update}{Vector that stores the item valuations for the trial conditon simulated}
 
 \item{fixation_model}{a user supplied fixation model that will be utilized to supply fixation locations and potentially fixation durations}
+
+\item{nr_reps}{number of repitions (simulation runs)}
+
+\item{timestep}{timestep in ms associated with each step in the drift diffusion process}
 }
 \value{
 Returns a vector that stores detailed output by simulation run

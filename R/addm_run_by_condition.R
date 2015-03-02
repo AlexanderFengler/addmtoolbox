@@ -15,9 +15,9 @@
 #' @param timestep An integer number that provides the timestep-size that is used in the simulations (in ms).
 #' @param generate Binary variable that tells the function to return either log likelihood values (0) or rt, decision (1). Relevant only if model.type variable is 'fit'.
 
-addm_run_by_condition = function(choice.dat = data.table(decision = 0, rt = 0, id = 0),
-                                 eye.dat = data.table(fixloc = 0, fixdur = 0, fixnr = 1, id = 0),
-                                 conditions.dat = data.table(v1 = 0, v2 = 0, id = 0),
+addm_run_by_condition = function(choice.dat = data.table(decision = 0, rt = 0, condition_id = 0),
+                                 eye.dat = data.table(fixloc = 0, fixdur = 0, fixnr = 1, condition_id = 0),
+                                 conditions.dat = data.table(v1 = 0, v2 = 0, condition_id = 0),
                                  model.parameters = c(0.006,0.6,0.06,0),
                                  nr.reps = 2000,
                                  timestep = 10,
@@ -46,9 +46,9 @@ addm_run_by_condition = function(choice.dat = data.table(decision = 0, rt = 0, i
   #-------------------------------------------------------------------------------------------------------------------------------------
 
   # INITIALIZATION OF ALL DATA FRAMES THAT WE NEED TO STORE addm RESULTS IN-------------------------------------------------------------
-  nr_rows = length(conditions.dat[,id])*nr.reps
-  len.trials = length(conditions.dat[,id])
-  ids = conditions.dat[,id]
+  nr_rows = length(conditions.dat[,condition_id])*nr.reps
+  len.trials = length(conditions.dat[,condition_id])
+  ids = conditions.dat[,condition_id]
   cur.set_size = length(which(conditions.dat[1,grep("^v[1-9]*",names(conditions.dat)),with=FALSE] > -1))
 
   # Define Matrix that stores values adjusted for drift rates // will be fed into evidence accumulaiton function
@@ -150,7 +150,7 @@ addm_run_by_condition = function(choice.dat = data.table(decision = 0, rt = 0, i
 
   # STORING DATA FRAME THAT COLLECTS ALL RELEVANT INFORMATION CONCERNING MODEL OUTPUT---------------------------------------------------
   if (output.type == "full"){
-    output.names = c("id",
+    output.names = c("condition_id",
                      "drift.rate",
                      "theta",
                      "sd",
@@ -168,14 +168,14 @@ addm_run_by_condition = function(choice.dat = data.table(decision = 0, rt = 0, i
       output.names[namelen + cur.set_size + i] = paste("nr.fix.",toString(i),sep='')
     }
 
-    addm.output.frame = cbind(data.table(id = rep(ids,each=nr.reps)),as.data.table(addm.output))
+    addm.output.frame = cbind(data.table(condition_id = rep(ids,each=nr.reps)),as.data.table(addm.output))
     setnames(addm.output.frame,output.names)
     return(addm.output.frame)
   } else if (output.type == "fit"){
 
     addm.output.frame = data.table(decision=addm.output[,1],
                                    rt=addm.output[,2],
-                                   id=rep(ids,each=nr.reps))
+                                   condition_id=rep(ids,each=nr.reps))
 
     if (generate == 1){
       return(addm.output.frame)
@@ -184,16 +184,16 @@ addm_run_by_condition = function(choice.dat = data.table(decision = 0, rt = 0, i
     addm.output.frame$rtbins = cut(addm.output.frame$rt,cur.breaks,include.lowest = TRUE)
 
     addm.choice.table = addm.output.frame %>%
-      group_by(id,decision,rtbins) %>%
+      group_by(condition_id,decision,rtbins) %>%
       summarise(count = n()) %>%
       mutate(choice.p = count / nr.reps)
 
     choice.dat$rtbins = cut(choice.dat$rt,cur.breaks,include.lowest = TRUE)
-    real.choice.table = choice.dat %>% select(id,decision,rtbins)
+    real.choice.table = choice.dat %>% select(condition_id,decision,rtbins)
 
     # CALCULATE LOGLIKELIHOOD  ----------------------------------------------------------------------------------------------------------
-    setkey(addm.choice.table,id,decision,rtbins)
-    setkey(real.choice.table,id,decision,rtbins)
+    setkey(addm.choice.table,condition_id,decision,rtbins)
+    setkey(real.choice.table,condition_id,decision,rtbins)
 
     temp.table = addm.choice.table[real.choice.table]
     temp.table[is.na(choice.p),choice.p:=1/(nr.reps + 1)]
