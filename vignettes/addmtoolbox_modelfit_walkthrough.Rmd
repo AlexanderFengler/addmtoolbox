@@ -78,9 +78,9 @@ Once our data is in shape we can continue to use the `addm_dataprep()` function,
 
 ```{r, results='hide'}
  my.dat = addm_dataprep(choice.dat = addm_data_choice,
-                         eye.dat = addm_data_eye,
-                         timestep = 10,
-                         rtbinsize = 100)  
+                        eye.dat = addm_data_eye,
+                        timestep = 10,
+                        rtbinsize = 100)  
 ```
 
 You can look at detailed descriptions of the input parameters directly in the package documentation. Click on the package name in your **RStudio** package window or type `?addmtoolbox`.    
@@ -129,7 +129,7 @@ addm_fit_grid = function(data = list(choice.dat = NULL, eye.dat = NULL, conditio
 ```
 
 
-To highlight a few of the non-obvious options;
+To highlight a few of the non-obvious options:
 
 1. `model.type` which defaults to **"standard"**, lets you choose **"memnoise"** as an alternative. This is a version of the model which, given bigger set sizes than 2, lets you scale down/up noise and evidence accumulation separately for seen and unseen items. <br> <br>
 
@@ -152,7 +152,7 @@ my.log.liks = addm_fit_grid(my.dat)
 In this vignette I am not going to run the code, but instead show you the resulting data.table that stores the loglikelihood values and corresponding model-parameters from a precomputed model-fit.
 
 ```{r}
-  head(addm_data_loglik_condition)
+head(addm_data_loglik_condition)
 ```
 
 You can see that all model parameters are stored along with a variable `coarse` which can be ignored for now. This variable is needed when plotting the loglikelihoods, separate for the coarse and fine grid search. In the defaults we are not using a fine grid, so we will not bother with this for now. <br> <br> <br> 
@@ -227,6 +227,8 @@ You can use the `addm_plot_family()` function to get some basic psychometric plo
 ```  
 
 The functionality of this function will increase over time. From the user perspective the only difference however will be that you will receive back a longer list of plot-objects.
+
+<br> <br> 
 
 # DONE
 
