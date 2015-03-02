@@ -178,13 +178,13 @@ The **addmtoolbox** can do this with the **addm_by_condition()** function. You n
 ```{r}
   # Generate vector with optimal parameters (as seen above)
   # Order: sd,theta,drift,non_decision_time
-  our.best.parameters = c(0.07,1,0.0015,0)
+  our.best.parameters = c(0.0015,1,0.07,0)
   
   # Now call addm_by_condition() function
   detailed.output = addm_run_by_condition(conditions.dat = my.dat$conditions.dat, 
                                           choice.dat = my.dat$choice.dat, 
                                           output.type = 'full', 
-                                          nr.reps = 50, 
+                                          nr.reps = 250, 
                                           model.parameters = our.best.parameters)
 ```
 <br>
@@ -217,7 +217,7 @@ You can use the `addm_plot_family()` function to get some basic psychometric plo
 
 ```{r,fig.show = "hold"}
   addm.plot = addm2_plot_family(choice.dat = my.dat$choice.dat,
-                                addm.output = addm_data_full_output)
+                                addm.output = detailed.output)
   
 ```  
 
