@@ -27,23 +27,23 @@ addm_support_gridsearch_foreach = function(choice.dat = data.table(v1 = 0, v2 = 
   sink(log.file,append=TRUE)
 
   if (fit.type == "trial"){
-    out[[1]] = foreach (i = ita,.combine='rbind') %dopar% addm_by_trial(choice.dat,
-                                                                        eye.dat,
-                                                                        i,
-                                                                        nr.reps,
-                                                                        timestep,
-                                                                        model.type)
-
-  } else if (fit.type == 'condition'){
-    out[[1]] = foreach (i = ita,.combine='rbind') %dopar% addm_by_condition(choice.dat,
+    out[[1]] = foreach (i = ita,.combine='rbind') %dopar% addm_run_by_trial(choice.dat,
                                                                             eye.dat,
-                                                                            conditions.dat,
                                                                             i,
                                                                             nr.reps,
                                                                             timestep,
-                                                                            model.type,
-                                                                            output.type = 'fit',
-                                                                            fixation.model)
+                                                                            model.type)
+
+  } else if (fit.type == 'condition'){
+    out[[1]] = foreach (i = ita,.combine='rbind') %dopar% addm_run_by_condition(choice.dat,
+                                                                                eye.dat,
+                                                                                conditions.dat,
+                                                                                i,
+                                                                                nr.reps,
+                                                                                timestep,
+                                                                                model.type,
+                                                                                output.type = 'fit',
+                                                                                fixation.model)
 
   }
   # --------------------------------------------------------------------------------------------------------------------------------------
