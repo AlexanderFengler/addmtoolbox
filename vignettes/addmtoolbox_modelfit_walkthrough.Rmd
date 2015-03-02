@@ -113,8 +113,8 @@ Now that our data is prepared for usage with the main functions of the ***addmto
 
 ```{r, eval=FALSE}
 addm_fit_grid = function(data = list(choice.dat = NULL, eye.dat = NULL, conditions.dat = NULL),
-                         drifts = seq(0,0.002,0.0005),
-                         thetas = seq(0.0,1,0.2),
+                         drifts = seq(0.0,0.002,0.0005),
+                         thetas = seq(0.0,1.0,0.2),
                          sds = seq(0.05,0.15,0.025),
                          non.decision.times = 0,
                          timestep = 10,
