@@ -211,7 +211,7 @@ What would you learn in addition? The model makes exactly the same predictions a
 
 <br> <br>
 
-# Ploting Results
+# Plotting Results
 
 You can use the `addm_plot_family()` function to get some basic psychometric plots, showing the model predictions and you original data. The function returns a **list** with **plot-objects**, which you can plot or, given some knowledge of the utilities that the **ggplot2** package offers, you can freely edit. You use the function like this:
 
@@ -221,7 +221,7 @@ You can use the `addm_plot_family()` function to get some basic psychometric plo
   
 ```  
 
-```{r,fig.show="hold",echo=FALSE}
+```{r,fig.show="hold"}
   addm.plot[[1]]
   addm.plot[[2]]
 ```  
