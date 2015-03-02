@@ -2,20 +2,16 @@
 % Please edit documentation in R/addm2_fixation_model_random.R
 \name{addm2_fixation_model_random}
 \alias{addm2_fixation_model_random}
-\title{Fixation model example (for usage with aevacc functions)}
+\title{Example for user-supplied fixation model (aevacc functions)}
 \usage{
 addm2_fixation_model_random()
 }
-\arguments{
-\item{fixdur.vec}{Vector of fixation-durations to sample from}
-}
 \value{
-Returns matrix with row one providing fixation location and row two providing fixation duration
+matrix with two rows. One providing fixation location and the second providing fixation duration
 }
 \description{
 Compute seqeuence of fixation locations and durations (random locations)
-\code{addm_fixation_model_random} Returns matrix with row one providing fixation location and row two providing fixation duration
-#'
+\code{addm2_fixation_model_random}
 }
 \author{
 Alexander Fengler, \email{alexanderfengler@gmx.de}

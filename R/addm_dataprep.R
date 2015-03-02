@@ -1,13 +1,13 @@
-#' Shapes up a 'data.frame' or 'data.table' to be straight usable with the other addm_*** functions
-#' \code{addm_dataprep} List of three components. A 'data.table' that stores all unique choice set conditions. A 'data.table' that stores eyetracking.data adjusted to be usable for by trial fits. A 'data.table' that stores by trial choice data. An id variable links all three data.tables.
-#' @param choice.dat A 'data.frame' or  'data.table' storing the item valuations (v1,v2...) , reaction times in ms (rt), decisions as decision and an id column (id). A by trial form is assumed.
-#' @param eye.dat A 'data.frame' or 'data.table' storing eyetracking data by trial. Fixation location (fixloc), Fixation number (fixnr), Fixation duration (fixdur) and an id column (id). Can all be initialized as zero columns when a by condition fit is attempted.
-#' @param timestep An integer number that provides the timestep-size that is used in the simulations (in ms).
-#' @param rtbinsize An integer number that provides the binsize that is used for binning reaction time data (in ms).
-#' @param fit.type String defined as 'condition' or 'trial' for the respective model fits
+#' Preprocess experimental data for easy usage with addmtoolbox package
+#' \code{addm_dataprep}
+#' @param choice.dat data.frame or data.table storing the item valuations (v1,v2...) , reaction times in ms (rt), decisions (decision) and a trial id column (id).
+#' @param eye.dat A data.frame or data.table storing eyetracking data by trial. Fixation location (fixloc), Fixation number (fixnr), Fixation duration (fixdur) and a trial id column (id). Can all be initialized as zero columns when a by condition fit is attempted.
+#' @param timestep integer that provides the timestep-size that is used in the simulations (in ms).
+#' @param rtbinsize integer that provides the binsize that is used for binning reaction time data (in ms).
+#' @param fit.type string defined as 'condition' or 'trial' for the respective model fits
 #' @author Alexander Fengler, \email{alexanderfengler@@gmx.de}
-#' @title Data Preparation for easy supply to fit functions
-#' @return returns a list of three components. A 'data.table' that stores all unique choice set conditions. A 'data.table' that stores eyetracking.data adjusted to be usable for by trial fits. A 'data.table' that stores by trial choice data. An id variable links all three data.tables.
+#' @title Data Preprocessing for easy usage of addmtoolbox package
+#' @return list of three components. data.table that stores all unique choice set conditions. data.table that stores eyetracking.data adjusted to be usable for by trial fits. data.table that stores by trial choice data. trial id and condition id variable link all data.tables
 #' @export
 addm_dataprep = function(choice.dat =  data.table(v1 = 0,v2 = 0,id = 0,rt = 0, decision = 0, id = 0),
                          eye.dat = data.table(fixloc = 0,fixnr = 1, fixdur= 0, id = 0),

@@ -1,24 +1,24 @@
-#' Runs grid search over supplied parameter space
+#' Run grid search over supplied parameter space
 #' @author Alexander Fengler, \email{alexanderfengler@@gmx.de}
-#' @title Run Gridsearch over supplied parameter space
-#' @return Returns data.table with log likelihoods by parameter combination
-#' \code{addm_fit_grid} Returns data.table with log likelihoods by parameter combination
+#' @title Fit addm using grid search
+#' @return data.table with log likelihoods by parameter combination
+#' \code{addm_fit_grid}
 #' @export
-#' @param data A list of three data.tables of each: choice data, eyetracking data, conditions data (as created by addm_dataprep)
-#' @param drifts Vector of all driftrate values to be tested.
-#' @param thetas Vector of all theta to be tested (between 0 and 1).
-#' @param sds Vector of all standard deviation values to be tested.
-#' @param non.decision.times Vector of all non decision times to be tested (in ms).
-#' @param timestep An integer number that provides the timestep-size that is used in the simulations (in ms).
-#' @param nr.reps An integer number that tells the function how many simulation runs to use.
-#' @param model.type A string that indicates which version of the model to run. 'standard' or 'memnoise' when memory effects shall be allowed.
-#' @param output.type A string that indicates what output the model shall produce. 'full' for detailed model output, 'fit' for sparse output (rt,decision) by id variable.
-#' @param fit.type A string indicating either 'condition' for fits by unique trial conditions or 'trial' for fits by trial.
-#' @param fixation.model A string that indicates which fixation model will be utilized for simulations. 'random' for random fixations (implemented) 'fixedpath' for following a predetermined fixation path with fixed durations (implemented).
-#' @param allow.fine.grid Binary variable that indicates whether we allow (1) a fine grid to be created an searched around the coarse grid minimum or not (0).
-#' @param log.file Filepath for storage of logs
-#' @param parallel Binary variable that tells whether to initialize local cluster on start (1) or not (0).
-#' @param coarse.to.fine.ratio Integer number deifining the ratio between parameter steps in the coarse vs. the fine grid. Defaults to 4.
+#' @param data list of three data.tables of each: choice data, eyetracking data, conditions data (as created by addm_dataprep)
+#' @param drifts vector of all driftrate values to be tested.
+#' @param thetas vector of all theta to be tested (between 0 and 1).
+#' @param sds vector of all standard deviation values to be tested.
+#' @param non.decision.times vector of all non decision times to be tested (in ms).
+#' @param timestep integer that provides the timestep-size that is used in the simulations (in ms).
+#' @param nr.reps integer that tells the function how many simulation runs to use.
+#' @param model.type string that indicates which version of the model to run. 'standard' for normal model fits. 'memnoise' to allow for memory effects (see vignette for more for detailed explanation of what this is about).
+#' @param output.type string that indicates what output the model shall produce. 'full' for detailed model output. 'fit' for sparse output (rt,decision), as needed for calculating likelihood
+#' @param fit.type string indicating either 'condition' for fits by unique trial conditions or 'trial' for fits by trial.
+#' @param fixation.model string that indicates which fixation model will be utilized for simulations. 'random' for random fixations (example). 'fixedpath' for following a predetermined fixation path with fixed durations (example). 'user' to provide your own fixation model, defined in a function "user_fixation_model" in the global environment.
+#' @param allow.fine.grid variable that indicates whether we allow (1) a fine grid to be created and searched around the coarse grid minimum or not (0).
+#' @param log.file path to a file for storing fit-logs
+#' @param parallel boolean varible that indicates whether to initialize local cluster on start (1) or not (0).
+#' @param coarse.to.fine.ratio integer defining the ratio between parameter steps in the coarse versus the fine grid.
 
 addm_fit_grid = function(data = list(choice.dat = NULL, eye.dat = NULL, conditions.dat = NULL),
                          drifts = seq(0.0005,0.003,0.0005),

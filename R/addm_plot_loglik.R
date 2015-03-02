@@ -1,8 +1,8 @@
-#' Produce model fit visualization
+#' Visualize Likelihood fitting
 #' @author Alexander Fengler, \email{alexanderfengler@@gmx.de}
-#' @title Plot modelfit
-#' @return Returns a list of two ggplot objects. plot.coarse.grid stores a plot corresponding to coarse grid fits. plot.fine.grid analogously for fine grid fits
-#' \code{addm_plot_loglik} Returns data.table with log likelihoods by parameter combination
+#' @title Visualize Likelihood fitting
+#' @return list of two ggplot objects. plot.coarse.grid stores a plot corresponding to coarse grid fits. plot.fine.grid analogously stores a plot for fine grid fits.
+#' \code{addm_plot_loglik}
 #' @export
 #' @param logliks 'data.frame' or 'data.table' storing parameter values and corresponding log likelihoods as a result of a model fit.
 

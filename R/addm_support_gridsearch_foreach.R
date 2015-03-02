@@ -1,11 +1,11 @@
-#' Runs parallel grid search for addm fits using foreach loops
-#' \code{addm_gridsearch_foreach} Returns data.table with log likelihoods and corresponding parameter combinations
-#' #' @author Alexander Fengler, \email{alexanderfengler@@gmx.de}
-#' @title Run grid search parallel
-#' @return Returns data.table with log likelihoods and corresponding parameter combinations
+#' Run (parallel) grid search for addm fits using foreach loops
+#' \code{addm_gridsearch_foreach}
+#' @author Alexander Fengler, \email{alexanderfengler@@gmx.de}
+#' @title Run grid search (parallel)
+#' @return data.table with log likelihoods and corresponding parameter combinations
 #' @export
 #' @inheritParams addm_fit_grid
-#' @param parameter.matrix Matrix that represents the parameter space which is looped over. (drift,theta,sd,non.decision.time)
+#' @param parameter.matrix matrix that provides the parameter space which is looped over. (drifts, thetas, sds, non decision times)
 
 addm_support_gridsearch_foreach = function(choice.dat = data.table(v1 = 0, v2 = 0, rt = 0, decision = 0, id = 0),
                                            eye.dat = data.table(fixloc = 0, fixdur = 0, fixnr = 1, id = 0),

@@ -1,15 +1,15 @@
-#' Function internal to grid search, which computes a fine grid around the coarse grid minimum log likelihood
-#' \code{addm_support_compute_finegrid} Gives back a parameter matrix
-#' #' @author Alexander Fengler, \email{alexanderfengler@@gmx.de}
-#' @title Generate fine grid around best parameter combination
-#' @return Matrix storing parameter space
+#' Compute parameter space for fine grid given the optimal parameter set of a coarse grid search
+#' \code{addm_support_compute_finegrid}
+#' @author Alexander Fengler, \email{alexanderfengler@@gmx.de}
+#' @title Compute fine grid best parameters from coarse grid search (internal)
+#' @return matrix storing new parameter space
 #' @export
-#' @param drift.step.fine Numeric variable storing precision with which drift rate space is searched in the fine grid parameter matrix.
-#' @param sd.step.fine Numeric variable storing precision with which standard deviation space is searched in the fine grid parameter matrix.
-#' @param thetas Numeric variable storing testable thetas. The theta space is not changed in the fine parameter matrix.
-#' @param non.decision.time.step.fine Numeric variable storing precision with which non.decision.time space is searched in the fine grid parameter matrix.
-#' @param coarse.to.fine.ratio Numeric Variable that stores the precision ratio between the coarse and fine grid for grid search fits.
-#' @param log.liks 'data.table' that stores log likelihoods and corresponding parameter combinations resulting from coarse grid search.
+#' @param drift.step.fine numeric variable storing precision with which drift rate space is searched in the fine grid parameter matrix.
+#' @param sd.step.fine numeric variable storing precision with which standard deviation space is searched in the fine grid parameter matrix.
+#' @param thetas numeric variable storing testable thetas. The theta space is not changed in the fine parameter matrix.
+#' @param non.decision.time.step.fine numeric variable storing precision with which non.decision.time space is searched in the fine grid parameter matrix.
+#' @param coarse.to.fine.ratio numeric Variable that stores the precision ratio between the coarse and fine grid for grid search fits.
+#' @param log.liks data.table that stores log likelihoods and corresponding parameter combinations resulting from coarse grid search.
 
 
 addm_support_compute_finegrid = function(drift.step.fine = 0,

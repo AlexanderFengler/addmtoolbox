@@ -2,7 +2,7 @@
 % Please edit documentation in R/addm_support_gridsearch_foreach.R
 \name{addm_support_gridsearch_foreach}
 \alias{addm_support_gridsearch_foreach}
-\title{Run grid search parallel}
+\title{Run grid search (parallel)}
 \usage{
 addm_support_gridsearch_foreach(choice.dat = data.table(v1 = 0, v2 = 0, rt =
   0, decision = 0, id = 0), eye.dat = data.table(fixloc = 0, fixdur = 0, fixnr
@@ -12,27 +12,26 @@ addm_support_gridsearch_foreach(choice.dat = data.table(v1 = 0, v2 = 0, rt =
   fit.type = "condition", log.file = "defaultlog.txt")
 }
 \arguments{
-\item{parameter.matrix}{Matrix that represents the parameter space which is looped over. (drift,theta,sd,non.decision.time)}
+\item{parameter.matrix}{matrix that provides the parameter space which is looped over. (drifts, thetas, sds, non decision times)}
 
-\item{nr.reps}{An integer number that tells the function how many simulation runs to use.}
+\item{nr.reps}{integer that tells the function how many simulation runs to use.}
 
-\item{timestep}{An integer number that provides the timestep-size that is used in the simulations (in ms).}
+\item{timestep}{integer that provides the timestep-size that is used in the simulations (in ms).}
 
-\item{model.type}{A string that indicates which version of the model to run. 'standard' or 'memnoise' when memory effects shall be allowed.}
+\item{model.type}{string that indicates which version of the model to run. 'standard' for normal model fits. 'memnoise' to allow for memory effects (see vignette for more for detailed explanation of what this is about).}
 
-\item{fixation.model}{A string that indicates which fixation model will be utilized for simulations. 'random' for random fixations (implemented) 'fixedpath' for following a predetermined fixation path with fixed durations (implemented).}
+\item{fixation.model}{string that indicates which fixation model will be utilized for simulations. 'random' for random fixations (example). 'fixedpath' for following a predetermined fixation path with fixed durations (example). 'user' to provide your own fixation model, defined in a function "user_fixation_model" in the global environment.}
 
-\item{fit.type}{A string indicating either 'condition' for fits by unique trial conditions or 'trial' for fits by trial.}
+\item{fit.type}{string indicating either 'condition' for fits by unique trial conditions or 'trial' for fits by trial.}
 
-\item{log.file}{Filepath for storage of logs}
+\item{log.file}{path to a file for storing fit-logs}
 }
 \value{
-Returns data.table with log likelihoods and corresponding parameter combinations
+data.table with log likelihoods and corresponding parameter combinations
 }
 \description{
-Runs parallel grid search for addm fits using foreach loops
-\code{addm_gridsearch_foreach} Returns data.table with log likelihoods and corresponding parameter combinations
-#'
+Run (parallel) grid search for addm fits using foreach loops
+\code{addm_gridsearch_foreach}
 }
 \author{
 Alexander Fengler, \email{alexanderfengler@gmx.de}

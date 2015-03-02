@@ -2,7 +2,7 @@
 % Please edit documentation in R/addm_run_by_trial.R
 \name{addm_run_by_trial}
 \alias{addm_run_by_trial}
-\title{Model run by trial}
+\title{Run model by unique trial}
 \usage{
 addm_run_by_trial(choice.dat = data.table(v1 = 0, v2 = 0, id = 0),
   eye.dat = data.table(fixloc = 0, fixdur = 0, fixnr = 1, id = 0),
@@ -10,24 +10,24 @@ addm_run_by_trial(choice.dat = data.table(v1 = 0, v2 = 0, id = 0),
   timestep = 10, model.type = "standard")
 }
 \arguments{
-\item{choice.dat}{A 'data.frame' or  'data.table' storing the item valuations (v1,v2...) , reaction times in ms (rt), decisions as decision and an id column (id). A by trial form is assumed.}
+\item{choice.dat}{data.table storing the item valuations (v1,v2...), reaction times in ms (rt), decisions (decision) and unique trial ids (id).}
 
-\item{eye.dat}{A 'data.frame' or 'data.table' storing eyetracking data by trial. Fixation location (fixloc), Fixation number (fixnr), Fixation duration (fixdur) and an id column (id). Can all be initialized as zero columns when a by condition fit is attempted.}
+\item{eye.dat}{data.table storing eyetracking data by trial. Fixation location (fixloc), Fixation number (fixnr), Fixation duration (fixdur) and a unique trial ids (id).}
 
-\item{model.parameters}{A vector with the four core addm parameters in order (drift.rate,theta,sd,non.decision.time).}
+\item{model.parameters}{vector with the four core addm parameters in order (drift.rate, theta, sd, non.decision.time).}
 
-\item{nr.reps}{An integer number that tells the function how many simulation runs to use.}
+\item{nr.reps}{integer that tells the function how many simulation runs to use.}
 
-\item{timestep}{An integer number that provides the timestep-size that is used in the simulations (in ms).}
+\item{timestep}{integer number that provides the timestep-size that is used in the simulations (in ms).}
 
-\item{model.type}{A string that indicates which version of the model to run. 'standard' or 'memnoise' when memory effects shall be allowed.}
+\item{model.type}{string that indicates which version of the model to run. 'standard' for traditional (a)ddm, or 'memnoise' when memory effects shall be allowed.}
 }
 \value{
-Returns a log likelihood value.
-\code{addm_run_by_trial} Returns log likelihood
+numeric variable storing the negative log likelihood for given parameter set
+\code{addm_run_by_trial}
 }
 \description{
-Runs the model by trial
+Run model by unique trial for one set of parameter values
 }
 \author{
 Alexander Fengler, \email{alexanderfengler@gmx.de}

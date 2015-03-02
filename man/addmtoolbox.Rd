@@ -4,30 +4,30 @@
 \name{addmtoolbox}
 \alias{addmtoolbox}
 \alias{addmtoolbox-package}
-\title{addmtoolbox: A package to fit (attentional) drift diffusion models}
+\title{addmtoolbox: Fit (attentional) drift diffusion models}
 \description{
 The addmtoolbox package provides four categories of functions:
-addm_dataprep(), addm_plot(), addm_by..(), addm_fit..().
+addm_dataprep(), addm_run_...(), addm_fit_...(), addm_plot_...().
 }
 \section{addm_dataprep()}{
 
-This function gets your data in shape for usage with the rest of the package
+This function gets your data in shape for easy usage with the other functions in the package.
+It is not strictly necessary to use it, however strongly recommended for predictable behavior.
 }
 
-\section{addm_plot() functions}{
+\section{addm_run_...()}{
 
-This set of functions will enable you to plot various psychometrics (in development).
-Currently there is only one function available that lets you plot the log likelihoods
-for each parameter combination from your model fit.
+These are wrapper functions to run a (a)ddm simulations for a set of provided parameters.
 }
 
-\section{addm_by..()}{
+\section{addm_fit_...()}{
 
-These are wrapper functions to run a (a)ddm simulation provided with some parameters.
+These functions allow you to do maximum likelihood fits of the model, provided with a parameter space. Currently only grid search is possible,
+however new fitting methods will be developed in the near future.
 }
 
-\section{addm_fit()}{
+\section{addm_plot_...() functions}{
 
-These functions allow you to fit the model to a provided parameter space (currently only grid_search).
+This set of functions will enable you to plot various psychometrics (currently two plots) and diagnostics of the modelfits.
 }
 

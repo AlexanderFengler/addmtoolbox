@@ -1,10 +1,9 @@
 #' Compute seqeuence of fixation locations and durations (random locations)
-#' \code{addm_fixation_model_random} Returns matrix with row one providing fixation location and row two providing fixation duration
-#' #' @author Alexander Fengler, \email{alexanderfengler@@gmx.de}
-#' @title Fixation model example (for usage with aevacc functions)
-#' @return Returns matrix with row one providing fixation location and row two providing fixation duration
+#' \code{addm2_fixation_model_random}
+#'  @author Alexander Fengler, \email{alexanderfengler@@gmx.de}
+#' @title Example for user-supplied fixation model (aevacc functions)
+#' @return matrix with two rows. One providing fixation location and the second providing fixation duration
 #' @export
-#' @param fixdur.vec Vector of fixation-durations to sample from
 
 addm2_fixation_model_random = function(){
 

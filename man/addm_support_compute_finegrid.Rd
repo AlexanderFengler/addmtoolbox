@@ -2,7 +2,7 @@
 % Please edit documentation in R/addm_support_compute_finegrid.R
 \name{addm_support_compute_finegrid}
 \alias{addm_support_compute_finegrid}
-\title{Generate fine grid around best parameter combination}
+\title{Compute fine grid best parameters from coarse grid search (internal)}
 \usage{
 addm_support_compute_finegrid(drift.step.fine = 0, sd.step.fine = 0,
   thetas = 0, non.decision.time.step.fine = 0, coarse.to.fine.ratio = 0,
@@ -10,25 +10,24 @@ addm_support_compute_finegrid(drift.step.fine = 0, sd.step.fine = 0,
   nr.reps = 0, loglik = 0))
 }
 \arguments{
-\item{drift.step.fine}{Numeric variable storing precision with which drift rate space is searched in the fine grid parameter matrix.}
+\item{drift.step.fine}{numeric variable storing precision with which drift rate space is searched in the fine grid parameter matrix.}
 
-\item{sd.step.fine}{Numeric variable storing precision with which standard deviation space is searched in the fine grid parameter matrix.}
+\item{sd.step.fine}{numeric variable storing precision with which standard deviation space is searched in the fine grid parameter matrix.}
 
-\item{thetas}{Numeric variable storing testable thetas. The theta space is not changed in the fine parameter matrix.}
+\item{thetas}{numeric variable storing testable thetas. The theta space is not changed in the fine parameter matrix.}
 
-\item{non.decision.time.step.fine}{Numeric variable storing precision with which non.decision.time space is searched in the fine grid parameter matrix.}
+\item{non.decision.time.step.fine}{numeric variable storing precision with which non.decision.time space is searched in the fine grid parameter matrix.}
 
-\item{coarse.to.fine.ratio}{Numeric Variable that stores the precision ratio between the coarse and fine grid for grid search fits.}
+\item{coarse.to.fine.ratio}{numeric Variable that stores the precision ratio between the coarse and fine grid for grid search fits.}
 
-\item{log.liks}{'data.table' that stores log likelihoods and corresponding parameter combinations resulting from coarse grid search.}
+\item{log.liks}{data.table that stores log likelihoods and corresponding parameter combinations resulting from coarse grid search.}
 }
 \value{
-Matrix storing parameter space
+matrix storing new parameter space
 }
 \description{
-Function internal to grid search, which computes a fine grid around the coarse grid minimum log likelihood
-\code{addm_support_compute_finegrid} Gives back a parameter matrix
-#'
+Compute parameter space for fine grid given the optimal parameter set of a coarse grid search
+\code{addm_support_compute_finegrid}
 }
 \author{
 Alexander Fengler, \email{alexanderfengler@gmx.de}
