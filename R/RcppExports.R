@@ -16,8 +16,8 @@
 #' @param update Vector that stores the item valuations for the trial conditon simulated
 #' @param fixation_model a user supplied fixation model that will be utilized to supply fixation locations and potentially fixation durations
 #' @export
-aevacc2_by_condition <- function(sd, theta, drift, non_decision_time, timestep, nr_reps, maxdur, update, fixation_model) {
-    .Call('addmtoolbox_aevacc2_by_condition', PACKAGE = 'addmtoolbox', sd, theta, drift, non_decision_time, timestep, nr_reps, maxdur, update, fixation_model)
+aevacc2_by_condition <- function(sd, theta, drift, non_decision_time, maxdur, update, fixation_model, nr_reps, timestep) {
+    .Call('addmtoolbox_aevacc2_by_condition', PACKAGE = 'addmtoolbox', sd, theta, drift, non_decision_time, maxdur, update, fixation_model, nr_reps, timestep)
 }
 
 #' Runs evidence accumulation function (2 item case) for one trial condition
@@ -57,8 +57,8 @@ aevacc2_by_trial <- function(sd, theta, drift, non_decision_time, maxdur, mindur
 #' @param update Vector that stores the item valuations for the trial conditon simulated
 #' @param fixation_model a user supplied fixation model that will be utilized to supply fixation locations and potentially fixation durations
 #' @export
-aevacc2_full_output <- function(sd, theta, drift, non_decision_time, timestep, nr_reps, maxdur, update, fixation_model) {
-    .Call('addmtoolbox_aevacc2_full_output', PACKAGE = 'addmtoolbox', sd, theta, drift, non_decision_time, timestep, nr_reps, maxdur, update, fixation_model)
+aevacc2_full_output <- function(sd, theta, drift, non_decision_time, maxdur, update, fixation_model, nr_reps, timestep) {
+    .Call('addmtoolbox_aevacc2_full_output', PACKAGE = 'addmtoolbox', sd, theta, drift, non_decision_time, maxdur, update, fixation_model, nr_reps, timestep)
 }
 
 #' Runs evidence accumulation function (item general case) for one trial condition

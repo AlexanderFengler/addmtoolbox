@@ -214,6 +214,23 @@ What would you learn in addition? The model makes exactly the same predictions a
 
 <br> <br>
 
+# Ploting Results
+
+You can use the `addm_plot_family()` function to get some basic psychometric plots, showing the model predictions and you original data. The function returns a **list** with **plot-objects**, which you can plot or, given some knowledge of the utilities that the **ggplot2** package offers, you can freely edit. You use the function like this:
+
+```{r,fig.show = "hold"}
+  addm.plot = addm2_plot_family(choice.dat = my.dat$choice.dat,
+                                addm.output = addm_data_full_output)
+  
+```  
+
+```{r,fig.show="hold",echo=FALSE}
+  addm.plot[[1]]
+  addm.plot[[2]]
+```  
+
+The functionality of this function will increase over time. From the user perspective the only difference however will be that you will receive back a longer list of plot-objects.
+
 # DONE
 
 **That's it.** You did your first model-fit with the **addmtoolbox** package, plotted the likelihood functions, generated detailed output and are now ready to explore plotting opportunities.

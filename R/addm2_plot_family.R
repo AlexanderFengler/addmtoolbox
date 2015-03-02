@@ -49,7 +49,7 @@ addm2_plot_family = function(choice.dat = data.table(v1 = 0,v2 = 0, rt = 0, deci
     geom_line(data=addm.p.choice,color="red",linetype="dashed") +
     geom_line(data=real.p,color="black",linetype="dashed") +
     geom_point(data=real.p,color='black',shape=0) +
-    theme_bw(base_size = 16) +
+    theme_bw(base_size = 12) +
     ylab("Probability Item 1 is chosen") +
     xlab('Relative Value of Item 1') + scale_color_manual(values=c('black','red'))
   # -----------------------------------------------------------------------------------------------------
@@ -63,7 +63,7 @@ addm2_plot_family = function(choice.dat = data.table(v1 = 0,v2 = 0, rt = 0, deci
     geom_line(data = addm.rt.by.difficulty, color='red',linetype='dashed') +
     geom_line(data=real.rt.by.difficulty,color="black",linetype="dashed") +
     geom_point(data=real.rt.by.difficulty,color='black',shape=0) +
-    theme_bw(base_size = 16) +
+    theme_bw(base_size = 12) +
     ylab("Mean Reaction Time") +
     xlab('Value Difference of Items Presented') + scale_color_manual(values=c('black','red'))
   # -----------------------------------------------------------------------------------------------------

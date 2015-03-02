@@ -5,8 +5,8 @@
 \title{Evidence accumulation with detailed output (2 items)
 \code{aevacc2_full_output}}
 \usage{
-aevacc2_full_output(sd, theta, drift, non_decision_time, timestep, nr_reps,
-  maxdur, update, fixation_model)
+aevacc2_full_output(sd, theta, drift, non_decision_time, maxdur, update,
+  fixation_model, nr_reps, timestep)
 }
 \arguments{
 \item{sd}{standard deviation used for drift diffusion process}
@@ -17,15 +17,15 @@ aevacc2_full_output(sd, theta, drift, non_decision_time, timestep, nr_reps,
 
 \item{non_decision_time}{non decision time used for drift diffusion process}
 
-\item{timestep}{timestep in ms associated with each step in the drift diffusion process}
-
-\item{nr_reps}{number of repitions (simulation runs)}
-
 \item{maxdur}{maximum duration in ms that the process is allowed to simulate}
 
 \item{update}{Vector that stores the item valuations for the trial conditon simulated}
 
 \item{fixation_model}{a user supplied fixation model that will be utilized to supply fixation locations and potentially fixation durations}
+
+\item{nr_reps}{number of repitions (simulation runs)}
+
+\item{timestep}{timestep in ms associated with each step in the drift diffusion process}
 }
 \value{
 Returns a vector that stores detailed output by simulation run
