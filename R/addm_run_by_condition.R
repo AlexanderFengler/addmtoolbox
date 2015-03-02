@@ -151,9 +151,9 @@ addm_run_by_condition = function(choice.dat = data.table(decision = 0, rt = 0, c
   # STORING DATA FRAME THAT COLLECTS ALL RELEVANT INFORMATION CONCERNING MODEL OUTPUT---------------------------------------------------
   if (output.type == "full"){
     output.names = c("condition_id",
-                     "drift.rate",
-                     "theta",
                      "sd",
+                     "theta",
+                     "drift.rate",
                      "non.decision.time",
                      "decision",
                      "nr.fixations",

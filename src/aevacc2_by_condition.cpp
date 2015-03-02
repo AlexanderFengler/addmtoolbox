@@ -26,11 +26,11 @@ IntegerVector aevacc2_by_condition(float sd,
                                    float theta,
                                    float drift,
                                    int non_decision_time,
-                                   int timestep,
-                                   int nr_reps,
                                    int maxdur,
                                    NumericVector update,
-                                   Function fixation_model){
+                                   Function fixation_model,
+                                   int nr_reps,
+                                   int timestep){
 
   // Set seed for random sampler ------------------------------------------------------------------
   NumericVector seed(1);

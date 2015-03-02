@@ -32,7 +32,7 @@ The package is selfcontained in that it should load all dependencies correctly, 
 
 ## The Data Frames
 
-Lets first have a quick look at the content of the two data frames that are supplied with the package.
+Lets first have a quick look at the content of the two main data frames that are supplied with the package.
 
 ### Choice Data
 
@@ -80,8 +80,7 @@ Once our data is in shape we can continue to use the `addm_dataprep()` function,
  my.dat = addm_dataprep(choice.dat = addm_data_choice,
                          eye.dat = addm_data_eye,
                          timestep = 10,
-                         rtbinsize = 100,
-                         fit.type = 'condition')  
+                         rtbinsize = 100)  
 ```
 
 You can look at detailed descriptions of the input parameters directly in the package documentation. Click on the package name in your **RStudio** package window or type `?addmtoolbox`.    
@@ -99,7 +98,7 @@ Lets look at the output that we have generated with out call to `addm_dataprep()
  my.dat
 ```
 
-**Note,** that the **id variable** has changed from the one we originally supplied, to an identifier for unique trial conditions. A simple rule is applied here. The values that appear in every trial display are simply concatenated as a string and separated by "_". 
+**Note,** that now there is a **condition_id** variable. A simple rule is applied to form the **condition_id** variable. The values that appear in every trial display are simply concatenated as a string and separated by "_". 
 
 ####***Important***
 
@@ -113,9 +112,9 @@ When you choose to **fit by condition**, it is important to note that `addm_data
 Now that our data is prepared for usage with the main functions of the ***addmtoolbox** package, we can call the `addm_fit_grid()` function. This function has quite some parameters, and you find detailed information what each one stands for in the function/pckage documentation. Lets look at the default setting of all parameters below to get an overview.
 
 ```{r, eval=FALSE}
-addm_fit_grid = function(conditions.dat = data.table(v1 = 0, v2 = 0, id = 0),
+addm_fit_grid = function(choice.dat = data.table(v1 = 0,v2 = 0, rt = 0, decision = 0, id = 0),
                          eye.dat = data.table(fixloc = 0,fixnr = 1, fixdur= 0, id = 0),
-                         choice.dat = data.table(v1 = 0,v2 = 0, rt = 0, decision = 0, id = 0),
+                         conditions.dat = data.table(v1 = 0, v2 = 0, id = 0),
                          drifts = seq(0,0.002,0.0005),
                          thetas = seq(0.0,1,0.2),
                          sds = seq(0.05,0.15,0.025),
@@ -185,11 +184,11 @@ The **addmtoolbox** can do this with the **addm_by_condition()** function. You n
   our.best.parameters = c(0.07,1,0.0015,0)
   
   # Now call addm_by_condition() function
-  detailed.output = addm_by_condition(conditions.dat = my.dat$conditions.dat, 
-                                      choice.dat = my.dat$choice.dat, 
-                                      output.type = 'full', 
-                                      nr.reps = 50, 
-                                      model.parameters = our.best.parameters)
+  detailed.output = addm_run_by_condition(conditions.dat = my.dat$conditions.dat, 
+                                          choice.dat = my.dat$choice.dat, 
+                                          output.type = 'full', 
+                                          nr.reps = 50, 
+                                          model.parameters = our.best.parameters)
 ```
 <br>
 

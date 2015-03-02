@@ -19,11 +19,11 @@ addm2_plot_family = function(choice.dat = data.table(v1 = 0,v2 = 0, rt = 0, deci
   choice.dat$val.diff = choice.dat$v1 - choice.dat$v2
 
   # Get val.diff (relative valuation of the first item) over to the addm output frame
-  temp = choice.dat %>% group_by(id) %>% summarise(v1 = unique(v1),
+  temp = choice.dat %>% group_by(condition_id) %>% summarise(v1 = unique(v1),
                                                    v2 = unique(v2),
                                                    val.diff = unique(val.diff))
-  setkey(addm.output,id)
-  setkey(temp,id)
+  setkey(addm.output,condition_id)
+  setkey(temp,condition_id)
   addm.output = temp[addm.output]
   # -----------------------------------------------------------------------------------------------------
 

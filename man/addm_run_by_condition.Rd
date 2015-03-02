@@ -4,10 +4,10 @@
 \alias{addm_run_by_condition}
 \title{Model run by condition}
 \usage{
-addm_run_by_condition(choice.dat = data.table(decision = 0, rt = 0, id = 0),
-  eye.dat = data.table(fixloc = 0, fixdur = 0, fixnr = 1, id = 0),
-  conditions.dat = data.table(v1 = 0, v2 = 0, id = 0),
-  model.parameters = c(0.006, 0.6, 0.06, 0), nr.reps = 2000,
+addm_run_by_condition(choice.dat = data.table(decision = 0, rt = 0,
+  condition_id = 0), eye.dat = data.table(fixloc = 0, fixdur = 0, fixnr = 1,
+  condition_id = 0), conditions.dat = data.table(v1 = 0, v2 = 0, condition_id
+  = 0), model.parameters = c(0.006, 0.6, 0.06, 0), nr.reps = 2000,
   timestep = 10, model.type = "standard", output.type = "fit",
   fixation.model = "fixedpath", generate = 0)
 }

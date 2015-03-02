@@ -2,6 +2,7 @@
 
 export(addm2_fixation_model_fixedpath)
 export(addm2_fixation_model_random)
+export(addm2_plot_family)
 export(addm_dataprep)
 export(addm_fit_grid)
 export(addm_generate_by_condition_artificial)
