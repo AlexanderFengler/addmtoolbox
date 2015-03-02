@@ -233,4 +233,4 @@ The functionality of this function will increase over time. From the user perspe
 # DONE
 
 **That's it.** You did your first model-fit with the **addmtoolbox** package, plotted the likelihood functions, generated detailed output and checked some basic psychometrics of your model against real behavioral data. 
-Be sure to update the [addmtoolbox package](https://github.com/AlexanderFengler/addmtoolbox) regularly, since it is in a very early development stage and will improve rather rapidly over the next few month. Please provide [feedback here](https://github.com/AlexanderFengler/addmtoolbox/issues), such as **bugreports** or **suggestions** for useful additions to the functionality of the package.
+Be sure to update the [addmtoolbox package](https://github.com/AlexanderFengler/addmtoolbox) regularly, since it is in a very early development stage and will improve rather rapidly over the next few months. Please provide [feedback here](https://github.com/AlexanderFengler/addmtoolbox/issues), such as **bugreports** or **suggestions** for useful additions to the functionality of the package.
