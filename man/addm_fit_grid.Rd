@@ -4,22 +4,16 @@
 \alias{addm_fit_grid}
 \title{Run Gridsearch over supplied parameter space}
 \usage{
-addm_fit_grid(choice.dat = data.table(v1 = 0, v2 = 0, rt = 0, decision = 0, id
-  = 0), eye.dat = data.table(fixloc = 0, fixnr = 1, fixdur = 0, id = 0),
-  conditions.dat = data.table(v1 = 0, v2 = 0, id = 0), drifts = seq(5e-04,
-  0.003, 5e-04), thetas = seq(0, 1, 0.25), sds = seq(0.05, 0.09, 0.01),
-  non.decision.times = 0, nr.reps = 2000, timestep = 10,
-  model.type = "standard", output.type = "fit",
+addm_fit_grid(data = list(choice.dat = NULL, eye.dat = NULL, conditions.dat =
+  NULL), drifts = seq(5e-04, 0.003, 5e-04), thetas = seq(0, 1, 0.25),
+  sds = seq(0.05, 0.09, 0.01), non.decision.times = 0, nr.reps = 2000,
+  timestep = 10, model.type = "standard", output.type = "fit",
   fixation.model = "fixedpath", fit.type = "condition",
   allow.fine.grid = 0, coarse.to.fine.ratio = 4,
   log.file = "defaultlog.txt", parallel = 1)
 }
 \arguments{
-\item{choice.dat}{A 'data.frame' or  'data.table' storing the item valuations (v1,v2...) , reaction times in ms (rt), decisions as decision and an id column (id). A by trial form is assumed.}
-
-\item{eye.dat}{A 'data.frame' or 'data.table' storing eyetracking data by trial. Fixation location (fixloc), Fixation number (fixnr), Fixation duration (fixdur) and an id column (id). Can all be initialized as zero columns when a by condition fit is attempted.}
-
-\item{conditions.dat}{A 'data.frame' storing the item valuations (v1,v2...) by unique trial conditions. An id column (id) needs to be provided that matches by trial data.}
+\item{data}{A list of three data.tables of each: choice data, eyetracking data, conditions data (as created by addm_dataprep)}
 
 \item{drifts}{Vector of all driftrate values to be tested.}
 

@@ -12,12 +12,6 @@ addm_support_gridsearch_foreach(choice.dat = data.table(v1 = 0, v2 = 0, rt =
   fit.type = "condition", log.file = "defaultlog.txt")
 }
 \arguments{
-\item{choice.dat}{A 'data.frame' or  'data.table' storing the item valuations (v1,v2...) , reaction times in ms (rt), decisions as decision and an id column (id). A by trial form is assumed.}
-
-\item{eye.dat}{A 'data.frame' or 'data.table' storing eyetracking data by trial. Fixation location (fixloc), Fixation number (fixnr), Fixation duration (fixdur) and an id column (id). Can all be initialized as zero columns when a by condition fit is attempted.}
-
-\item{conditions.dat}{A 'data.frame' storing the item valuations (v1,v2...) by unique trial conditions. An id column (id) needs to be provided that matches by trial data.}
-
 \item{parameter.matrix}{Matrix that represents the parameter space which is looped over. (drift,theta,sd,non.decision.time)}
 
 \item{nr.reps}{An integer number that tells the function how many simulation runs to use.}
