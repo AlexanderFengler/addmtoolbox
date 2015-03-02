@@ -30,14 +30,11 @@ IntegerVector aevacc_by_condition(float sd,
                                   float theta,
                                   float drift,
                                   int non_decision_time,
-                                  int timestep,
-                                  int nr_reps,
                                   int maxdur,
                                   NumericVector update,
-                                  IntegerVector fixpos,
-                                  IntegerVector fixdur,
-                                  IntegerVector fixdursamples,
-                                  Function fixation_model){
+                                  Function fixation_model,
+                                  int nr_reps,
+                                  int timestep){
 
   // Set seed for random sampler ------------------------------------------------------------------
   NumericVector seed(1);
@@ -46,7 +43,7 @@ IntegerVector aevacc_by_condition(float sd,
   // ----------------------------------------------------------------------------------------------
 
   // Initialize Variable that collects output -----------------------------------------------------
-   IntegerVector out(2*nr_reps);
+  IntegerVector out(2*nr_reps);
   // ----------------------------------------------------------------------------------------------
 
   // Initialize Variables needed to propagate model -----------------------------------------------
@@ -58,23 +55,16 @@ IntegerVector aevacc_by_condition(float sd,
   int cur_rt = 0;
   int out_cnt = -2; // index for output vector
   int out_plus = 0;
-  int num_fixpos = fixpos.size();
-  IntegerVector cur_fixpos(1);
-  IntegerVector cur_fixdur(1);
-  IntegerVector temp_fixpos(1);
   int cur_fix_cnt = 0;
   int cur_fixpos_indice = 0;
-
-  IntegerVector eligible(nr_items);
-  for (int i = 0; i < nr_items; i++){
-    eligible[i] = i + 1;
-  }
 
   NumericVector cur_update(nr_items);
   for (int i = 0; i < nr_items; ++i){
     update[i] = update[i]*drift;
     cur_update[i] = theta*update[i];
   }
+
+  NumericMatrix fixdat = fixation_model();
   // ------------------------------------------------------------------------------------------------
 
    // Outer loop cycles through simulation numbers --------------------------------------------------
@@ -89,42 +79,21 @@ IntegerVector aevacc_by_condition(float sd,
        for (int i = 0; i < nr_items; ++i){
          Evid[i] = 0;
        }
+
+       // Compute fixation path
+       fixdat = fixation_model();
        // -------------------------------------------------------------------------------------------
 
          // Propagate model through simulation run --------------------------------------------------
          for (int fix_cnt = 0; fix_cnt < 1000; ++fix_cnt){  //
 
-           // Handle next fixation ------------------------------------------------------------------
-           // identifying current fixation position and duration
-           // If empirical fixations still to be supplied fine,
-           // otherwise sample from eligible fixations positions
-           // and sample duration from fixdursamples vector.
-           if (fix_cnt <= (num_fixpos - 1)){
-             cur_fixpos[0] = fixpos[fix_cnt];
-             cur_fixdur[0] = fixdur[fix_cnt];
-
-             // get fixation duration
-             if (fix_cnt == num_fixpos - 1){
-               cur_fixdur = fixation_model(fixdursamples,1);
-             }
-           } else if (fix_cnt > (num_fixpos - 1)){
-
-             temp_fixpos[0] = cur_fixpos[0];
-             // sample fixation and make sure the new fixation is not the same as the old one
-             while (cur_fixpos[0] == temp_fixpos[0]){
-               cur_fixpos = fixation_model(eligible,1);
-             }
-             cur_fixdur = fixation_model(fixdursamples,1);
-           }
-           // ---------------------------------------------------------------------------------------
-
            // Make updates according to new fixation location ---------------------------------------
-           cur_fixpos_indice = cur_fixpos[0] - 1;
+           cur_fixpos_indice = fixdat(fix_cnt,0) - 1;
            cur_update[cur_fixpos_indice] = update[cur_fixpos_indice];
            // ---------------------------------------------------------------------------------------
 
            // Propagate Model through current fixation ----------------------------------------------
-           for (int rt_cur_fix = 0; rt_cur_fix < fixdur[fix_cnt];rt_cur_fix += timestep){
+           for (int rt_cur_fix = 0; rt_cur_fix < fixdat(fix_cnt,1);rt_cur_fix += timestep){
 
              decision = 1;
 

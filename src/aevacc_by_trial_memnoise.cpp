@@ -23,20 +23,24 @@ static Ziggurat::Ziggurat::Ziggurat zigg;
 //' @param update Vector that stores the item valuations for the trial conditon simulated
 //' @param fixpos Vector that stores the locations for a supplied fixed fixation pathway
 //' @param fixdur Vector that stores the fixation durations for a supplied fixed fixation pathway
+//' @param items_seen_bias Numeric Variable storing the relative amount of drift that unseen items receive
+//' @param items_seen_noise_bias Numeric Variable storing the relative noise sd that unseen items receive
 //' @export
 // [[Rcpp::export]]
-int aevacc_by_trial_memnoise(int nr_reps,
-                             int maxdur,
-                             int mindur,
-                             int cur_decision,
-                             float sd,
+int aevacc_by_trial_memnoise(float sd,
                              float theta,
                              float drift,
                              int non_decision_time,
-                             int timestep,
+                             float items_seen_bias,
+                             float items_seen_noise_bias,
+                             int maxdur,
+                             int mindur,
+                             int cur_decision,
                              NumericVector update,
                              IntegerVector fixpos,
-                             IntegerVector fixdur){
+                             IntegerVector fixdur,
+                             int nr_reps,
+                             int timestep){
 
   // Set seed for random sampler ------------------------------------------------------------------
   NumericVector seed(1);
@@ -64,12 +68,12 @@ int aevacc_by_trial_memnoise(int nr_reps,
   NumericVector temp_update(nr_items);
   IntegerVector items_seen(nr_items);
   IntegerVector items_seen_noise(nr_items);
-  float items_seen_noise_scalar = 0;
 
   for (int i = 0; i < nr_items; ++i){
     update[i] = update[i]*drift;
     cur_update[i] = theta*update[i];
-    items_seen_noise[i] = items_seen_noise_scalar;
+    items_seen_noise[i] = items_seen_noise_bias;
+    items_seen[i] = items_seen_bias;
   }
   // ----------------------------------------------------------------------------------------------
 

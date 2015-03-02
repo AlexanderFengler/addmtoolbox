@@ -2,7 +2,7 @@
 #' @author Alexander Fengler, \email{alexanderfengler@@gmx.de}
 #' @title Model run by trial
 #' @return Returns a log likelihood value.
-#' \code{addm_by_trial} Returns log likelihood
+#' \code{addm_run_by_trial} Returns log likelihood
 #' @export
 #' @param eye.dat A 'data.frame' or 'data.table' storing eyetracking data by trial. Fixation location (fixloc), Fixation number (fixnr), Fixation duration (fixdur) and an id column (id). Can all be initialized as zero columns when a by condition fit is attempted.
 #' @param choice.dat A 'data.frame' or  'data.table' storing the item valuations (v1,v2...) , reaction times in ms (rt), decisions as decision and an id column (id). A by trial form is assumed.
@@ -11,12 +11,12 @@
 #' @param model.type A string that indicates which version of the model to run. 'standard' or 'memnoise' when memory effects shall be allowed.
 #' @param timestep An integer number that provides the timestep-size that is used in the simulations (in ms).
 
-addm_by_trial = function(choice.dat = data.table(v1 = 0,v2 = 0, id = 0),
-                         eye.dat = data.table(fixloc = 0, fixdur = 0, fixnr = 1, id = 0),
-                         model.parameters = c(0.006,0.6,0.06,0),
-                         nr.reps = 2000,
-                         model.type = 'standard',
-                         timestep = 10){
+addm_run_by_trial = function(choice.dat = data.table(v1 = 0,v2 = 0, id = 0),
+                             eye.dat = data.table(fixloc = 0, fixdur = 0, fixnr = 1, id = 0),
+                             model.parameters = c(0.006,0.6,0.06,0),
+                             nr.reps = 2000,
+                             timestep = 10,
+                             model.type = 'standard'){
 
   # INITIALIZATION OF PARAMETERS -------------------------------------------------------------------------------------------------------
   drift.rate = model.parameters[1]
@@ -73,18 +73,18 @@ addm_by_trial = function(choice.dat = data.table(v1 = 0,v2 = 0, id = 0),
     cur.durations = eye.dat[J(trial),fixdur]
 
     # Run Model
-    success.counts[cnt] = aevacc(nr.reps,
-                                 cur.rtbin.up[cnt],
-                                 cur.rtbin.down[cnt],
-                                 decisions[cnt],
-                                 cur.sd,
+    success.counts[cnt] = aevacc(cur.sd,
                                  theta,
                                  drift.rate,
                                  non.decision.time,
-                                 timestep,
+                                 cur.rtbin.up[cnt],
+                                 cur.rtbin.down[cnt],
+                                 decisions[cnt],
                                  valuations[,cnt],
                                  cur.fixations,
-                                 cur.durations)
+                                 cur.durations,
+                                 timestep,
+                                 nr.reps)
 
     cnt[1] = cnt + 1
   }

@@ -20,17 +20,21 @@ static Ziggurat::Ziggurat::Ziggurat zigg;
 //' @param maxdur maximum duration in ms that the process is allowed to simulate
 //' @param update Vector that stores the item valuations for the trial conditon simulated
 //' @param fixation_model a user supplied fixation model that will be utilized to supply fixation locations and potentially fixation durations
+//' @param items_seen_bias Numeric Variable storing the relative amount of drift that unseen items receive
+//' @param items_seen_noise_bias Numeric Variable storing the relative noise sd that unseen items receive
 //' @export
 // [[Rcpp::export]]
 NumericVector aevacc_full_output_memnoise(float sd,
                                           float theta,
                                           float drift,
                                           int non_decision_time,
-                                          int timestep,
-                                          int nr_reps,
+                                          float items_seen_bias,
+                                          float items_seen_noise_bias,
                                           int maxdur,
                                           NumericVector update,
-                                          Function fixation_model){
+                                          Function fixation_model,
+                                          int nr_reps,
+                                          int timestep){
 
   // Set seed for random sampler ------------------------------------------------------------------
   NumericVector seed(1);
@@ -65,22 +69,18 @@ NumericVector aevacc_full_output_memnoise(float sd,
     eligible[i] = i + 1;
   }
 
-  NumericVector cur_update(nr_items);    // storing current updates
-  NumericVector temp_update(nr_items);   // storing current updates adjusted for items_seen and items_seen noise
-  NumericVector items_seen(nr_items);    // vector that scales drift for unseen items
+  NumericVector cur_update(nr_items);       // storing current updates
+  NumericVector temp_update(nr_items);      // storing current updates adjusted for items_seen and items_seen noise
+  NumericVector items_seen(nr_items);       // vector that scales drift for unseen items
   NumericVector items_seen_noise(nr_items); // vector than scales noise for unseen items
 
-  // temporarily not include any effect of item seen
-  float items_seen_noise_scalar = 1;
-  for(int i = 0; i < nr_items; ++i){
-    items_seen[i] = 1;
-  }
   // ------------------------------------------------------------------------------------------------
 
   for (int i = 0; i < nr_items; ++i){
     update[i] = update[i]*drift;
     cur_update[i] = theta*update[i];
-    items_seen_noise[i] = items_seen_noise_scalar;
+    items_seen_noise[i] = items_seen_noise_bias;
+    items_seen[i] = items_seen_bias;
   }
   // ------------------------------------------------------------------------------------------------
 

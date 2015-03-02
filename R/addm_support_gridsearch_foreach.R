@@ -7,16 +7,16 @@
 #' @inheritParams addm_fit_grid
 #' @param parameter.matrix Matrix that represents the parameter space which is looped over. (drift,theta,sd,non.decision.time)
 
-addm_support_gridsearch_foreach = function(conditions.dat = data.table(v1 = 0, v2 = 0, id = 0),
+addm_support_gridsearch_foreach = function(choice.dat = data.table(v1 = 0, v2 = 0, rt = 0, decision = 0, id = 0),
                                            eye.dat = data.table(fixloc = 0, fixdur = 0, fixnr = 1, id = 0),
-                                           choice.dat = data.table(v1 = 0, v2 = 0, rt = 0, decision = 0, id = 0),
+                                           conditions.dat = data.table(v1 = 0, v2 = 0, id = 0),
                                            parameter.matrix = c(0.006,0.6,0.06,0),
-                                           fit.type = 'condition',
                                            nr.reps = 2000,
+                                           timestep = 10,
                                            model.type = 'standard',
                                            fixation.model = 'fixedpath',
-                                           log.file = "defaultlog.txt",
-                                           timestep = 10){
+                                           fit.type = 'condition',
+                                           log.file = "defaultlog.txt"){
 
   # Initialize iterator and output list --------------------------------------------------------------------------------------------------
   out = list(0)
@@ -31,20 +31,19 @@ addm_support_gridsearch_foreach = function(conditions.dat = data.table(v1 = 0, v
                                                                         eye.dat,
                                                                         i,
                                                                         nr.reps,
-                                                                        model.type,
-                                                                        timestep)
+                                                                        timestep,
+                                                                        model.type)
 
   } else if (fit.type == 'condition'){
-    out[[1]] = foreach (i = ita,.combine='rbind') %dopar% addm_by_condition(conditions.dat,
+    out[[1]] = foreach (i = ita,.combine='rbind') %dopar% addm_by_condition(choice.dat,
                                                                             eye.dat,
-                                                                            choice.dat,
+                                                                            conditions.dat,
                                                                             i,
                                                                             nr.reps,
+                                                                            timestep,
                                                                             model.type,
                                                                             output.type = 'fit',
-                                                                            fixation.model,
-                                                                            timestep,
-                                                                            generate = 0)
+                                                                            fixation.model)
 
   }
   # --------------------------------------------------------------------------------------------------------------------------------------

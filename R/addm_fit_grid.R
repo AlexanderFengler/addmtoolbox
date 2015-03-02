@@ -20,21 +20,23 @@
 #' @param allow.fine.grid Binary variable that indicates whether we allow (1) a fine grid to be created an searched around the coarse grid minimum or not (0).
 #' @param log.file Filepath for storage of logs
 #' @param parallel Binary variable that tells whether to initialize local cluster on start (1) or not (0).
+#' @param coarse.to.fine.ratio Integer number deifining the ratio between parameter steps in the coarse vs. the fine grid. Defaults to 4.
 
-addm_fit_grid = function(conditions.dat = data.table(v1 = 0, v2 = 0, id = 0),
+addm_fit_grid = function(choice.dat = data.table(v1 = 0,v2 = 0, rt = 0, decision = 0, id = 0),
                          eye.dat = data.table(fixloc = 0,fixnr = 1, fixdur= 0, id = 0),
-                         choice.dat = data.table(v1 = 0,v2 = 0, rt = 0, decision = 0, id = 0),
+                         conditions.dat = data.table(v1 = 0, v2 = 0, id = 0),
                          drifts = seq(0.0005,0.003,0.0005),
                          thetas = seq(0.0,1,0.25),
                          sds = seq(0.05,0.09,0.01),
                          non.decision.times = 0,
-                         timestep = 10,
                          nr.reps = 2000,
+                         timestep = 10,
                          model.type = 'standard',
                          output.type = 'fit',
-                         fit.type = 'condition',
                          fixation.model = 'fixedpath',
+                         fit.type = 'condition',
                          allow.fine.grid = 0,
+                         coarse.to.fine.ratio = 4,
                          log.file = "defaultlog.txt",
                          parallel = 1){
 
@@ -50,9 +52,7 @@ addm_fit_grid = function(conditions.dat = data.table(v1 = 0, v2 = 0, id = 0),
 
   # Parameters for fine grid search
   # Distance between two points on the grid by dimension (drift.rate,sd)
-  coarse.to.fine.ratio = 4
   drift.step.fine = (drifts[length(drifts)] - drifts[length(drifts)-1])/coarse.to.fine.ratio
-  theta.step.fine = (thetas[length(thetas)] - thetas[length(thetas)-1])/coarse.to.fine.ratio
   sd.step.fine = (sds[length(sds)] - sds[length(sds)-1])/coarse.to.fine.ratio
   non.decision.time.step.fine = (non.decision.times[length(non.decision.times)] -
                                    non.decision.times[length(non.decision.times)-1])/coarse.to.fine.ratio
@@ -71,16 +71,16 @@ addm_fit_grid = function(conditions.dat = data.table(v1 = 0, v2 = 0, id = 0),
       # ---------------------------------------------------------------------------------------------
 
       # RUN coarse GRID SEARCH ----------------------------------------------------------------------
-      log.liks = addm_support_gridsearch_foreach(conditions.dat,
+      log.liks = addm_support_gridsearch_foreach(choice.dat,
                                                  eye.dat,
-                                                 choice.dat,
+                                                 conditions.dat,
                                                  parameter.matrix,
-                                                 fit.type,
                                                  nr.reps,
+                                                 timestep,
                                                  model.type,
                                                  fixation.model,
-                                                 log.file,
-                                                 timestep)
+                                                 fit.type,
+                                                 cur.log.file)
       # ---------------------------------------------------------------------------------------------
 
       # UPDATE LOGLIKS ------------------------------------------------------------------------------
@@ -100,16 +100,16 @@ addm_fit_grid = function(conditions.dat = data.table(v1 = 0, v2 = 0, id = 0),
         # ---------------------------------------------------------------------------------------------
 
         # RUN FINE GRID SEARCH ------------------------------------------------------------------------
-        fine.log.liks = addm_support_gridsearch_foreach(conditions.dat,
+        fine.log.liks = addm_support_gridsearch_foreach(choice.dat,
                                                         eye.dat,
-                                                        choice.dat,
+                                                        conditions.dat,
                                                         fine.parameter.matrix,
-                                                        fit.type,
                                                         nr.reps,
+                                                        timestep,
                                                         model.type,
                                                         fixation.model,
-                                                        log.file = cur.log.file,
-                                                        timestep)
+                                                        fit.type,
+                                                        cur.log.file)
         # ---------------------------------------------------------------------------------------------
 
         #

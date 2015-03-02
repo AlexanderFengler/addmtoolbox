@@ -24,20 +24,21 @@ static Ziggurat::Ziggurat::Ziggurat zigg;
 //' @param fixdur Vector that stores the fixation durations for a supplied fixed fixation pathway
 //' @param fixdursamples Vector from which fixation duration can be sampled once supplied fixations run out
 //' @param fixation_model a user supplied fixation model that will be utilized to supply fixation locations and potentially fixation durations
+//' @param items_seen_bias Numeric Variable storing the relative amount of drift that unseen items receive
+//' @param items_seen_noise_bias Numeric Variable storing the relative noise sd that unseen items receive
 //' @export
 // [[Rcpp::export]]
 IntegerVector aevacc_by_condition_memnoise(float sd,
                                            float theta,
                                            float drift,
                                            int non_decision_time,
-                                           int timestep,
-                                           int nr_reps,
+                                           float items_seen_bias,
+                                           float items_seen_noise_bias,
                                            int maxdur,
                                            NumericVector update,
-                                           IntegerVector fixpos,
-                                           IntegerVector fixdur,
-                                           IntegerVector fixdursamples,
-                                           Function fixation_model){
+                                           Function fixation_model,
+                                           int nr_reps,
+                                           int timestep){
 
   // Set seed for random sampler ------------------------------------------------------------------
   NumericVector seed(1);
@@ -58,35 +59,28 @@ IntegerVector aevacc_by_condition_memnoise(float sd,
   int cur_rt = 0;
   int out_cnt = -2; // index for output vector
   int out_plus = 0;
-  int num_fixpos = fixpos.size();
-  IntegerVector cur_fixpos(1);
-  IntegerVector cur_fixdur(1);
-  IntegerVector temp_fixpos(1);
   int cur_fix_cnt = 0;
   int cur_fixpos_indice = 0;
 
-  IntegerVector eligible(nr_items);
-  for (int i = 0; i < nr_items; i++){
-    eligible[i] = i + 1;
-  }
-
   NumericVector cur_update(nr_items);
-  NumericVector temp_update(nr_items);        // storing current updates adjusted for items_seen and items_seen noise
+  NumericVector temp_update(nr_items);
   NumericVector items_seen(nr_items);         // vector that scales drift for unseen items
   NumericVector items_seen_noise(nr_items);   // vector than scales noise for unseen items
-  float items_seen_noise_scalar = 0;
 
   for (int i = 0; i < nr_items; ++i){
     update[i] = update[i]*drift;
     cur_update[i] = theta*update[i];
-    items_seen_noise[i] = items_seen_noise_scalar;
+    items_seen_noise[i] = items_seen_noise_bias;
+    items_seen[i] = items_seen_bias;
   }
+
+  NumericVector fixdat = fixation_model();
   // ----------------------------------------------------------------------------------------------
 
-  // Outer loop cycles through simulation numbers ------------------------------------------------
+  // Outer loop cycles through simulation numbers -------------------------------------------------
   for (int rep_cnt = 0; rep_cnt < nr_reps;++rep_cnt){
 
-    // Reset Variables before entering simulation ----------------------------------------------
+    // Reset Variables before entering simulation -------------------------------------------------
     cur_rt = 0;
     cur_fix_cnt = 0;
     out_cnt += 2;
@@ -95,36 +89,18 @@ IntegerVector aevacc_by_condition_memnoise(float sd,
     for (int i = 0; i < nr_items; ++i){
       Evid[i] = 0;
     }
-    // -----------------------------------------------------------------------------------------
 
-    // Propagate model through simulation run ------------------------------------------------
-    for (int fix_cnt = 0; fix_cnt < 1000; ++fix_cnt){  //
+    // Compute fixation path
+    fixdat = fixation_model();
+    // --------------------------------------------------------------------------------------------
 
-      // Handle next fixation ----------------------------------------------------------------
-      // identifying current fixation position and duration
-      // If empirical fixations still to be supplied fine, otherwise sample from eligible fixations positions
-      // and sample duration from fixdursamples vector
-      if (fix_cnt <= (num_fixpos - 1)){
-        cur_fixpos[0] = fixpos[fix_cnt];
-        cur_fixdur[0] = fixdur[fix_cnt];
+    // --------------------------------------------------------------------------------------------
 
-        // get fixation duration
-        if (fix_cnt == num_fixpos - 1){
-          cur_fixdur = fixation_model(fixdursamples,1);
-        }
-      } else if (fix_cnt > (num_fixpos - 1)){
+    // Propagate model through simulation run -----------------------------------------------------
+    for (int fix_cnt = 0; fix_cnt < 1000; ++fix_cnt){
 
-        temp_fixpos[0] = cur_fixpos[0];
-        // sample fixation and make sure the new fixation is not the same as the old one
-        while (cur_fixpos[0] == temp_fixpos[0]){
-          cur_fixpos = fixation_model(eligible,1);
-        }
-        cur_fixdur = fixation_model(fixdursamples,1);
-      }
-      // ---------------------------------------------------------------------------------------
-
-      // Make updates according to new fixation location ---------------------------------------
-      cur_fixpos_indice = cur_fixpos[0] - 1;
+      // Make updates according to new fixation location ------------------------------------------
+      cur_fixpos_indice = fixdat(fix_cnt,0) - 1;
       cur_update[cur_fixpos_indice] = update[cur_fixpos_indice];
 
       // update items_seen vector to account for current fixation
@@ -135,10 +111,10 @@ IntegerVector aevacc_by_condition_memnoise(float sd,
       for(int i = 0; i < nr_items; i++){
         temp_update[i] = cur_update[i]*items_seen[i];
       }
-      // ---------------------------------------------------------------------------------------
+      // ------------------------------------------------------------------------------------------
 
-      // Propagate Model through current fixation ----------------------------------------------
-      for (int rt_cur_fix = 0; rt_cur_fix < fixdur[fix_cnt];rt_cur_fix += timestep){
+      // Propagate Model through current fixation -------------------------------------------------
+      for (int rt_cur_fix = 0; rt_cur_fix < fixdat(fix_cnt,1);rt_cur_fix += timestep){
 
         decision = 1;
 
@@ -182,7 +158,7 @@ IntegerVector aevacc_by_condition_memnoise(float sd,
         break;
       }
     }
-    // ---------------------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
 
     // store decision
     out[out_cnt] = maxpos+1; // maxpos plus one to convert from indice to item
@@ -193,7 +169,7 @@ IntegerVector aevacc_by_condition_memnoise(float sd,
     } else {
       out[out_plus] = cur_rt + non_decision_time;
     }
-    // -----------------------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
   }
   // ----------------------------------------------------------------------------------------------
   return out;

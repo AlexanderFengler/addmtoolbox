@@ -26,18 +26,18 @@ static Ziggurat::Ziggurat::Ziggurat zigg;
 //' @param fixdur Vector that stores the fixation durations for a supplied fixed fixation pathway
 //' @export
 // [[Rcpp::export]]
-int aevacc2_by_trial(int nr_reps,
-                     int maxdur,
-                     int mindur,
-                     int real_decision,
-                     float sd,
+int aevacc2_by_trial(float sd,
                      float theta,
                      float drift,
                      int non_decision_time,
-                     int timestep,
+                     int maxdur,
+                     int mindur,
+                     int real_decision,
                      NumericVector update,
                      IntegerVector fixpos,
-                     IntegerVector fixdur){
+                     IntegerVector fixdur,
+                     int nr_reps,
+                     int timestep){
 
   // Set seed for random sampler --------------------------------------------------------------------
   NumericVector seed(1);

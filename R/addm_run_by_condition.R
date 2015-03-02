@@ -2,7 +2,7 @@
 #' @author Alexander Fengler, \email{alexanderfengler@@gmx.de}
 #' @title Model run by condition
 #' @return The function has three potential return values. A log likelihood value, utilized when trying to fit the model. A simple data.table providing simulated rts,decisions by condition id, which useful for generating fake data in testing. A full model output with many details, utilized for running the model with optimal parameters and extracting data for plots.
-#' \code{addm_by_condition} Returns either log likelihoods, a simple id,decision,rt data frame or a detailed model output
+#' \code{addm_run_by_condition} Returns either log likelihoods, a simple id,decision,rt data frame or a detailed model output
 #' @export
 #' @param conditions.dat A 'data.frame' storing the item valuations (v1,v2...) by unique trial conditions. An id column (id) needs to be provided that matches by trial data.
 #' @param eye.dat A 'data.frame' or 'data.table' storing eyetracking data by trial. Fixation location (fixloc), Fixation number (fixnr), Fixation duration (fixdur) and an id column (id). Can all be initialized as zero columns when a by condition fit is attempted.
@@ -15,16 +15,16 @@
 #' @param timestep An integer number that provides the timestep-size that is used in the simulations (in ms).
 #' @param generate Binary variable that tells the function to return either log likelihood values (0) or rt, decision (1). Relevant only if model.type variable is 'fit'.
 
-addm_by_condition = function(conditions.dat = data.table(v1 = 0, v2 = 0, id = 0),
-                             eye.dat = data.table(fixloc = 0, fixdur = 0, fixnr = 1, id = 0),
-                             choice.dat = data.table(decision = 0, rt = 0, id = 0),
-                             model.parameters = c(0.006,0.6,0.06,0),
-                             nr.reps = 2000,
-                             model.type = 'standard',
-                             output.type = 'fit',
-                             fixation.model = 'fixedpath',
-                             timestep = 10,
-                             generate = 0){
+addm_run_by_condition = function(choice.dat = data.table(decision = 0, rt = 0, id = 0),
+                                 eye.dat = data.table(fixloc = 0, fixdur = 0, fixnr = 1, id = 0),
+                                 conditions.dat = data.table(v1 = 0, v2 = 0, id = 0),
+                                 model.parameters = c(0.006,0.6,0.06,0),
+                                 nr.reps = 2000,
+                                 timestep = 10,
+                                 model.type = 'standard',
+                                 output.type = 'fit',
+                                 fixation.model = 'fixedpath',
+                                 generate = 0){
 
   # INITIALIZATION OF PARAMETERS AND RELEVANT SUBSETS OF DATA FRAMES--------------------------------------------------------------------
   # Initialize model parameters
@@ -91,8 +91,8 @@ addm_by_condition = function(conditions.dat = data.table(v1 = 0, v2 = 0, id = 0)
     if (output.type == "fit"){
       if (cur.set_size == 2){
         aevacc = aevacc2_by_condition
-        } else {
-          aevacc = aevacc_by_condition
+      } else {
+        aevacc = aevacc_by_condition
       }
     } else if (output.type == "full"){
       if (cur.set_size == 2){
@@ -135,11 +135,11 @@ addm_by_condition = function(conditions.dat = data.table(v1 = 0, v2 = 0, id = 0)
                       theta,
                       drift.rate,
                       non.decision.time,
-                      timestep,
-                      nr.reps,
                       cur.max.RT,
                       valuations[,cnt],
-                      fixation_model)
+                      fixation_model,
+                      nr.reps,
+                      timestep)
 
     addm.output[output.row.min:output.row.max,output.cols] = matrix(output,nrow=nr.reps,ncol=nr.output.cols,byrow=TRUE)
     output.row.min[1] = sum(output.row.min,nr.reps)

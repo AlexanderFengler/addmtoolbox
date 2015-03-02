@@ -13,12 +13,11 @@
 #' @param core.parameters Vector that provide parameters used to generate artificial data from drift diffusion process. (drift,theta,sd,non deicision time)
 addm_generate_by_condition_artificial = function(set.size = 2,
                                                  possible.valuations = c(0,1,2,3),
-                                                 timestep= 10,
+                                                 model.parameters = c(0.006,0.6,0.06,0),
                                                  nr.reps = 2000,
+                                                 timestep = 10,
                                                  model.type = "standard",
-                                                 fixation.model = "fixedpath",
-                                                 core.parameters = c(0.006,0.6,0.06,0)){
-
+                                                 fixation.model = "fixedpath"){
 # GENERATE MODEL INPUT DATA --------------------------------------------------------------------------------------------------------------
   # Conditions
   val.dat = as.data.table(matrix(sample(possible.valuations,25*set_size,replace=TRUE),ncol=set_size))
@@ -26,36 +25,23 @@ addm_generate_by_condition_artificial = function(set.size = 2,
   ids = data.table(id = 1:25)
   conditions =  cbind(val.dat, ids)
 
-  # Eyetracking
-  cur.eye.dat =  data.table(fixloc = 0, fixnr=0, fixdur=0, id = 1:25)
-
-  test.dat = list(conditions = conditions,
+  test.dat = list(choice.dat = 0,
                   eye.dat = cur.eye.dat,
-                  choice.dat = 0,
-                  timestep = timestep,
+                  conditions.dat = conditions,
+                  model.parameters = core.parameters,
                   nr.reps = nr.reps,
+                  timestep = timestep,
                   model.type = model.type,
-                  fixation.model = fixation.model,
                   output.type = 'fit',
-                  core.parameters = core.parameters, # order of core parameter: drift.rate, theta, sd, non.decision.time
+                  fixation.model = fixation.model, # order of core parameter: drift.rate, theta, sd, non.decision.time
                   generate = 1) # the last model parameter tells the model to generate a data.frame instead of running log.likelihood test
 #------------------------------------------------------------------------------------------------------------------------------------------
 
 # RUN MODEL TO GET CHOICE DATA ------------------------------------------------------------------------------------------------------------
-choices = addm_by_condition(test.dat$conditions,
-                            test.dat$eye.dat,
-                            test.dat$choice.dat,
-                            test.dat$core.parameters,
-                            test.dat$nr.reps,
-                            test.dat$model.type,
-                            test.dat$output.type,
-                            test.dat$fixation.model,
-                            test.dat$timestep,
-                            test.dat$generate)
+choices = do.call(addm_by_condition, args = test.dat)
 #------------------------------------------------------------------------------------------------------------------------------------------
 return(list(cur.choice.dat = choices,
-            conditions = conditions,
-            cur.eye.dat = cur.eye.dat))
+            conditions.dat = conditions))
 }
 
 
