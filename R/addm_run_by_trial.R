@@ -88,7 +88,6 @@ addm_run_by_trial = function(choice.dat = data.table(v1 = 0,v2 = 0, id = 0),
 
     cnt[1] = cnt + 1
   }
-return(success.counts)
   # CONTINUE BY CALCULATING LOG LIKELIHOOD----------------------------------------------------------------------------------------------
   success.counts[success.counts == 0] = nr.reps/(nr.reps + 1)
 
