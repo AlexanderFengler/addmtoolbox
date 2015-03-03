@@ -126,13 +126,13 @@ addm_fit_grid = function(data = list(choice.dat = NULL, eye.dat = NULL, conditio
       # PRINT FINAL STATUS AND SET OF BEST PARAMETERS -------------------------------------------------
       writeLines("Model was fit successfully and logs are saved in ",log.file, '\n\n')
 
-      setkey(logliks,loglik)
+      setkey(log.liks,loglik)
       writeLines(paste(' \nOptimal Parameters... \n \n',
                        'Drift Rate: ',
-                       toString(logliks[1,drift]),'\n',
-                       'Theta: ',toString(logliks[1,theta]),'\n',
-                       'SD: ', toString(logliks[1,sd]), '\n',
-                       'Non decision time: ', toString(logliks[1,non.decision.time]),sep=''))
+                       toString(log.liks[1,drift]),'\n',
+                       'Theta: ',toString(log.liks[1,theta]),'\n',
+                       'SD: ', toString(log.liks[1,sd]), '\n',
+                       'Non decision time: ', toString(log.liks[1,non.decision.time]),sep=''))
       # -----------------------------------------------------------------------------------------------
       file.remove('cur_addm_log.txt')
       return(log.liks)
