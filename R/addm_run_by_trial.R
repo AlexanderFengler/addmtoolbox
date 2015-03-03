@@ -83,12 +83,12 @@ addm_run_by_trial = function(choice.dat = data.table(v1 = 0,v2 = 0, id = 0),
                                  valuations[,cnt],
                                  cur.fixations,
                                  cur.durations,
-                                 timestep,
-                                 nr.reps)
+                                 nr.reps,
+                                 timestep)
 
     cnt[1] = cnt + 1
   }
-
+return(success.counts)
   # CONTINUE BY CALCULATING LOG LIKELIHOOD----------------------------------------------------------------------------------------------
   success.counts[success.counts == 0] = nr.reps/(nr.reps + 1)
 
@@ -96,8 +96,7 @@ addm_run_by_trial = function(choice.dat = data.table(v1 = 0,v2 = 0, id = 0),
                     theta,
                     cur.sd,
                     non.decision.time,
-                    nr.reps,
-                    (-1)*sum(log(success.counts/nr.reps)))
+                    nr.reps,(-1)*sum(log(success.counts/nr.reps)))
 
   print(total.log.lik)
   return(total.log.lik)

@@ -1,6 +1,6 @@
 Package: addmtoolbox
 Title: addmtoolbox
-Version: 0.1.1
+Version: 0.1.11
 Authors@R: person("Alexander", "Fengler", , "alexanderfengler@gmx.de", role = c("aut", "cre"))
 Description: Convenience functions for fitting (attentional) drift diffusion models.
 Depends: R (>= 3.1.2)
