@@ -12,12 +12,13 @@ logliks = as.data.table(logliks)
 logliks$theta = as.factor(logliks$theta)
 setkey(logliks,loglik)
 
-writeLines(paste(' \nOptimal Parameters... \n \n',
-      'Drift Rate: ',
-      toString(logliks[1,drift]),'\n',
-      'Theta: ',toString(logliks[1,theta]),'\n',
-      'SD: ', toString(logliks[1,sd]), '\n',
-      'Non decision time: ', toString(logliks[1,non.decision.time]),sep=''))
+# Not necessary to show optimal parameters in text form... already doing that at add_model_fit()
+#writeLines(paste(' \nOptimal Parameters... \n \n',
+#      'Drift Rate: ',
+#      toString(logliks[1,drift]),'\n',
+#      'Theta: ',toString(logliks[1,theta]),'\n',
+#      'SD: ', toString(logliks[1,sd]), '\n',
+#      'Non decision time: ', toString(logliks[1,non.decision.time]),sep=''))
 
 optimal.parameters = logliks[1,]
 
