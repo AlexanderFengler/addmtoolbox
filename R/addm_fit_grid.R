@@ -12,7 +12,6 @@
 #' @param timestep integer that provides the timestep-size that is used in the simulations (in ms).
 #' @param nr.reps integer that tells the function how many simulation runs to use.
 #' @param model.type string that indicates which version of the model to run. 'standard' for normal model fits. 'memnoise' to allow for memory effects (see vignette for more for detailed explanation of what this is about).
-#' @param output.type string that indicates what output the model shall produce. 'full' for detailed model output. 'fit' for sparse output (rt,decision), as needed for calculating likelihood
 #' @param fit.type string indicating either 'condition' for fits by unique trial conditions or 'trial' for fits by trial.
 #' @param fixation.model string that indicates which fixation model will be utilized for simulations. 'random' for random fixations (example). 'fixedpath' for following a predetermined fixation path with fixed durations (example). 'user' to provide your own fixation model, defined in a function "user_fixation_model" in the global environment.
 #' @param allow.fine.grid variable that indicates whether we allow (1) a fine grid to be created and searched around the coarse grid minimum or not (0).
@@ -28,7 +27,6 @@ addm_fit_grid = function(data = list(choice.dat = NULL, eye.dat = NULL, conditio
                          nr.reps = 2000,
                          timestep = 10,
                          model.type = 'standard',
-                         output.type = 'fit',
                          fixation.model = 'fixedpath',
                          fit.type = 'condition',
                          allow.fine.grid = 0,

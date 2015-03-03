@@ -9,49 +9,49 @@ View(head(addm_data_eye))
 # --------------------------------------------------------------------------------------------
 
 # Preprocess data for easy usage with addmtoolbox --------------------------------------------
-addm.dat  = addm_dataprep(choice.dat = addm_data_choice,
+addm_dat  = addm_dataprep(choice.dat = addm_data_choice,
                           eye.dat = addm_data_eye,
                           rtbinsize = 100, timestep = 10)
 
 # Look at the output
-addm.dat
+addm_dat
 
 # View it separately
-addm.dat$choice.dat
+addm_dat$choice.dat
 
-addm.dat$eye.dat
+addm_dat$eye.dat
 
-addm.dat$conditions.dat
+addm_dat$conditions.dat
 # --------------------------------------------------------------------------------------------
 
 # Run model by trial -------------------------------------------------------------------------
-addm_data_loglik_trial = addm_fit_grid(addm.dat,
+addm_loglik_trial = addm_fit_grid(addm_dat,
                                        fit.type = 'trial')
 # --------------------------------------------------------------------------------------------
 
 # Plot Log likelihood ------------------------------------------------------------------------
-addm_plot_loglik(addm_data_loglik_trial)
+addm_plot_loglik(addm_loglik_trial)
 # --------------------------------------------------------------------------------------------
 
 # Run model by condition ---------------------------------------------------------------------
-addm_data_loglik_condition = addm_fit_grid(addm.dat,
+addm_loglik_condition = addm_fit_grid(addm_dat,
                                            fit.type = 'condition')
 # --------------------------------------------------------------------------------------------
 
 # Plot Log likelihood ------------------------------------------------------------------------
-addm_plot_loglik(addm_data_loglik_condition)
+addm_plot_loglik(addm_loglik_condition)
 # --------------------------------------------------------------------------------------------
 
 # Simulate Data
-addm_data_full_output = addm_run_by_condition(choice.dat = addm.dat$choice.dat,
-                                              conditions.dat = addm.dat$conditions.dat,
+addm_data_full_output = addm_run_by_condition(choice.dat = addm_dat$choice.dat,
+                                              conditions.dat = addm_dat$conditions.dat,
                                               model.parameters = c(0.0015,1,0.07,0),
                                               output.type = 'full',
                                               nr.reps = 250)
 # --------------------------------------------------------------------------------------------
 
 # Plot some psychometrics --------------------------------------------------------------------
-addm2_plot_family(choice.dat = addm.dat$choice.dat,
+addm2_plot_family(choice.dat = addm_dat$choice.dat,
                   addm.output = addm_data_full_output)
 # --------------------------------------------------------------------------------------------
 

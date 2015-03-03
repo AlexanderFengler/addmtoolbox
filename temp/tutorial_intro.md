@@ -171,6 +171,46 @@ Plotting Results
 
 **addm_plot...()**
 
+addmtoolbox: internal functions
+========================================================
+<br>
+*What does it do for you?*
+
+<br>
+
+Internal computations
+
+Internal model simulation
+
+***
+
+<br>
+*Functions*
+
+<br>
+
+**addm_support...( )**
+
+**aevacc_...( )** *(c++)*
+
+addmtoolbox: internal functions
+========================================================
+
+<br>
+
+All functions are documented and available to you!
+
+<br>
+
+This makes the list of functions a little long and maybe confusing,
+but I hope it aids holistic understand of the source code.
+
+<br>
+
+Every function that has a "2" in it's name (**addm2_**, **aevacc2_**) is preferred when working with two items.
+Other functions with the same name are item general.
+
+
 addmtoolbox: documentation
 ========================================================
 General Package info:
@@ -240,7 +280,7 @@ Detailed aDDM Output
 
 **addm_data_loglik_trial/condition**
 
-**add,_data_full_output**
+**addm_data_full_output**
 
 addmtoolbox
 ========================================================

@@ -13,7 +13,7 @@ vignette: >
 
 This vignette illustrates the process of fitting (attentional) drift diffusion models to experimental choice and reaction time data (and fixation data). We are going to walk through a model fit that is done *by unique experiment condition* using only the functionality provided by the ***addmtoolbox*** package in ***R***.
 
-As example data we are goint to use the two data frames that come supplied by the package: 
+As example data we are goint to use two data frames that come supplied by the package: 
 
 1. `addm_data_choice` 
 2. `addm_data_eye`
@@ -26,7 +26,7 @@ Before starting lets load the necessary environment for working with the ***addm
 library("addmtoolbox")
 ```
 
-The package is selfcontained in that it should load all dependencies correctly, and you are good to go now. <br><br><br> 
+The package is self-contained in that it should load all dependencies correctly, and you are good to go now. <br><br><br> 
 
 # Data Preparation
 
@@ -120,7 +120,6 @@ addm_fit_grid = function(data = list(choice.dat = NULL, eye.dat = NULL, conditio
                          timestep = 10,
                          nr.reps = 2000,
                          model.type = 'standard',
-                         output.type = 'fit',
                          fit.type = 'condition',
                          fixation.model = 'fixedpath',
                          allow.fine.grid = 0,
@@ -229,6 +228,14 @@ You can use the `addm_plot_family()` function to get some basic psychometric plo
 The functionality of this function will increase over time. From the user perspective the only difference however will be that you will receive back a longer list of plot-objects.
 
 <br> <br> 
+
+# Fitting the Model (by trial)
+
+The procedure to fit the model by trial is exactly the same. When calling `addm_fit_grid()` however, you will simply change the **fit.type** parameter to **"trial"**. All other code will follow precisely the same recipe as when fitting by condition.
+
+**Note,** that the model-fit result will likely be different (guaranteed when working with the example data, and the example fixation models). This is due to the impact of the fixation models.
+
+<br> <br>
 
 # DONE
 

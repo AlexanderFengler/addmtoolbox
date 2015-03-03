@@ -7,9 +7,8 @@
 addm_fit_grid(data = list(choice.dat = NULL, eye.dat = NULL, conditions.dat =
   NULL), drifts = seq(5e-04, 0.003, 5e-04), thetas = seq(0, 1, 0.25),
   sds = seq(0.05, 0.09, 0.01), non.decision.times = 0, nr.reps = 2000,
-  timestep = 10, model.type = "standard", output.type = "fit",
-  fixation.model = "fixedpath", fit.type = "condition",
-  allow.fine.grid = 0, coarse.to.fine.ratio = 4,
+  timestep = 10, model.type = "standard", fixation.model = "fixedpath",
+  fit.type = "condition", allow.fine.grid = 0, coarse.to.fine.ratio = 4,
   log.file = "defaultlog.txt", parallel = 1)
 }
 \arguments{
@@ -28,8 +27,6 @@ addm_fit_grid(data = list(choice.dat = NULL, eye.dat = NULL, conditions.dat =
 \item{timestep}{integer that provides the timestep-size that is used in the simulations (in ms).}
 
 \item{model.type}{string that indicates which version of the model to run. 'standard' for normal model fits. 'memnoise' to allow for memory effects (see vignette for more for detailed explanation of what this is about).}
-
-\item{output.type}{string that indicates what output the model shall produce. 'full' for detailed model output. 'fit' for sparse output (rt,decision), as needed for calculating likelihood}
 
 \item{fixation.model}{string that indicates which fixation model will be utilized for simulations. 'random' for random fixations (example). 'fixedpath' for following a predetermined fixation path with fixed durations (example). 'user' to provide your own fixation model, defined in a function "user_fixation_model" in the global environment.}
 
