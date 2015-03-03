@@ -109,7 +109,7 @@ When you choose to **fit by condition**, it is important to note that `addm_data
 # Fitting the model **(by condition)**
 
 ## The `addm_fit_grid()` function
-Now that our data is prepared for usage with the main functions of the ***addmtoolbox** package, we can call the `addm_fit_grid()` function. This function has quite some parameters, and you find detailed information what each one stands for in the function/pckage documentation. Lets look at the default setting of all parameters below to get an overview.
+Now that our data is prepared for usage with the main functions of the **addmtoolbox** package, we can call the `addm_fit_grid()` function. This function has quite some parameters, and you find detailed information what each one stands for in the function/pckage documentation. Lets look at the default setting of all parameters below to get an overview.
 
 ```{r, eval=FALSE}
 addm_fit_grid = function(data = list(choice.dat = NULL, eye.dat = NULL, conditions.dat = NULL),

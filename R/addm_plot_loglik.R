@@ -12,14 +12,21 @@ logliks = as.data.table(logliks)
 logliks$theta = as.factor(logliks$theta)
 setkey(logliks,loglik)
 
-print(logliks[length(logliks[,drift]),])
+writeLines(paste(' \nOptimal Parameters... \n \n',
+      'Drift Rate: ',
+      toString(logliks[1,drift]),'\n',
+      'Theta: ',toString(logliks[1,theta]),'\n',
+      'SD: ', toString(logliks[1,sd]), '\n',
+      'Non decision time: ', toString(logliks[1,non.decision.time]),sep=''))
+
+optimal.parameters = logliks[1,]
 
 p.coarse = ggplot(data = logliks[logliks$coarse == 1,], aes(y=loglik,x=sd,group = theta,color= theta))  +
   facet_wrap(~ drift) +
   theme_bw(base_size = 14) +
   theme(strip.background = element_blank(),axis.text.x = element_text(angle=-45,hjust=-0.05)) +
   ggtitle("Log Likelihood (separated by drift rate)") +
-  geom_line()
+  geom_line() + geom_point(data=optimal.parameters, size = 5, shape = 4, color = 'red')
 
 if (any(logliks[,coarse] == 0)){
 p.fine = ggplot(data = logliks[logliks$coarse == 0,], aes(y=loglik,x=sd,group = theta,color=as.factor(theta)))  +

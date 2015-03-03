@@ -120,7 +120,6 @@ aDDM quick intro // fit by condition
 
  - simulate model by unique trial condition with own fixation model
 
-<br>
 
 **Implemented** in addmtoolbox. You can supply your own arbitrary fixation model
 and the package will use it.
@@ -129,7 +128,6 @@ and the package will use it.
 aDDM quick intro // fit by trial
 ========================================================
 <br>
-
 *Alternative way of fitting the addm,*
 
 <br>
@@ -244,3 +242,8 @@ Detailed aDDM Output
 
 **add,_data_full_output**
 
+addmtoolbox
+========================================================
+<br> <br> <br> <br>
+
+Questions?
