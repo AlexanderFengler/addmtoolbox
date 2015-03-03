@@ -42,8 +42,8 @@ addm_fit_grid = function(data = list(choice.dat = NULL, eye.dat = NULL, conditio
   conditions.dat = data$conditions.dat
 
   if (parallel == 1){
-    cores = detectCores()
-    registerDoMC(cores)
+    cores = parallel::detectCores()
+    DoMC::registerDoMC(cores)
   }
 
   # Initialize the log.file we are going to use for storing intermediate results from the gridsearch
