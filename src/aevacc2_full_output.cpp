@@ -6,13 +6,13 @@
 using namespace Rcpp;
 static Ziggurat::Ziggurat::Ziggurat zigg;
 
-//' Evidence accumulation function for one trial/condition, and returns detailed model output (2 items)
+//' Simulate aDDM process (2 items) with detailed output
 //' @author Alexander Fengler, \email{alexanderfengler@@gmx.de}
-//' @title Evidence accumulation with detailed output (2 items)
-//' \code{aevacc2_full_output}
-//' @return Returns a vector that stores detailed output by simulation run
+//' @title Simulate aDDM process (2 items) with detailed output
+//' \code{aevacc2_full_output()}
+//' @return vector that stores detailed output by simulation run
 //' @param sd standard deviation used for drift diffusion process
-//' @param theta theta used for drift diffusion process
+//' @param theta theta (attentional bias) used for drift diffusion process
 //' @param drift drift-rate used for drift diffusion process
 //' @param non_decision_time non decision time used for drift diffusion process
 //' @param timestep timestep in ms associated with each step in the drift diffusion process

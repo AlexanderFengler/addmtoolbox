@@ -7,13 +7,13 @@
 using namespace Rcpp;
 static Ziggurat::Ziggurat::Ziggurat zigg;
 
-//' Runs evidence accumulation function (item general case) for one trial condition. Flexible version allowing for memory effects. It is possible to allow scale drift rate and noise according to whether an item has been seen.
+//' Simulate aDDM process by unique trial condition (>2 items, allow memory effects)
 //' @author Alexander Fengler, \email{alexanderfengler@@gmx.de}
-//' @title Flexible Evidence accumulation by condition (item general)
-//' \code{aevacc_by_condition_memnoise}
-//' @return Returns a vector that stores decisions and rts for each simulation run
+//' @title Simulate aDDM process by unique trial condition (>2 items, allow memory effects)
+//' \code{aevacc_by_condition_memnoise()}
+//' @return vector that stores decisions and rts for each simulation run
 //' @param sd standard deviation used for drift diffusion process
-//' @param theta theta used for drift diffusion process
+//' @param theta theta (attentional bias) used for drift diffusion process
 //' @param drift drift-rate used for drift diffusion process
 //' @param non_decision_time non decision time used for drift diffusion process
 //' @param timestep timestep in ms associated with each step in the drift diffusion process

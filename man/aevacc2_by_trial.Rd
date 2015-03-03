@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{aevacc2_by_trial}
 \alias{aevacc2_by_trial}
-\title{evidence accumulation (2 item case) by trial}
+\title{Simulate aDDM process (by trial, 2 items)}
 \usage{
 aevacc2_by_trial(sd, theta, drift, non_decision_time, maxdur, mindur,
   real_decision, update, fixpos, fixdur, nr_reps, timestep)
@@ -10,7 +10,7 @@ aevacc2_by_trial(sd, theta, drift, non_decision_time, maxdur, mindur,
 \arguments{
 \item{sd}{standard deviation used for drift diffusion process}
 
-\item{theta}{theta used for drift diffusion process}
+\item{theta}{theta (attentional bias) used for drift diffusion process}
 
 \item{drift}{drift-rate used for drift diffusion process}
 
@@ -33,11 +33,11 @@ aevacc2_by_trial(sd, theta, drift, non_decision_time, maxdur, mindur,
 \item{timestep}{timestep in ms associated with each step in the drift diffusion process}
 }
 \value{
-Returns a numeric variable that provides a success count (runs that predicted a reaction time in the correct rt-bin and simultaneously the correct decision)
+numeric variable that provides a success count (runs that predicted a reaction time in the correct rt-bin and simultaneously the correct decision)
 }
 \description{
-Runs evidence accumulation function (2 item case) for one trial condition
-\code{aevacc2_by_trial}
+Simulate aDDM process by unique trial (2 items)
+\code{aevacc2_by_trial()}
 }
 \author{
 Alexander Fengler, \email{alexanderfengler@gmx.de}

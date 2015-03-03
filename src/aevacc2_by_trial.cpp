@@ -7,13 +7,13 @@
 using namespace Rcpp;
 static Ziggurat::Ziggurat::Ziggurat zigg;
 
-//' Runs evidence accumulation function (2 item case) for one trial condition
-//' \code{aevacc2_by_trial}
+//' Simulate aDDM process by unique trial (2 items)
+//' \code{aevacc2_by_trial()}
 //' @author Alexander Fengler, \email{alexanderfengler@@gmx.de}
-//' @title evidence accumulation (2 item case) by trial
-//' @return Returns a numeric variable that provides a success count (runs that predicted a reaction time in the correct rt-bin and simultaneously the correct decision)
+//' @title Simulate aDDM process (by trial, 2 items)
+//' @return numeric variable that provides a success count (runs that predicted a reaction time in the correct rt-bin and simultaneously the correct decision)
 //' @param sd standard deviation used for drift diffusion process
-//' @param theta theta used for drift diffusion process
+//' @param theta theta (attentional bias) used for drift diffusion process
 //' @param drift drift-rate used for drift diffusion process
 //' @param non_decision_time non decision time used for drift diffusion process
 //' @param timestep timestep in ms associated with each step in the drift diffusion process

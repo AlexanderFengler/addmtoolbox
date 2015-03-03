@@ -2,8 +2,8 @@
 % Please edit documentation in R/RcppExports.R
 \name{aevacc_by_condition}
 \alias{aevacc_by_condition}
-\title{Evidence accumulation by condition (item general)
-\code{aevacc_by_condition}}
+\title{Simulate aDDM process by unique trial condition (>2 items)
+\code{aevacc_by_condition()}}
 \usage{
 aevacc_by_condition(sd, theta, drift, non_decision_time, maxdur, update,
   fixation_model, nr_reps, timestep)
@@ -11,7 +11,7 @@ aevacc_by_condition(sd, theta, drift, non_decision_time, maxdur, update,
 \arguments{
 \item{sd}{standard deviation used for drift diffusion process}
 
-\item{theta}{theta used for drift diffusion process}
+\item{theta}{theta (attentional bias) used for drift diffusion process}
 
 \item{drift}{drift-rate used for drift diffusion process}
 
@@ -34,10 +34,10 @@ aevacc_by_condition(sd, theta, drift, non_decision_time, maxdur, update,
 \item{fixdursamples}{Vector from which fixation duration can be sampled once supplied fixations run out}
 }
 \value{
-Returns a vector that stores decisions and rts for each simulation run
+vector that stores decisions and rts for each simulation run
 }
 \description{
-Runs evidence accumulation function (item general case) for one trial condition
+Simulate aDDM process by unique trial condition (>2 items)
 }
 \author{
 Alexander Fengler, \email{alexanderfengler@gmx.de}

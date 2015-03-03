@@ -2,8 +2,8 @@
 % Please edit documentation in R/RcppExports.R
 \name{aevacc2_full_output}
 \alias{aevacc2_full_output}
-\title{Evidence accumulation with detailed output (2 items)
-\code{aevacc2_full_output}}
+\title{Simulate aDDM process (2 items) with detailed output
+\code{aevacc2_full_output()}}
 \usage{
 aevacc2_full_output(sd, theta, drift, non_decision_time, maxdur, update,
   fixation_model, nr_reps, timestep)
@@ -11,7 +11,7 @@ aevacc2_full_output(sd, theta, drift, non_decision_time, maxdur, update,
 \arguments{
 \item{sd}{standard deviation used for drift diffusion process}
 
-\item{theta}{theta used for drift diffusion process}
+\item{theta}{theta (attentional bias) used for drift diffusion process}
 
 \item{drift}{drift-rate used for drift diffusion process}
 
@@ -28,10 +28,10 @@ aevacc2_full_output(sd, theta, drift, non_decision_time, maxdur, update,
 \item{timestep}{timestep in ms associated with each step in the drift diffusion process}
 }
 \value{
-Returns a vector that stores detailed output by simulation run
+vector that stores detailed output by simulation run
 }
 \description{
-Evidence accumulation function for one trial/condition, and returns detailed model output (2 items)
+Simulate aDDM process (2 items) with detailed output
 }
 \author{
 Alexander Fengler, \email{alexanderfengler@gmx.de}

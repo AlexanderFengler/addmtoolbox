@@ -6,11 +6,11 @@
 using namespace Rcpp;
 static Ziggurat::Ziggurat::Ziggurat zigg;
 
-//' Runs evidence accumulation function (2 item case) for one trial condition
+//' Simulate aDDM process by unique trial condition (2 items)
 //' @author Alexander Fengler, \email{alexanderfengler@@gmx.de}
-//' @title evidence accumulation (2 item case)
-//' \code{aevacc2_by_condition} Returns data.table with log likelihoods and corresponding parameter combinations
-//' @return Returns a vector that stores decisions and rts for each simulation run
+//' @title Simulate aDDM process (by condition, 2 items)
+//' \code{aevacc2_by_condition()}
+//' @return vector that stores decisions and rts for each simulation run
 //' @param sd standard deviation used for drift diffusion process
 //' @param theta theta used for drift diffusion process
 //' @param drift drift-rate used for drift diffusion process

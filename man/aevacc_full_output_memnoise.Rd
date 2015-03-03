@@ -2,8 +2,8 @@
 % Please edit documentation in R/RcppExports.R
 \name{aevacc_full_output_memnoise}
 \alias{aevacc_full_output_memnoise}
-\title{Evidence accumulation by condition (item general) with detailed output
-\code{aevacc_full_output_memnoise}}
+\title{Simulate aDDM process (>2 items, allow memory effects) for detailed model output
+\code{aevacc_full_output_memnoise()}}
 \usage{
 aevacc_full_output_memnoise(sd, theta, drift, non_decision_time,
   items_seen_bias, items_seen_noise_bias, maxdur, update, fixation_model,
@@ -12,7 +12,7 @@ aevacc_full_output_memnoise(sd, theta, drift, non_decision_time,
 \arguments{
 \item{sd}{standard deviation used for drift diffusion process}
 
-\item{theta}{theta used for drift diffusion process}
+\item{theta}{theta (attentional bias) used for drift diffusion process}
 
 \item{drift}{drift-rate used for drift diffusion process}
 
@@ -33,10 +33,10 @@ aevacc_full_output_memnoise(sd, theta, drift, non_decision_time,
 \item{timestep}{timestep in ms associated with each step in the drift diffusion process}
 }
 \value{
-Returns a vector that stores detailed output by simulation run
+vector that stores detailed output by simulation run
 }
 \description{
-Runs evidence accumulation function (item general case) for one trial, and returns detailed model output
+Simulate aDDM process (>2 items, allow memory effects) for detailed model output
 }
 \author{
 Alexander Fengler, \email{alexanderfengler@gmx.de}

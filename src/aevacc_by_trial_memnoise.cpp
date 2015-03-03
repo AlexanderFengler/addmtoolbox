@@ -6,13 +6,13 @@
 using namespace Rcpp;
 static Ziggurat::Ziggurat::Ziggurat zigg;
 
-//' Runs evidence accumulation for one trial (item general case). Flexible version allowing for memory effects.
-//' \code{aevacc_by_trial_memnoise} Returns success counts for model simulation
+//' Simulate aDDM process by unique trial (>2 items, allow memory effects)
+//' \code{aevacc_by_trial_memnoise}
 //' @author Alexander Fengler, \email{alexanderfengler@@gmx.de}
-//' @title Flexible evidence accumulation (item general) allowing for memory effects
-//' @return Returns a numeric variable that provides a success count (runs that predicted a reaction time in the correct rt-bin and simultaneously the correct decision)
+//' @title Simulate aDDM process by unique trial (>2 items, allow memory effects)
+//' @return numeric variable that provides a success count (runs that predicted a reaction time in the correct rt-bin and simultaneously the correct decision)
 //' @param sd standard deviation used for drift diffusion process
-//' @param theta theta used for drift diffusion process
+//' @param theta theta (attentional bias) used for drift diffusion process
 //' @param drift drift-rate used for drift diffusion process
 //' @param non_decision_time non decision time used for drift diffusion process
 //' @param timestep timestep in ms associated with each step in the drift diffusion process

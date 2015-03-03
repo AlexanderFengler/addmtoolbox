@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{aevacc_by_trial_memnoise}
 \alias{aevacc_by_trial_memnoise}
-\title{Flexible evidence accumulation (item general) allowing for memory effects}
+\title{Simulate aDDM process by unique trial (>2 items, allow memory effects)}
 \usage{
 aevacc_by_trial_memnoise(sd, theta, drift, non_decision_time, items_seen_bias,
   items_seen_noise_bias, maxdur, mindur, cur_decision, update, fixpos, fixdur,
@@ -11,7 +11,7 @@ aevacc_by_trial_memnoise(sd, theta, drift, non_decision_time, items_seen_bias,
 \arguments{
 \item{sd}{standard deviation used for drift diffusion process}
 
-\item{theta}{theta used for drift diffusion process}
+\item{theta}{theta (attentional bias) used for drift diffusion process}
 
 \item{drift}{drift-rate used for drift diffusion process}
 
@@ -38,11 +38,11 @@ aevacc_by_trial_memnoise(sd, theta, drift, non_decision_time, items_seen_bias,
 \item{timestep}{timestep in ms associated with each step in the drift diffusion process}
 }
 \value{
-Returns a numeric variable that provides a success count (runs that predicted a reaction time in the correct rt-bin and simultaneously the correct decision)
+numeric variable that provides a success count (runs that predicted a reaction time in the correct rt-bin and simultaneously the correct decision)
 }
 \description{
-Runs evidence accumulation for one trial (item general case). Flexible version allowing for memory effects.
-\code{aevacc_by_trial_memnoise} Returns success counts for model simulation
+Simulate aDDM process by unique trial (>2 items, allow memory effects)
+\code{aevacc_by_trial_memnoise}
 }
 \author{
 Alexander Fengler, \email{alexanderfengler@gmx.de}

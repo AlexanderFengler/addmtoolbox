@@ -2,8 +2,8 @@
 % Please edit documentation in R/RcppExports.R
 \name{aevacc2_by_condition}
 \alias{aevacc2_by_condition}
-\title{evidence accumulation (2 item case)
-\code{aevacc2_by_condition} Returns data.table with log likelihoods and corresponding parameter combinations}
+\title{Simulate aDDM process (by condition, 2 items)
+\code{aevacc2_by_condition()}}
 \usage{
 aevacc2_by_condition(sd, theta, drift, non_decision_time, maxdur, update,
   fixation_model, nr_reps, timestep)
@@ -28,10 +28,10 @@ aevacc2_by_condition(sd, theta, drift, non_decision_time, maxdur, update,
 \item{timestep}{timestep in ms associated with each step in the drift diffusion process}
 }
 \value{
-Returns a vector that stores decisions and rts for each simulation run
+vector that stores decisions and rts for each simulation run
 }
 \description{
-Runs evidence accumulation function (2 item case) for one trial condition
+Simulate aDDM process by unique trial condition (2 items)
 }
 \author{
 Alexander Fengler, \email{alexanderfengler@gmx.de}
