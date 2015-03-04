@@ -135,7 +135,7 @@ aDDM quick intro // fit by trial
 
 <br>
 
-  - simulate model by trial
+  - simulate model by unique trial
 
   - use empirical fixations and rt to inform simulations
 
@@ -205,11 +205,6 @@ All functions are documented and available to you!
 
 <br>
 
-This makes the list of functions a little long and maybe confusing,
-but on the upside hides no information necessary to understand the code.
-
-<br>
-
 Every function that has a "2" in it's name (**addm2_**, **aevacc2_**) is preferred when working with two items.
 Other functions with the same name are item general.
 
@@ -242,9 +237,9 @@ vignette('addmtoolbox_modelfit_walkthrough')
 addmtoolbox: data
 ========================================================
 <br>
-The addmtoolbox come with a full **set of example data**.
+The addmtoolbox comes with a full **set of example data**.
 
-This should help to,
+This will help you,
 
 <br> <br>
 1. Understand the data **format expected** by addmtoolbox

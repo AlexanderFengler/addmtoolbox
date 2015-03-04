@@ -24,7 +24,7 @@ addm_fit_grid = function(data = list(choice.dat = NULL, eye.dat = NULL, conditio
                          thetas = seq(0.0,1,0.25),
                          sds = seq(0.05,0.09,0.01),
                          non.decision.times = 0,
-                         nr.reps = 2000,
+                         nr.reps = 1000,
                          timestep = 10,
                          model.type = 'standard',
                          fixation.model = 'fixedpath',
