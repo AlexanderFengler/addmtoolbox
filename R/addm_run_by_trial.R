@@ -65,12 +65,7 @@ addm_run_by_trial = function(choice.dat = data.table(v1 = 0,v2 = 0, id = 0),
   eye.row.cnt = 1
   len.eye = length(eye.dat[,fixloc])
   eye.mat = as.matrix(eye.dat %>% select(-id,-condition_id))
-
-  max.fixnum = max(eye.dat[,max.fix])
-  cur.fixations = rep(0,max.fixnum)
-  cur.durations = rep(0,max.fixnum)
   cur.maxfix = 0
-
   cur.rtbin.up = choice.dat[,rtup]
   cur.rtbin.down = choice.dat[,rtdown]
 
@@ -88,7 +83,6 @@ addm_run_by_trial = function(choice.dat = data.table(v1 = 0,v2 = 0, id = 0),
                                        valuations[,trial.cnt],
                                        eye.mat[eye.row.cnt:(eye.row.cnt + cur.maxfix - 1),1], # fixation locations
                                        eye.mat[eye.row.cnt:(eye.row.cnt + cur.maxfix - 1),2], # fixation durations
-                                       cur.maxfix,
                                        nr.reps,
                                        timestep)
 

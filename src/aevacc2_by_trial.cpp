@@ -37,7 +37,6 @@ int aevacc2_by_trial(float sd,
                      NumericVector update,
                      IntegerVector fixpos,
                      IntegerVector fixdur,
-                     int cur_maxfix,
                      int nr_reps,
                      int timestep){
 

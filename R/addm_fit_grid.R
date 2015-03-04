@@ -20,7 +20,7 @@
 #' @param coarse.to.fine.ratio integer defining the ratio between parameter steps in the coarse versus the fine grid.
 
 addm_fit_grid = function(data = list(choice.dat = NULL, eye.dat = NULL, conditions.dat = NULL),
-                         drifts = seq(0.0005,0.003,0.0005),
+                         drifts = seq(0.001,0.0025,0.0005),
                          thetas = seq(0.0,1,0.25),
                          sds = seq(0.05,0.09,0.01),
                          non.decision.times = 0,
@@ -122,7 +122,7 @@ addm_fit_grid = function(data = list(choice.dat = NULL, eye.dat = NULL, conditio
       # -----------------------------------------------------------------------------------------------
 
       # PRINT FINAL STATUS AND SET OF BEST PARAMETERS -------------------------------------------------
-      writeLines(paste("Model was fit successfully and logs are saved in ",log.file, '\n\n',sep='_'))
+      writeLines(paste("Model was fit successfully and logs are saved in: ",log.file,sep=''))
 
       setkey(log.liks,loglik)
       writeLines(paste(' \nOptimal Parameters... \n \n',
