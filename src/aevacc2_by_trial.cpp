@@ -58,7 +58,7 @@ int aevacc2_by_trial(float sd,
   int maxpos = 0;
   int cur_rt = 0;
   int cur_fixpos_indice = 0;
-  int num_fixpos = cur_maxfix;
+  int num_fixpos = fixpos.size();
   int cur_fixpos = 0;
   int cur_fix_cnt = 0;
 

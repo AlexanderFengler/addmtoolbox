@@ -75,12 +75,7 @@ addm_run_by_trial = function(choice.dat = data.table(v1 = 0,v2 = 0, id = 0),
   cur.rtbin.down = choice.dat[,rtdown]
 
   while(eye.row.cnt < len.eye){
-
-    # Extract Empirical Fixations and Fixations Durations
     cur.maxfix[1] = eye.mat[eye.row.cnt,4]
-    cur.fixations[1:cur.maxfix] = eye.mat[eye.row.cnt + cur.maxfix - 1,1]
-    cur.durations[1:cur.maxfix] = eye.mat[eye.row.cnt + cur.maxfix - 1,2]
-    eye.row.cnt[1] = eye.row.cnt + cur.maxfix
 
     # Run Model
     success.counts[trial.cnt] = aevacc(cur.sd,
@@ -91,14 +86,14 @@ addm_run_by_trial = function(choice.dat = data.table(v1 = 0,v2 = 0, id = 0),
                                        cur.rtbin.down[trial.cnt],
                                        decisions[trial.cnt],
                                        valuations[,trial.cnt],
-                                       cur.fixations,
-                                       cur.durations,
+                                       eye.mat[eye.row.cnt:(eye.row.cnt + cur.maxfix - 1),1], # fixation locations
+                                       eye.mat[eye.row.cnt:(eye.row.cnt + cur.maxfix - 1),2], # fixation durations
                                        cur.maxfix,
                                        nr.reps,
                                        timestep)
 
     trial.cnt[1] = trial.cnt + 1
-    print(trial.cnt)
+    eye.row.cnt[1] = eye.row.cnt + cur.maxfix
   }
   # CONTINUE BY CALCULATING LOG LIKELIHOOD----------------------------------------------------------------------------------------------
   success.counts[success.counts == 0] = nr.reps/(nr.reps + 1)
