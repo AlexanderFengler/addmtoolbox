@@ -1,3 +1,8 @@
+# INSTALL PACKAGE IF NECESSARY ---------------------------------------------------------------
+devtools::install_github('AlexanderFengler/addmtoolbox',build_vignette=TRUE)
+library("addmtoolbox")
+# --------------------------------------------------------------------------------------------
+
 # Understanding the format need for input data -----------------------------------------------
 
 # Choice Data
@@ -54,4 +59,3 @@ addm_data_full_output = addm_run_by_condition(choice.dat = addm_dat$choice.dat,
 addm2_plot_family(choice.dat = addm_dat$choice.dat,
                   addm.output = addm_data_full_output)
 # --------------------------------------------------------------------------------------------
-

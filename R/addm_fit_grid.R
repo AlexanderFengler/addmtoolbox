@@ -122,7 +122,7 @@ addm_fit_grid = function(data = list(choice.dat = NULL, eye.dat = NULL, conditio
       # -----------------------------------------------------------------------------------------------
 
       # PRINT FINAL STATUS AND SET OF BEST PARAMETERS -------------------------------------------------
-      writeLines("Model was fit successfully and logs are saved in ",log.file, '\n\n')
+      writeLines(paste("Model was fit successfully and logs are saved in ",log.file, '\n\n',sep='_'))
 
       setkey(log.liks,loglik)
       writeLines(paste(' \nOptimal Parameters... \n \n',
