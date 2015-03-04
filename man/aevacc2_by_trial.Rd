@@ -5,7 +5,7 @@
 \title{Simulate aDDM process (by trial, 2 items)}
 \usage{
 aevacc2_by_trial(sd, theta, drift, non_decision_time, maxdur, mindur,
-  real_decision, update, fixpos, fixdur, nr_reps, timestep)
+  cur_decision, update, fixpos, fixdur, cur_maxfix, nr_reps, timestep)
 }
 \arguments{
 \item{sd}{standard deviation used for drift diffusion process}
@@ -20,13 +20,15 @@ aevacc2_by_trial(sd, theta, drift, non_decision_time, maxdur, mindur,
 
 \item{mindur}{numeric variable that supplies the minimum reaction time considered a succes in simulations}
 
-\item{real_decision}{numeric variable that provides the empirical decision taken in trial}
+\item{cur_decision}{numeric variable that provides the empirical decision taken in trial}
 
 \item{update}{Vector that stores the item valuations for the trial conditon simulated}
 
 \item{fixpos}{Vector that stores the locations for a supplied fixed fixation pathway}
 
 \item{fixdur}{Vector that stores the fixation durations for a supplied fixed fixation pathway}
+
+\item{cur_maxfix}{integer that provides number of fixation in trial}
 
 \item{nr_reps}{number of repitions (simulation runs)}
 

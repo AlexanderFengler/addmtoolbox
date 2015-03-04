@@ -82,24 +82,20 @@ addm_run_by_trial = function(choice.dat = data.table(v1 = 0,v2 = 0, id = 0),
     cur.durations[1:cur.maxfix] = eye.mat[eye.row.cnt + cur.maxfix - 1,2]
     eye.row.cnt[1] = eye.row.cnt + cur.maxfix
 
-#     cur.fixations[1:cur.maxfix] = eye.dat[J(trial),fixloc]
-#     cur.durations[1:cur.maxfix] = eye.dat[J(trial),fixdur]
-
-
     # Run Model
-#     success.counts[trial.cnt] = aevacc(cur.sd,
-#                                  theta,
-#                                  drift.rate,
-#                                  non.decision.time,
-#                                  cur.rtbin.up[trial.cnt],
-#                                  cur.rtbin.down[trial.cnt],
-#                                  decisions[trial.cnt],
-#                                  valuations[,trial.cnt],
-#                                  cur.fixations,
-#                                  cur.durations,
-#                                  cur.maxfix,
-#                                  nr.reps,
-#                                  timestep)
+    success.counts[trial.cnt] = aevacc(cur.sd,
+                                       theta,
+                                       drift.rate,
+                                       non.decision.time,
+                                       cur.rtbin.up[trial.cnt],
+                                       cur.rtbin.down[trial.cnt],
+                                       decisions[trial.cnt],
+                                       valuations[,trial.cnt],
+                                       cur.fixations,
+                                       cur.durations,
+                                       cur.maxfix,
+                                       nr.reps,
+                                       timestep)
 
     trial.cnt[1] = trial.cnt + 1
     print(trial.cnt)
