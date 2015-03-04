@@ -61,24 +61,27 @@ Model:
 ```{r}
 # Some Initializations
 rdv.vector = seq(1:1000)
+fixpos.vector = rep(c(1,2,1,2),each=250)
 time = 1
 
 # Now propagate model
-for (fix.pos in rep(c(1,2,1,2),each=250)){
+while (rdv < 1 & rdv > -1){
+  fixpos = fixpos.vector[time]
 
-  if (fix.pos == 1){
+  if (fixpos == 1){
     rdv = rdv + d*(v1 - theta*v2) + rnorm(1,0,sd)
   }
 
-  if (fix.pos == 2){
+  if (fixpos == 2){
     rdv = rdv + d*(theta*v1 - v2) + rnorm(1,0,sd)
   }
 
   rdv.vector[time] = rdv
-  if (rdv > 1 | rdv < -1){
+  time = time + 1
+
+  if (time >= 1000){
     break
   }
-  time = time + 1
 }
 ```
 </small>
@@ -227,7 +230,7 @@ All functions are documented and available to you!
 <br>
 
 This makes the list of functions a little long and maybe confusing,
-but I hope it aids holistic understand of the source code.
+but on the upside hides no information necessary to understand the code.
 
 <br>
 
