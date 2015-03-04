@@ -47,26 +47,26 @@ addm_dataprep = function(choice.dat =  data.table(v1 = 0,v2 = 0,id = 0,rt = 0, d
   setkey(rts,id)
   choice = choice %>% select(-rt)
   choice = choice[rts]
-  # ----------------------------------------------------------------------------------------------
+  # ------------------------------------------------------------------------------------------------
 
-  # DEFINE UPPER AND LOWER BOUNDS FOR RTBINS PER TRIAL -------------------------------------------
+  # DEFINE UPPER AND LOWER BOUNDS FOR RTBINS PER TRIAL ---------------------------------------------
   choice$rtup = ((choice$rt + rtbinsize) %/% rtbinsize) * rtbinsize
   choice$rtdown = choice$rtup - rtbinsize
-  # ----------------------------------------------------------------------------------------------
+  # ------------------------------------------------------------------------------------------------
 
-  # ADJUST LAST FIXATION TIMES SO THAT WE HAVE DATA UNTIL UPPER BOUND OF RT BIN ------------------
+  # ADJUST LAST FIXATION TIMES SO THAT WE HAVE DATA UNTIL UPPER BOUND OF RT BIN --------------------
   # We simply add rtbinsize to any last fixation, which ensures data to upper bound
   eye = eye %>% group_by(id) %>% mutate(max.fix = n())
   #eye$last.fix = 0
   eye[fixnr == max.fix,last.fix:= 1]
   eye[last.fix == 1,fixdur := fixdur + rtbinsize]
-  eye = eye %>% select(-max.fix,-last.fix)
-  # ----------------------------------------------------------------------------------------------
+  eye = eye %>% select(-last.fix)
+  # -------------------------------------------------------------------------------------------------
 
-  # RETURN LIST WITH CHOICE, EYE, CONDITIONS DATA ------------------------------------------------
+  # RETURN LIST WITH CHOICE, EYE, CONDITIONS DATA ---------------------------------------------------
   return(list(choice.dat = choice,
               eye.dat = eye,
               conditions.dat = conditions))
-  # ----------------------------------------------------------------------------------------------
-  # ------------------------------------------------------------------------------------------------
+  # -------------------------------------------------------------------------------------------------
+  # -------------------------------------------------------------------------------------------------
 }

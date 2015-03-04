@@ -14,7 +14,7 @@
 addm_run_by_trial = function(choice.dat = data.table(v1 = 0,v2 = 0, id = 0),
                              eye.dat = data.table(fixloc = 0, fixdur = 0, fixnr = 1, id = 0),
                              model.parameters = c(0.006,0.6,0.06,0),
-                             nr.reps = 2000,
+                             nr.reps = 1000,
                              timestep = 10,
                              model.type = 'standard'){
 
@@ -61,32 +61,48 @@ addm_run_by_trial = function(choice.dat = data.table(v1 = 0,v2 = 0, id = 0),
 
   # RUN MODEL --------------------------------------------------------------------------------------------------------------------------
   success.counts = rep(0,len.trials)
-  cnt = 1
+  trial.cnt = 1
+  eye.row.cnt = 1
+  len.eye = length(eye.dat[,fixloc])
+  eye.mat = as.matrix(eye.dat %>% select(-id,-condition_id))
+
+  max.fixnum = max(eye.dat[,max.fix])
+  cur.fixations = rep(0,max.fixnum)
+  cur.durations = rep(0,max.fixnum)
+  cur.maxfix = 0
 
   cur.rtbin.up = choice.dat[,rtup]
   cur.rtbin.down = choice.dat[,rtdown]
-  ids = choice.dat[,id]
 
-  for (trial in ids){
+  while(eye.row.cnt < len.eye){
+
     # Extract Empirical Fixations and Fixations Durations
-    cur.fixations = eye.dat[J(trial),fixloc]
-    cur.durations = eye.dat[J(trial),fixdur]
+    cur.maxfix[1] = eye.mat[eye.row.cnt,4]
+    cur.fixations[1:cur.maxfix] = eye.mat[eye.row.cnt + cur.maxfix - 1,1]
+    cur.durations[1:cur.maxfix] = eye.mat[eye.row.cnt + cur.maxfix - 1,2]
+    eye.row.cnt[1] = eye.row.cnt + cur.maxfix
+
+#     cur.fixations[1:cur.maxfix] = eye.dat[J(trial),fixloc]
+#     cur.durations[1:cur.maxfix] = eye.dat[J(trial),fixdur]
+
 
     # Run Model
-    success.counts[cnt] = aevacc(cur.sd,
-                                 theta,
-                                 drift.rate,
-                                 non.decision.time,
-                                 cur.rtbin.up[cnt],
-                                 cur.rtbin.down[cnt],
-                                 decisions[cnt],
-                                 valuations[,cnt],
-                                 cur.fixations,
-                                 cur.durations,
-                                 nr.reps,
-                                 timestep)
+#     success.counts[trial.cnt] = aevacc(cur.sd,
+#                                  theta,
+#                                  drift.rate,
+#                                  non.decision.time,
+#                                  cur.rtbin.up[trial.cnt],
+#                                  cur.rtbin.down[trial.cnt],
+#                                  decisions[trial.cnt],
+#                                  valuations[,trial.cnt],
+#                                  cur.fixations,
+#                                  cur.durations,
+#                                  cur.maxfix,
+#                                  nr.reps,
+#                                  timestep)
 
-    cnt[1] = cnt + 1
+    trial.cnt[1] = trial.cnt + 1
+    print(trial.cnt)
   }
   # CONTINUE BY CALCULATING LOG LIKELIHOOD----------------------------------------------------------------------------------------------
   success.counts[success.counts == 0] = nr.reps/(nr.reps + 1)

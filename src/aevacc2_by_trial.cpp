@@ -20,7 +20,7 @@ static Ziggurat::Ziggurat::Ziggurat zigg;
 //' @param nr_reps number of repitions (simulation runs)
 //' @param maxdur numeric variable that supplies the maximum reaction time considered a success in simulations
 //' @param mindur numeric variable that supplies the minimum reaction time considered a succes in simulations
-//' @param real_decision numeric variable that provides the empirical decision taken in trial
+//' @param cur_decision numeric variable that provides the empirical decision taken in trial
 //' @param update Vector that stores the item valuations for the trial conditon simulated
 //' @param fixpos Vector that stores the locations for a supplied fixed fixation pathway
 //' @param fixdur Vector that stores the fixation durations for a supplied fixed fixation pathway
@@ -32,10 +32,11 @@ int aevacc2_by_trial(float sd,
                      int non_decision_time,
                      int maxdur,
                      int mindur,
-                     int real_decision,
+                     int cur_decision,
                      NumericVector update,
                      IntegerVector fixpos,
                      IntegerVector fixdur,
+                     int cur_maxfix,
                      int nr_reps,
                      int timestep){
 
@@ -56,7 +57,7 @@ int aevacc2_by_trial(float sd,
   int maxpos = 0;
   int cur_rt = 0;
   int cur_fixpos_indice = 0;
-  int num_fixpos = fixpos.size();
+  int num_fixpos = cur_maxfix;
   int cur_fixpos = 0;
   int cur_fix_cnt = 0;
 
@@ -126,7 +127,7 @@ int aevacc2_by_trial(float sd,
       } else {
         maxpos = 0;
       }
-      if (maxpos == real_decision){
+      if (maxpos == cur_decision){
         if ((cur_rt + non_decision_time <= maxdur) && (cur_rt + non_decision_time >= mindur)){
           ++out;
         }

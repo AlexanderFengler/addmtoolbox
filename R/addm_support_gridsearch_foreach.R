@@ -11,7 +11,7 @@ addm_support_gridsearch_foreach = function(choice.dat = data.table(v1 = 0, v2 = 
                                            eye.dat = data.table(fixloc = 0, fixdur = 0, fixnr = 1, id = 0),
                                            conditions.dat = data.table(v1 = 0, v2 = 0, id = 0),
                                            parameter.matrix = c(0.006,0.6,0.06,0),
-                                           nr.reps = 2000,
+                                           nr.reps = 1000,
                                            timestep = 10,
                                            model.type = 'standard',
                                            fixation.model = 'fixedpath',
