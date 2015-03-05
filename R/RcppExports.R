@@ -184,13 +184,14 @@ aevacc_full_output_memnoise <- function(sd, theta, drift, non_decision_time, ite
 #' @param theta theta used for drift diffusion process
 #' @param drift drift-rate used for drift diffusion process
 #' @param non_decision_time non decision time used for drift diffusion process
+#' @param decision integer which gives choice in current trial (1 or 2)
 #' @param rt reaction time of provided trial
 #' @param valuations vector that stores the item valuations for the provided trial
 #' @param fixpos vector with all empirical fixations positions encountered in provided trial
 #' @param fixdur vector with all empirical fixation durations encounrtered in provided trial
 #' @param stateStep numeric variable between [0,1] that indicates how finegrained the vertical grid of the model space shall be computed
 #' @export
-dynamicaddm <- function(sd, theta, drift, non_decision_time, valuations, fixpos, fixdur, rt, stateStep) {
-    .Call('addmtoolbox_dynamicaddm', PACKAGE = 'addmtoolbox', sd, theta, drift, non_decision_time, valuations, fixpos, fixdur, rt, stateStep)
+dynamicaddm <- function(sd, theta, drift, non_decision_time, decision, valuations, fixpos, fixdur, rt, stateStep) {
+    .Call('addmtoolbox_dynamicaddm', PACKAGE = 'addmtoolbox', sd, theta, drift, non_decision_time, decision, valuations, fixpos, fixdur, rt, stateStep)
 }
 

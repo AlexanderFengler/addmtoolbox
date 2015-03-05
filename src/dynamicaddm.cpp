@@ -10,6 +10,7 @@ using namespace Rcpp;
 //' @param theta theta used for drift diffusion process
 //' @param drift drift-rate used for drift diffusion process
 //' @param non_decision_time non decision time used for drift diffusion process
+//' @param decision integer which gives choice in current trial (1 or 2)
 //' @param rt reaction time of provided trial
 //' @param valuations vector that stores the item valuations for the provided trial
 //' @param fixpos vector with all empirical fixations positions encountered in provided trial
@@ -21,6 +22,7 @@ int dynamicaddm(float sd,
                 float theta,
                 float drift,
                 int non_decision_time,
+                int decision,
                 NumericVector valuations,
                 NumericVector fixpos,
                 NumericVector fixdur,
@@ -170,9 +172,14 @@ int dynamicaddm(float sd,
     }
   }
 
+if (decision == 1){
+  return(upCrossing[t]);
+}  else {
+  return(downCrossing[t]);
+}
+
 //   return List::create(_["upCrossing"] = upCrossing,
 //                       _["downCrossing"] = downCrossing,
 //                       _["pCrossBarrierUp"] = pCrossBarrierUp,
 //                       _["pCrossBarrierDown"] = pCrossBarrierDown);
-return(1);
 }

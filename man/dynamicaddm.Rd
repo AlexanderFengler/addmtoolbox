@@ -5,8 +5,8 @@
 \title{Simulate aDDM process (by condition, 2 items)
 \code{dynamicaddm()}}
 \usage{
-dynamicaddm(sd, theta, drift, non_decision_time, valuations, fixpos, fixdur, rt,
-  stateStep)
+dynamicaddm(sd, theta, drift, non_decision_time, decision, valuations, fixpos,
+  fixdur, rt, stateStep)
 }
 \arguments{
 \item{sd}{standard deviation used for drift diffusion process}
@@ -16,6 +16,8 @@ dynamicaddm(sd, theta, drift, non_decision_time, valuations, fixpos, fixdur, rt,
 \item{drift}{drift-rate used for drift diffusion process}
 
 \item{non_decision_time}{non decision time used for drift diffusion process}
+
+\item{decision}{integer which gives choice in current trial (1 or 2)}
 
 \item{valuations}{vector that stores the item valuations for the provided trial}
 

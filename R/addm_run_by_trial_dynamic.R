@@ -42,7 +42,7 @@ addm_run_by_trial_dynamic = function(choice.dat = data.table(v1 = 0,v2 = 0, id =
   }
 
   # Decision Vector
-  decisions = choice.dat[,decision] - 1 # Minus one because in C++ vectorsstart at indice zero
+  decisions = choice.dat[,decision]
   #-------------------------------------------------------------------------------------------------------------------------------------
 
   # RUN MODEL --------------------------------------------------------------------------------------------------------------------------
@@ -50,13 +50,12 @@ addm_run_by_trial_dynamic = function(choice.dat = data.table(v1 = 0,v2 = 0, id =
   trial.cnt = 1
   eye.row.cnt = 1
   len.eye = length(eye.dat[,fixloc])
-  eye.dat[,fixdur.orig := fixdur.orig / timestep]
   eye.mat = as.matrix(eye.dat %>% select(-id,-condition_id))
+  eye.mat[,5] = eye.mat[,5] / timestep
   cur.maxfix = 0
 
-
-  choice.dat[,rt := rt / timestep]
   rts = choice.dat[,rt]
+  rts = rts / timestep
 
   while(eye.row.cnt < len.eye){
     cur.maxfix[1] = eye.mat[eye.row.cnt,4]
@@ -66,6 +65,7 @@ addm_run_by_trial_dynamic = function(choice.dat = data.table(v1 = 0,v2 = 0, id =
                                           theta,
                                           drift.rate,
                                           non.decision.time,
+                                          decisions[trial.cnt],
                                           valuations[,trial.cnt],
                                           eye.mat[eye.row.cnt:(eye.row.cnt + cur.maxfix - 1),1], # fixation locations
                                           eye.mat[eye.row.cnt:(eye.row.cnt + cur.maxfix - 1),5], # fixation durations
