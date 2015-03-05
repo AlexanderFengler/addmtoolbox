@@ -50,10 +50,11 @@ addm_run_by_trial_dynamic = function(choice.dat = data.table(v1 = 0,v2 = 0, id =
   trial.cnt = 1
   eye.row.cnt = 1
   len.eye = length(eye.dat[,fixloc])
+  eye.dat[,fixdur.orig := fixdur.orig / timestep]
   eye.mat = as.matrix(eye.dat %>% select(-id,-condition_id))
   cur.maxfix = 0
 
-  eye.dat[,fixdur.orig := fixdur.orig / timestep]
+
   choice.dat[,rt := rt / timestep]
   rts = choice.dat[,rt]
 
