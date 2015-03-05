@@ -81,7 +81,8 @@ addm_run_by_trial_dynamic = function(choice.dat = data.table(v1 = 0,v2 = 0, id =
                     theta,
                     cur.sd,
                     non.decision.time,
-                    'NA',(-1)*sum(log(likelihoods)))
+                    0,
+                    (-1)*sum(log(likelihoods)))
 
   print(total.log.lik)
   return(total.log.lik)
