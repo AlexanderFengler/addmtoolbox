@@ -1,24 +1,39 @@
 #include <Rcpp.h>
 using namespace Rcpp;
 
+//' Simulate aDDM process by unique trial condition (2 items)
+//' @author Alexander Fengler, \email{alexanderfengler@@gmx.de}
+//' @title Simulate aDDM process (by condition, 2 items)
+//' \code{dynamicaddm()}
+//' @return numeric variable storing likelihood value
+//' @param sd standard deviation used for drift diffusion process
+//' @param theta theta used for drift diffusion process
+//' @param drift drift-rate used for drift diffusion process
+//' @param non_decision_time non decision time used for drift diffusion process
+//' @param rt reaction time of provided trial
+//' @param valuations vector that stores the item valuations for the provided trial
+//' @param fixpos vector with all empirical fixations positions encountered in provided trial
+//' @param fixdur vector with all empirical fixation durations encounrtered in provided trial
+//' @param stateStep numeric variable between [0,1] that indicates how finegrained the vertical grid of the model space shall be computed
+//' @export
 // [[Rcpp::export]]
-List dynamicaddm(float sd,
-                 float d,
-                 float theta,
-                 int non_decision_time,
-                 NumericVector valuations,
-                 NumericVector fixpos,
-                 NumericVector fixdur,
-                 int rt,
-                 float stateStep){
+int dynamicaddm(float sd,
+                float theta,
+                float drift,
+                int non_decision_time,
+                NumericVector valuations,
+                NumericVector fixpos,
+                NumericVector fixdur,
+                int rt,
+                float stateStep){
 
   // get number of fixations to consider
   int fixnum = fixpos.size();
 
   // generate the two drifts corresponding to potential fixation locations
   NumericVector drifts(2);
-  drifts[0] = d*(valuations[0] - theta*valuations[1]);
-  drifts[1] = d*(theta*valuations[0] - valuations[1]);
+  drifts[0] = drift*(valuations[0] - theta*valuations[1]);
+  drifts[1] = drift*(theta*valuations[0] - valuations[1]);
 
   // define barriers
   int barrierUp = 1;
@@ -155,8 +170,9 @@ List dynamicaddm(float sd,
     }
   }
 
-  return List::create(_["upCrossing"] = upCrossing,
-                      _["downCrossing"] = downCrossing,
-                      _["pCrossBarrierUp"] = pCrossBarrierUp,
-                      _["pCrossBarrierDown"] = pCrossBarrierDown);
+//   return List::create(_["upCrossing"] = upCrossing,
+//                       _["downCrossing"] = downCrossing,
+//                       _["pCrossBarrierUp"] = pCrossBarrierUp,
+//                       _["pCrossBarrierDown"] = pCrossBarrierDown);
+return(1);
 }

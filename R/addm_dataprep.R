@@ -59,6 +59,7 @@ addm_dataprep = function(choice.dat =  data.table(v1 = 0,v2 = 0,id = 0,rt = 0, d
   eye = eye %>% group_by(id) %>% mutate(max.fix = n())
   #eye$last.fix = 0
   eye[fixnr == max.fix,last.fix:= 1]
+  eye$fixdur.orig = eye$fixdur
   eye[last.fix == 1,fixdur := fixdur + rtbinsize]
   eye = eye %>% select(-last.fix)
   # -------------------------------------------------------------------------------------------------

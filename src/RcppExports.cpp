@@ -205,3 +205,26 @@ BEGIN_RCPP
     return __sexp_result;
 END_RCPP
 }
+// dynamicaddm
+int dynamicaddm(float sd, float theta, float drift, int non_decision_time, NumericVector valuations, NumericVector fixpos, NumericVector fixdur, int rt, float stateStep);
+RcppExport SEXP addmtoolbox_dynamicaddm(SEXP sdSEXP, SEXP thetaSEXP, SEXP driftSEXP, SEXP non_decision_timeSEXP, SEXP valuationsSEXP, SEXP fixposSEXP, SEXP fixdurSEXP, SEXP rtSEXP, SEXP stateStepSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< float >::type sd(sdSEXP );
+        Rcpp::traits::input_parameter< float >::type theta(thetaSEXP );
+        Rcpp::traits::input_parameter< float >::type drift(driftSEXP );
+        Rcpp::traits::input_parameter< int >::type non_decision_time(non_decision_timeSEXP );
+        Rcpp::traits::input_parameter< NumericVector >::type valuations(valuationsSEXP );
+        Rcpp::traits::input_parameter< NumericVector >::type fixpos(fixposSEXP );
+        Rcpp::traits::input_parameter< NumericVector >::type fixdur(fixdurSEXP );
+        Rcpp::traits::input_parameter< int >::type rt(rtSEXP );
+        Rcpp::traits::input_parameter< float >::type stateStep(stateStepSEXP );
+        int __result = dynamicaddm(sd, theta, drift, non_decision_time, valuations, fixpos, fixdur, rt, stateStep);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
