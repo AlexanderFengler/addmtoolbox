@@ -39,8 +39,8 @@ aevacc2_by_condition <- function(sd, theta, drift, non_decision_time, maxdur, up
 #' @param fixdur Vector that stores the fixation durations for a supplied fixed fixation pathway
 #' @param cur_maxfix integer that provides number of fixation in trial
 #' @export
-aevacc2_by_trial <- function(sd, theta, drift, non_decision_time, maxdur, mindur, cur_decision, update, fixpos, fixdur, cur_maxfix, nr_reps, timestep) {
-    .Call('addmtoolbox_aevacc2_by_trial', PACKAGE = 'addmtoolbox', sd, theta, drift, non_decision_time, maxdur, mindur, cur_decision, update, fixpos, fixdur, cur_maxfix, nr_reps, timestep)
+aevacc2_by_trial <- function(sd, theta, drift, non_decision_time, maxdur, mindur, cur_decision, update, fixpos, fixdur, nr_reps, timestep) {
+    .Call('addmtoolbox_aevacc2_by_trial', PACKAGE = 'addmtoolbox', sd, theta, drift, non_decision_time, maxdur, mindur, cur_decision, update, fixpos, fixdur, nr_reps, timestep)
 }
 
 #' Simulate aDDM process (2 items) with detailed output

@@ -5,7 +5,7 @@
 \title{Fit addm using grid search}
 \usage{
 addm_fit_grid(data = list(choice.dat = NULL, eye.dat = NULL, conditions.dat =
-  NULL), drifts = seq(5e-04, 0.003, 5e-04), thetas = seq(0, 1, 0.25),
+  NULL), drifts = seq(0.001, 0.0025, 5e-04), thetas = seq(0, 1, 0.25),
   sds = seq(0.05, 0.09, 0.01), non.decision.times = 0, nr.reps = 1000,
   timestep = 10, model.type = "standard", fixation.model = "fixedpath",
   fit.type = "condition", allow.fine.grid = 0, coarse.to.fine.ratio = 4,
