@@ -206,7 +206,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // dynamicaddm
-int dynamicaddm(float sd, float theta, float drift, int non_decision_time, int decision, NumericVector valuations, NumericVector fixpos, NumericVector fixdur, int rt, float stateStep);
+double dynamicaddm(float sd, float theta, float drift, int non_decision_time, int decision, NumericVector valuations, NumericVector fixpos, NumericVector fixdur, int rt, float stateStep);
 RcppExport SEXP addmtoolbox_dynamicaddm(SEXP sdSEXP, SEXP thetaSEXP, SEXP driftSEXP, SEXP non_decision_timeSEXP, SEXP decisionSEXP, SEXP valuationsSEXP, SEXP fixposSEXP, SEXP fixdurSEXP, SEXP rtSEXP, SEXP stateStepSEXP) {
 BEGIN_RCPP
     SEXP __sexp_result;
@@ -222,7 +222,7 @@ BEGIN_RCPP
         Rcpp::traits::input_parameter< NumericVector >::type fixdur(fixdurSEXP );
         Rcpp::traits::input_parameter< int >::type rt(rtSEXP );
         Rcpp::traits::input_parameter< float >::type stateStep(stateStepSEXP );
-        int __result = dynamicaddm(sd, theta, drift, non_decision_time, decision, valuations, fixpos, fixdur, rt, stateStep);
+        double __result = dynamicaddm(sd, theta, drift, non_decision_time, decision, valuations, fixpos, fixdur, rt, stateStep);
         PROTECT(__sexp_result = Rcpp::wrap(__result));
     }
     UNPROTECT(1);

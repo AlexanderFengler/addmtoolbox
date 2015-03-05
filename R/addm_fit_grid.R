@@ -12,12 +12,13 @@
 #' @param timestep integer that provides the timestep-size that is used in the simulations (in ms).
 #' @param nr.reps integer that tells the function how many simulation runs to use.
 #' @param model.type string that indicates which version of the model to run. 'standard' for normal model fits. 'memnoise' to allow for memory effects (see vignette for more for detailed explanation of what this is about).
-#' @param fit.type string indicating either 'condition' for fits by unique trial conditions or 'trial' for fits by trial.
+#' @param fit.type string indicating either 'condition' for fits by unique trial conditions, 'trial' for fits by trial, or 'dyn' where you can use a dynamic programming algorithm for fitting the two items case, bypassing simulations for the fitting procedure
 #' @param fixation.model string that indicates which fixation model will be utilized for simulations. 'random' for random fixations (example). 'fixedpath' for following a predetermined fixation path with fixed durations (example). 'user' to provide your own fixation model, defined in a function "user_fixation_model" in the global environment.
 #' @param allow.fine.grid variable that indicates whether we allow (1) a fine grid to be created and searched around the coarse grid minimum or not (0).
 #' @param log.file path to a file for storing fit-logs
 #' @param parallel boolean varible that indicates whether to initialize local cluster on start (1) or not (0).
 #' @param coarse.to.fine.ratio integer defining the ratio between parameter steps in the coarse versus the fine grid.
+#' @param state.step parameter only relevant when using fit.type = 'dyn', for which case it given the precision of the vertical grid utilized in the dynammic programming algorithm
 
 addm_fit_grid = function(data = list(choice.dat = NULL, eye.dat = NULL, conditions.dat = NULL),
                          drifts = seq(0.001,0.0025,0.0005),
@@ -32,7 +33,8 @@ addm_fit_grid = function(data = list(choice.dat = NULL, eye.dat = NULL, conditio
                          allow.fine.grid = 0,
                          coarse.to.fine.ratio = 4,
                          log.file = "defaultlog.txt",
-                         parallel = 1){
+                         parallel = 1,
+                         state.step = 0.1){
 
   # INITIALIZIONS --------------------------------------------------------------------------------
   choice.dat = data$choice.dat
@@ -78,7 +80,8 @@ addm_fit_grid = function(data = list(choice.dat = NULL, eye.dat = NULL, conditio
                                                  model.type,
                                                  fixation.model,
                                                  fit.type,
-                                                 cur.log.file)
+                                                 cur.log.file,
+                                                 state.step)
       # ---------------------------------------------------------------------------------------------
 
       # UPDATE LOGLIKS ------------------------------------------------------------------------------
@@ -107,7 +110,8 @@ addm_fit_grid = function(data = list(choice.dat = NULL, eye.dat = NULL, conditio
                                                         model.type,
                                                         fixation.model,
                                                         fit.type,
-                                                        cur.log.file)
+                                                        cur.log.file,
+                                                        state.step)
         # ---------------------------------------------------------------------------------------------
 
         #

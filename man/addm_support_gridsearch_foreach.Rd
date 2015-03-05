@@ -9,7 +9,7 @@ addm_support_gridsearch_foreach(choice.dat = data.table(v1 = 0, v2 = 0, rt =
   = 1, id = 0), conditions.dat = data.table(v1 = 0, v2 = 0, id = 0),
   parameter.matrix = c(0.006, 0.6, 0.06, 0), nr.reps = 1000,
   timestep = 10, model.type = "standard", fixation.model = "fixedpath",
-  fit.type = "condition", log.file = "defaultlog.txt")
+  fit.type = "condition", log.file = "defaultlog.txt", state.step = 0.1)
 }
 \arguments{
 \item{parameter.matrix}{matrix that provides the parameter space which is looped over. (drifts, thetas, sds, non decision times)}
@@ -22,9 +22,11 @@ addm_support_gridsearch_foreach(choice.dat = data.table(v1 = 0, v2 = 0, rt =
 
 \item{fixation.model}{string that indicates which fixation model will be utilized for simulations. 'random' for random fixations (example). 'fixedpath' for following a predetermined fixation path with fixed durations (example). 'user' to provide your own fixation model, defined in a function "user_fixation_model" in the global environment.}
 
-\item{fit.type}{string indicating either 'condition' for fits by unique trial conditions or 'trial' for fits by trial.}
+\item{fit.type}{string indicating either 'condition' for fits by unique trial conditions, 'trial' for fits by trial, or 'dyn' where you can use a dynamic programming algorithm for fitting the two items case, bypassing simulations for the fitting procedure}
 
 \item{log.file}{path to a file for storing fit-logs}
+
+\item{state.step}{parameter only relevant when using fit.type = 'dyn', for which case it given the precision of the vertical grid utilized in the dynammic programming algorithm}
 }
 \value{
 data.table with log likelihoods and corresponding parameter combinations

@@ -9,7 +9,7 @@ addm_fit_grid(data = list(choice.dat = NULL, eye.dat = NULL, conditions.dat =
   sds = seq(0.05, 0.09, 0.01), non.decision.times = 0, nr.reps = 1000,
   timestep = 10, model.type = "standard", fixation.model = "fixedpath",
   fit.type = "condition", allow.fine.grid = 0, coarse.to.fine.ratio = 4,
-  log.file = "defaultlog.txt", parallel = 1)
+  log.file = "defaultlog.txt", parallel = 1, state.step = 0.1)
 }
 \arguments{
 \item{data}{list of three data.tables of each: choice data, eyetracking data, conditions data (as created by addm_dataprep)}
@@ -30,7 +30,7 @@ addm_fit_grid(data = list(choice.dat = NULL, eye.dat = NULL, conditions.dat =
 
 \item{fixation.model}{string that indicates which fixation model will be utilized for simulations. 'random' for random fixations (example). 'fixedpath' for following a predetermined fixation path with fixed durations (example). 'user' to provide your own fixation model, defined in a function "user_fixation_model" in the global environment.}
 
-\item{fit.type}{string indicating either 'condition' for fits by unique trial conditions or 'trial' for fits by trial.}
+\item{fit.type}{string indicating either 'condition' for fits by unique trial conditions, 'trial' for fits by trial, or 'dyn' where you can use a dynamic programming algorithm for fitting the two items case, bypassing simulations for the fitting procedure}
 
 \item{allow.fine.grid}{variable that indicates whether we allow (1) a fine grid to be created and searched around the coarse grid minimum or not (0).}
 
@@ -39,6 +39,8 @@ addm_fit_grid(data = list(choice.dat = NULL, eye.dat = NULL, conditions.dat =
 \item{log.file}{path to a file for storing fit-logs}
 
 \item{parallel}{boolean varible that indicates whether to initialize local cluster on start (1) or not (0).}
+
+\item{state.step}{parameter only relevant when using fit.type = 'dyn', for which case it given the precision of the vertical grid utilized in the dynammic programming algorithm}
 }
 \value{
 data.table with log likelihoods by parameter combination

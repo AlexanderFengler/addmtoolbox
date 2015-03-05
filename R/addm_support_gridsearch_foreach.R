@@ -16,7 +16,8 @@ addm_support_gridsearch_foreach = function(choice.dat = data.table(v1 = 0, v2 = 
                                            model.type = 'standard',
                                            fixation.model = 'fixedpath',
                                            fit.type = 'condition',
-                                           log.file = "defaultlog.txt"){
+                                           log.file = "defaultlog.txt",
+                                           state.step = 0.1){
 
   # Initialize iterator and output list --------------------------------------------------------------------------------------------------
   out = list(0)
@@ -44,6 +45,12 @@ addm_support_gridsearch_foreach = function(choice.dat = data.table(v1 = 0, v2 = 
                                                                                 output.type = 'fit',
                                                                                 fixation.model)
 
+  } else if (fit.type == 'dyn'){
+    out[[1]] = foreach (i = ita,.combine='rbind') %dopar% addm_run_by_trial_dynamic(choice.dat,
+                                                                                    eye.dat,
+                                                                                    i,
+                                                                                    timestep,
+                                                                                    state.step)
   }
   # --------------------------------------------------------------------------------------------------------------------------------------
 

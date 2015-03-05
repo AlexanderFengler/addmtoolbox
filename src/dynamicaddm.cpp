@@ -18,7 +18,7 @@ using namespace Rcpp;
 //' @param stateStep numeric variable between [0,1] that indicates how finegrained the vertical grid of the model space shall be computed
 //' @export
 // [[Rcpp::export]]
-int dynamicaddm(float sd,
+double dynamicaddm(float sd,
                 float theta,
                 float drift,
                 int non_decision_time,
@@ -29,6 +29,8 @@ int dynamicaddm(float sd,
                 int rt,
                 float stateStep){
 
+  // define output number
+  double out = 0;
   // get number of fixations to consider
   int fixnum = fixpos.size();
 
@@ -172,14 +174,15 @@ int dynamicaddm(float sd,
     }
   }
 
+
 if (decision == 1){
-  return(upCrossing[t]);
+  return(out = upCrossing[t]);
 }  else {
-  return(downCrossing[t]);
+  return(out = downCrossing[t]);
 }
 
-//   return List::create(_["upCrossing"] = upCrossing,
-//                       _["downCrossing"] = downCrossing,
-//                       _["pCrossBarrierUp"] = pCrossBarrierUp,
-//                       _["pCrossBarrierDown"] = pCrossBarrierDown);
+//    return List::create(_["upCrossing"] = upCrossing,
+//                        _["downCrossing"] = downCrossing,
+//                        _["pCrossBarrierUp"] = pCrossBarrierUp,
+//                        _["pCrossBarrierDown"] = pCrossBarrierDown);
 }
