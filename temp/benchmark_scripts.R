@@ -89,7 +89,11 @@ write.table(x = out.frame, file = 'temp/benchmark_vary_trial_constant_conditions
 # -----------------------------------------------------------------------------------------------------------
 
 # Draw plot -------------------------------------------------------------------------------------------------
+temp = read.table(file = 'temp/benchmark_vary_trial_constant_conditions.txt', header=TRUE)
 
+pl = ggplot(data = temp, aes(x = number.trials, y = mean.time, color = model.type)) +
+     geom_point(shape = 5) + geom_line(linetype = 'dashed') + theme_bw(base_size = 12) +
+     ggtitle('Constant Nr. Conditions / 1000 Simulations') + ylab('Time in Seconds') + xlab('Number Trials Simulated')
 # -----------------------------------------------------------------------------------------------------------
 
 # -----------------------------------------------------------------------------------------------------------
@@ -181,7 +185,11 @@ write.table(x = out.frame, file = 'temp/benchmark_vary_condition_constant_trials
 # -----------------------------------------------------------------------------------------------------------
 
 # Draw plot -------------------------------------------------------------------------------------------------
+temp = read.table(file = 'temp/benchmark_vary_condition_constant_trials.txt', header=TRUE)
 
+pl = ggplot(data = temp, aes(x = number.conditions, y = mean.time, color = model.type)) +
+  geom_point(shape = 5) + geom_line(linetype = 'dashed') + theme_bw(base_size = 12) +
+  ggtitle('Constant Nr. Trials / 1000 Simulations') + ylab('Time in Seconds') + xlab('Number Unique Conditions')
 # -----------------------------------------------------------------------------------------------------------
 
 # -----------------------------------------------------------------------------------------------------------
