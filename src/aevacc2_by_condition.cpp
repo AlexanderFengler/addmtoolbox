@@ -58,7 +58,7 @@ IntegerVector aevacc2_by_condition(float sd,
     cur_update[i] = theta*update[i];
   }
 
-  NumericMatrix fixdat = fixation_model();
+  NumericMatrix fixdat = fixation_model(update);
   // ------------------------------------------------------------------------------------------------
 
   // Outer loop cycles through simulation numbers --------------------------------------------------
@@ -73,7 +73,7 @@ IntegerVector aevacc2_by_condition(float sd,
     rdv = 0;
 
     // Compute fixation path
-    fixdat = fixation_model();
+    fixdat = fixation_model(update);
     // -------------------------------------------------------------------------------------------
 
     // Propagate model through simulation run --------------------------------------------------

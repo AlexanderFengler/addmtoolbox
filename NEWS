@@ -1,0 +1,8 @@
+addmtoolbox v0.2.24 =======================================================
+
+Enhancements:
+* you now can use addm_generate_artificial() to create fake data-sets of arbitrary set-size with fixed fixation pathways (matching the example fixation_model() functions provided)
+* you now have example fixation models included for the item general cases: addm_fixation_model_fixedpath() , addm_fixation_model_random(): can be accessed simply as before via the   fixation.model parameter in the addm_fit_...() and addm_run_...() functions. Will be called automatically if you provide data that implies more than two items.
+* the fixation models now get supplied with a vector of current valuations on the screen (example: c(0,3), for 0 value on item location one and 3 value on item location two). This should be more useful for the user_supplied...() cases.
+* by trial fitting for item-general case better tested now
+

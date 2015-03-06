@@ -126,8 +126,8 @@ aevacc_by_condition_memnoise <- function(sd, theta, drift, non_decision_time, it
 #' @param fixpos Vector that stores the locations for a supplied fixed fixation pathway
 #' @param fixdur Vector that stores the fixation durations for a supplied fixed fixation pathway
 #' @export
-aevacc_by_trial <- function(nr_reps, maxdur, mindur, cur_decision, sd, theta, drift, non_decision_time, timestep, update, fixpos, fixdur) {
-    .Call('addmtoolbox_aevacc_by_trial', PACKAGE = 'addmtoolbox', nr_reps, maxdur, mindur, cur_decision, sd, theta, drift, non_decision_time, timestep, update, fixpos, fixdur)
+aevacc_by_trial <- function(sd, theta, drift, non_decision_time, maxdur, mindur, cur_decision, update, fixpos, fixdur, nr_reps, timestep) {
+    .Call('addmtoolbox_aevacc_by_trial', PACKAGE = 'addmtoolbox', sd, theta, drift, non_decision_time, maxdur, mindur, cur_decision, update, fixpos, fixdur, nr_reps, timestep)
 }
 
 #' Simulate aDDM process by unique trial (>2 items, allow memory effects)

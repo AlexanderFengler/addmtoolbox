@@ -12,7 +12,7 @@
 
 addm_run_by_trial_dynamic = function(choice.dat = data.table(v1 = 0,v2 = 0, id = 0),
                                      eye.dat = data.table(fixloc = 0, fixdur = 0, fixnr = 1, id = 0),
-                                     model.parameters = c(0.006,0.6,0.06,0),
+                                     model.parameters = c(0.002,0.5,0.07,0),
                                      timestep = 10,
                                      state.step = 0.1){
 

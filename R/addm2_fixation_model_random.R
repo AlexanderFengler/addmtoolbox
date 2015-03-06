@@ -4,8 +4,9 @@
 #' @title Example for user-supplied fixation model (aevacc functions)
 #' @return matrix with two rows. One providing fixation location and the second providing fixation duration
 #' @export
+#' @param cur.valuations vector that provides item valuations in current choice set
 
-addm2_fixation_model_random = function(){
+addm2_fixation_model_random = function(cur.valuations = c(0,0)){
 
   # Get fixation durations and location for simulation run -------------------------------------
   x = matrix(rep(0,500),ncol=2)

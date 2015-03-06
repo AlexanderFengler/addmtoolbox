@@ -54,7 +54,7 @@ NumericVector aevacc_full_output_memnoise(float sd,
   NumericVector Durations(nr_items);
   NumericVector Fixations(nr_items);
 
-  NumericMatrix fixdat = fixation_model();
+  NumericMatrix fixdat = fixation_model(update);
   // ----------------------------------------------------------------------------------------------
 
   // Initialization of Varibales needed in loop ---------------------------------------------------
@@ -99,7 +99,7 @@ NumericVector aevacc_full_output_memnoise(float sd,
     // -----------------------------------------------------------------------------------------------
 
     // Generate fixations for current simulation run -------------------------------------------------
-    fixdat = fixation_model();
+    fixdat = fixation_model(update);
     // -----------------------------------------------------------------------------------------------
 
     // Enter simulation run --------------------------------------------------------------------------

@@ -4,18 +4,10 @@
 \alias{aevacc_by_trial}
 \title{Simulate aDDM process by unique trial (>2 items)}
 \usage{
-aevacc_by_trial(nr_reps, maxdur, mindur, cur_decision, sd, theta, drift,
-  non_decision_time, timestep, update, fixpos, fixdur)
+aevacc_by_trial(sd, theta, drift, non_decision_time, maxdur, mindur,
+  cur_decision, update, fixpos, fixdur, nr_reps, timestep)
 }
 \arguments{
-\item{nr_reps}{number of repitions (simulation runs)}
-
-\item{maxdur}{numeric variable that supplies the maximum reaction time considered a success in simulations}
-
-\item{mindur}{numeric variable that supplies the minimum reaction time considered a succes in simulations}
-
-\item{cur_decision}{numeric variable that provides the empirical decision taken in trial}
-
 \item{sd}{standard deviation used for drift diffusion process}
 
 \item{theta}{theta (attentional bias) used for drift diffusion process}
@@ -24,13 +16,21 @@ aevacc_by_trial(nr_reps, maxdur, mindur, cur_decision, sd, theta, drift,
 
 \item{non_decision_time}{non decision time used for drift diffusion process}
 
-\item{timestep}{timestep in ms associated with each step in the drift diffusion process}
+\item{maxdur}{numeric variable that supplies the maximum reaction time considered a success in simulations}
+
+\item{mindur}{numeric variable that supplies the minimum reaction time considered a succes in simulations}
+
+\item{cur_decision}{numeric variable that provides the empirical decision taken in trial}
 
 \item{update}{Vector that stores the item valuations for the trial conditon simulated}
 
 \item{fixpos}{Vector that stores the locations for a supplied fixed fixation pathway}
 
 \item{fixdur}{Vector that stores the fixation durations for a supplied fixed fixation pathway}
+
+\item{nr_reps}{number of repitions (simulation runs)}
+
+\item{timestep}{timestep in ms associated with each step in the drift diffusion process}
 }
 \value{
 Returns a numeric variable that provides a success count (runs that predicted a reaction time in the correct rt-bin and simultaneously the correct decision)

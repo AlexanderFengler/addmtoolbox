@@ -16,8 +16,8 @@
 
 addm_run_by_condition = function(choice.dat = data.table(decision = 0, rt = 0, condition_id = 0),
                                  conditions.dat = data.table(v1 = 0, v2 = 0, condition_id = 0),
-                                 model.parameters = c(0.006,0.6,0.06,0),
-                                 nr.reps = 2000,
+                                 model.parameters = c(0.002,0.6,0.07,0),
+                                 nr.reps = 1000,
                                  timestep = 10,
                                  model.type = 'standard',
                                  output.type = 'fit',
@@ -109,11 +109,19 @@ addm_run_by_condition = function(choice.dat = data.table(decision = 0, rt = 0, c
 
   # INITIALIZE FIXATION PATHWAYS -------------------------------------------------------------------------------------------------------
   if (fixation.model == "fixedpath"){
-    fixation_model = addm2_fixation_model_fixedpath
+    if (cur.set_size == 2){
+      fixation_model = addm2_fixation_model_fixedpath
+    } else {
+      fixation_model = addm_fixation_model_fixedpath
+    }
   }
 
   if (fixation.model == "random"){
-    fixation_model = addm2_fixation_model_random
+    if (cur.set_size == 2){
+      fixation_model = addm2_fixation_model_random
+    } else {
+      fixation_model = addm_fixation_model_random
+    }
   }
 
   if (fixation.model == "user"){
