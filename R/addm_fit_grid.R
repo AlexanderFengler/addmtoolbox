@@ -32,7 +32,7 @@ addm_fit_grid = function(data = list(choice.dat = NULL, eye.dat = NULL, conditio
                          fit.type = 'condition',
                          allow.fine.grid = 0,
                          coarse.to.fine.ratio = 4,
-                         log.file = "defaultlog.txt",
+                         log.file = 'defaultlog.txt',
                          parallel = 1,
                          state.step = 0.1){
 

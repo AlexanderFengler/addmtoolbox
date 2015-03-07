@@ -1,3 +1,10 @@
+addmtoolbox v0.2.26 =======================================================
+
+Enhancements:
+
+* visualize a single two item model run with the addm2_plot_modelvis() function
+* find a new addm_performance_benchmarks vignette added
+
 addmtoolbox v0.2.24 =======================================================
 
 Enhancements:

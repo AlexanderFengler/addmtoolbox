@@ -74,10 +74,10 @@ We can see that `addm_data_eye` has **four** columns.
 
 The two **data.frames** supplied in the ***addmtoolbox*** package serve as an illustration of the structure that is expected for the package to be conveniently usable.
 
-Once our data is in shape we can continue to use the `addm_dataprep()` function, like so:
+Once our data is in shape we can continue to use the `addm_preprocess()` function, like so:
 
 ```{r, results='hide'}
- my.dat = addm_dataprep(choice.dat = addm_data_choice,
+ my.dat = addm_preprocess(choice.dat = addm_data_choice,
                         eye.dat = addm_data_eye,
                         timestep = 10,
                         rtbinsize = 100)  
@@ -92,7 +92,7 @@ When **fitting by condition**, the model will assume that you are providing a fi
 
 When **fitting by trial**, the model needs empirical eyetracking data by trial, however a data.frame providing information about unique conditions is obsolete. Therefore we have a return element for eyetracking data, but none for conditions. <br> <br>
 
-Lets look at the output that we have generated with out call to `addm_dataprep()`:
+Lets look at the output that we have generated with out call to `addm_preprocess()`:
 
 ```{r, echo=FALSE}
  my.dat
@@ -102,9 +102,9 @@ Lets look at the output that we have generated with out call to `addm_dataprep()
 
 ####***Important***
 
-`addm_dataprep()` expects you to supply an id-variable that is a unique identifier of each trial for each subject (that means that trial 1 for subject 1 has a different key than trial 1 for subject 2). Note, that row.numbers are not sufficient, because **consistency** is demanded between ***trial-identifiers of the choice data.frame*** and ***trial-identifiers of the eye data.frame***.    
+`addm_preprocess()` expects you to supply an id-variable that is a unique identifier of each trial for each subject (that means that trial 1 for subject 1 has a different key than trial 1 for subject 2). Note, that row.numbers are not sufficient, because **consistency** is demanded between ***trial-identifiers of the choice data.frame*** and ***trial-identifiers of the eye data.frame***.    
 
-When you choose to **fit by condition**, it is important to note that `addm_dataprep()` is actually ***changing the trial-identifiers for you into condition identifiers***. **STILL**, `addm_dataprep()` expects you to supply the data with identifiers by trial first. <br><br><br>     
+When you choose to **fit by condition**, it is important to note that `addm_preprocess()` is actually ***changing the trial-identifiers for you into condition identifiers***. **STILL**, `addm_preprocess()` expects you to supply the data with identifiers by trial first. <br><br><br>     
 
 # Fitting the model **(by condition)**
 
@@ -142,7 +142,7 @@ To highlight a few of the non-obvious options:
 
 ## Let's do it once
 
-Lets take our prepared data.frames and fit the model once ourselves. I chose defaults so that reasonable outcomes will be returned for the example data-set. We will be fine in calling the function with default values for all but the `conditions_dat` and `choice_dat` variables, where we fit in the corresponding data.tables we retrieved from `addm_dataprep()` earlier. Note that for your own datasets you likely want to adjust the search-grid etc..
+Lets take our prepared data.frames and fit the model once ourselves. I chose defaults so that reasonable outcomes will be returned for the example data-set. We will be fine in calling the function with default values for all but the `conditions_dat` and `choice_dat` variables, where we fit in the corresponding data.tables we retrieved from `addm_preprocess()` earlier. Note that for your own datasets you likely want to adjust the search-grid etc..
 
 ```{r, eval=FALSE}
 my.log.liks = addm_fit_grid(my.dat)
@@ -195,7 +195,7 @@ Lets look at the output we generated:
 ```
 
 All variables are quite self-explanatory. Note that in this output the "id" variable refers to conditions instead of trials as expected when you first supply your experimental data.
-This is no issue when you chose to fit your data by condition, since then you already have your choice.data with an **id** variable that is referencing conditions. If you did your fits **by trial** however, you should re-run `addm_dataprep()` and use `fit.type = 'condition` to get **conditions data** and your **choice data** with **id** variable reference by conditions. Use this then as a supply to `addm_by_condition()` as shown above.  
+This is no issue when you chose to fit your data by condition, since then you already have your choice.data with an **id** variable that is referencing conditions. If you did your fits **by trial** however, you should re-run `addm_preprocess()` and use `fit.type = 'condition` to get **conditions data** and your **choice data** with **id** variable reference by conditions. Use this then as a supply to `addm_by_condition()` as shown above.  
 
 ### Why by condition?
 

@@ -1,6 +1,6 @@
 Package: addmtoolbox
 Title: addmtoolbox
-Version: 0.2.25
+Version: 0.2.26
 Authors@R: person("Alexander", "Fengler", , "alexanderfengler@gmx.de", role = c("aut", "cre"))
 Description: Convenience functions for fitting (attentional) drift diffusion models.
 Depends: R (>= 3.1.2)
@@ -17,7 +17,7 @@ Imports: data.table (>= 1.9.2),
     RcppGSL (>= 0.2.4),
     RcppZiggurat (>= 0.1.2),
     pander (>= 0.5.1),
-    rmarkdown (>= 0.5.1)
+    knitr (>= 1.9)
 LinkingTo: Rcpp,RcppGSL,RcppZiggurat
 Suggests: knitr
 VignetteBuilder: knitr

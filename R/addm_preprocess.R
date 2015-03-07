@@ -1,5 +1,5 @@
 #' Preprocess experimental data for easy usage with addmtoolbox package
-#' \code{addm_dataprep}
+#' \code{addm_preprocess()}
 #' @param choice.dat data.frame or data.table storing the item valuations (v1,v2...) , reaction times in ms (rt), decisions (decision) and a trial id column (id).
 #' @param eye.dat A data.frame or data.table storing eyetracking data by trial. Fixation location (fixloc), Fixation number (fixnr), Fixation duration (fixdur) and a trial id column (id). Can all be initialized as zero columns when a by condition fit is attempted.
 #' @param timestep integer that provides the timestep-size that is used in the simulations (in ms).
@@ -9,10 +9,10 @@
 #' @title Data Preprocessing for easy usage of addmtoolbox package
 #' @return list of three components. data.table that stores all unique choice set conditions. data.table that stores eyetracking.data adjusted to be usable for by trial fits. data.table that stores by trial choice data. trial id and condition id variable link all data.tables
 #' @export
-addm_dataprep = function(choice.dat =  data.table(v1 = 0,v2 = 0,id = 0,rt = 0, decision = 0, id = 0),
-                         eye.dat = data.table(fixloc = 0,fixnr = 1, fixdur= 0, id = 0),
-                         timestep = 10,
-                         rtbinsize = 100){
+addm_preprocess = function(choice.dat =  data.table(v1 = 0,v2 = 0,id = 0,rt = 0, decision = 0, id = 0),
+                           eye.dat = data.table(fixloc = 0,fixnr = 1, fixdur= 0, id = 0),
+                           timestep = 10,
+                           rtbinsize = 100){
 
   # TURN INPUT DATA FROM ORIGNAL FORMAT TO KEYED DATA TABLES -------------------------------------
   choice = as.data.table(choice.dat)

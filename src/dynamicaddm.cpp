@@ -19,18 +19,21 @@ using namespace Rcpp;
 //' @export
 // [[Rcpp::export]]
 double dynamicaddm(float sd,
-                float theta,
-                float drift,
-                int non_decision_time,
-                int decision,
-                NumericVector valuations,
-                NumericVector fixpos,
-                NumericVector fixdur,
-                int rt,
-                float stateStep){
+                   float theta,
+                   float drift,
+                   int non_decision_time,
+                   int decision,
+                   NumericVector valuations,
+                   NumericVector fixpos,
+                   NumericVector fixdur,
+                   int rt,
+                   float stateStep){
 
-  // define output number
-  double out = 0;
+  // INITIALIZATIONS -----------------------------------------------------------------------------------
+
+  // intialize loglik output variable
+  double loglik= 0;
+
   // get number of fixations to consider
   int fixnum = fixpos.size();
 
@@ -43,7 +46,7 @@ double dynamicaddm(float sd,
   int barrierUp = 1;
   int barrierDown = -1;
 
-  // Barriers by timesteps
+  // define barriers by timestep
   NumericVector barrierTimeUp(rt);
   NumericVector barrierTimeDown(rt);
 
@@ -54,13 +57,12 @@ double dynamicaddm(float sd,
 
   // Initialize potential decay
   //float decay = 0;
-
   //for (int i = 1; i < rt; i++){
   //   barrierTimeUp[i] = barrierUp /(1+decay*(i));
   //  barrierTimeDown[i] = barrierDown /(1+decay*(i));
   //}
 
-  // Define grid vertically
+  // Define positions in vertical grid
   int numStates = ((barrierUp - barrierDown)/stateStep) + 1;
   NumericVector states(numStates);
 
@@ -68,17 +70,19 @@ double dynamicaddm(float sd,
     states[i] = barrierUp - i*stateStep;
   }
 
-  // Initialize probability states (state in the middle zero for the moment)
+  // Initialize probability states
   NumericVector prStates(numStates);
-  int zeroPos = ((numStates-1)/2); // assuming odd number of states this provides the indice of the middle state (-1 in the end to account for vectors-indices starting at 0 in c++)
+
+  // Initialize starting point with probability 1
+  int zeroPos = ((numStates-1)/2); // note the '-1' is to account for indexing starting at 0
   prStates[zeroPos] = 1;
 
-  // Now initialize the vectors that collect the barrier crossing probabilities by timestep
+  // Initialize the vectors that collect the barrier crossing probabilities by timestep
   NumericVector upCrossing(rt);
   NumericVector downCrossing(rt);
 
   // Now main loop that propagates the model through the grid
-  // initialize a few variables that will be used in the loop
+  // Initialize a few variables that will be used in the loop
   NumericMatrix pCrossBarrierUp(numStates,2);
   NumericMatrix pCrossBarrierDown(numStates,2);
 
@@ -91,21 +95,15 @@ double dynamicaddm(float sd,
 
   // fresh probability states vector
   NumericVector PrStatesNew(numStates);
-  // a vector that stores current states we test for in inner for loop
-  //float to = 0;
-  // vector that stores current distance from all all states to the "to" states
-  NumericVector change(numStates);
-  // a temp variable may or may not be used for multiple purposes
-  float temp = 0;
 
   // storage variables used inside the for loop
-  //float changeUp = 0;
-  //float changeDown = 0;
   double tempUpCross = 0;
   double tempDownCross = 0;
   float sumIn = 0;
   float sumCurrent = 0;
   float ratioNewOld = 0;
+
+  float temp = 0; // state variable used inside the for loop
 
   // we precompute pnorm probabilities used for barrier crossings
   NumericMatrix pChange(numStates*2,2);
@@ -115,9 +113,12 @@ double dynamicaddm(float sd,
     pChange(i,0) = R::dnorm(stateStep*(i-numStates),drifts[0],sd,0);
     pChange(i,1) = R::dnorm(stateStep*(i-numStates),drifts[1],sd,0);
   }
+  //---------------------------------------------------------------------------------------------------------
 
+  // Run the grid -------------------------------------------------------------------------------------------
   int t = -1;
   int cur_fixpos = 0;
+
   for (int fixcnt = 0; fixcnt < fixnum; fixcnt++){
     cur_fixpos = fixpos[fixcnt];
     for (int cur_fixdur = 0; cur_fixdur < fixdur[fixcnt]; cur_fixdur++){
@@ -140,7 +141,7 @@ double dynamicaddm(float sd,
         }
       }
 
-      // now we store the barrier crossings and do some normalizations
+      // store the barrier crossings
       tempUpCross = 0;
       tempDownCross = 0;
       for(int i = 0; i < numStates;i++){
@@ -164,25 +165,27 @@ double dynamicaddm(float sd,
       tempDownCross = tempDownCross * ratioNewOld;
 
       for (int i=0;i<numStates;i++){
-        PrStatesNew[i] = PrStatesNew[i] * ratioNewOld;
+        //PrStatesNew[i] = PrStatesNew[i] * ratioNewOld;
         // make new states the old ones for next iteration
-        prStates[i] = PrStatesNew[i];
+        prStates[i] = PrStatesNew[i] * ratioNewOld;
       }
 
       upCrossing[t] = tempUpCross;
       downCrossing[t] = tempDownCross;
     }
   }
+  //---------------------------------------------------------------------------------------------------------------
 
-
-if (decision == 1){
-  return(out = upCrossing[t]);
-}  else {
-  return(out = downCrossing[t]);
+  // Return correct likelihood depending on supplied decision -----------------------------------------------------
+  if (decision == 1){
+    return(loglik= upCrossing[t]);
+  }  else {
+    return(loglik= downCrossing[t]);
+  }
+  //---------------------------------------------------------------------------------------------------------------
 }
 
 //    return List::create(_["upCrossing"] = upCrossing,
 //                        _["downCrossing"] = downCrossing,
 //                        _["pCrossBarrierUp"] = pCrossBarrierUp,
 //                        _["pCrossBarrierDown"] = pCrossBarrierDown);
-}

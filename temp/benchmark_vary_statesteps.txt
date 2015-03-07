@@ -1,9 +1,0 @@
-"model.type" "number.trials" "number.conditions" "set.sizes" "mean.time"
-"sim_by_trial" 100 10 2 0.1630449576
-"sim_by_trial" 100 10 4 0.770981487
-"sim_by_trial" 100 10 6 1.2630802422
-"sim_by_trial" 100 10 8 1.8569772442
-"sim_by_trial" 100 10 10 2.3222721126
-"sim_by_trial" 100 10 12 2.3568817296
-"sim_by_trial" 100 10 14 2.4354816964
-"sim_by_trial" 100 10 16 2.4699063092

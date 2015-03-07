@@ -1,19 +1,28 @@
+
+
+
+
 addmtoolbox: tutorial
 ========================================================
 author: Alexander Fengler
 date: 03.03.2015
-font-family: 'Helvetica'
+font-family: 'Helvetica';
 
+
+```{r, echo=FALSE}
+library(ggplot2)
+library(addmtoolbox)
+```
 
 
 
 aDDM: quick intro // equations
 ========================================================
-The Equations...
+<br>
 
+<p class="test"> <strong>Equations: 2 Items</strong></p>
  <br>
-
-Fixation left:
+<span><strong>Fixation left:</strong></span>
 <br> <br>
 $$
 \begin{aligned}
@@ -21,7 +30,7 @@ $$
 \end{aligned}
 $$
 
-Fixation right:
+<span><strong>Fixation right:</strong></span>
 <br> <br>
 $$
 \begin{aligned}
@@ -30,7 +39,7 @@ $$
 $$
 
 <br>
-Decision taken as soon as $V_t > 1$ or $V_t < -1$....
+Decision taken if $V_t > 1$ | $V_t < -1$ ....
 
 
 aDDM: quick intro // code
@@ -39,8 +48,7 @@ left: 30%
 
 Variables:
 <small style="font-size:.6em">
-
-```r
+```{r, tidy=TRUE}
 # Item Valuations
 v1 = 2
 v2 = 4
@@ -56,8 +64,31 @@ sd = 0.02
 ***
 Model:
 <small style="font-size:.6em">
+```{r, tidy = TRUE, eval=FALSE}
+fixpos.vector = rep(c(1,2,1,2),each=250)
+time = 1
 
-```r
+while (rdv < 1 & rdv > -1){
+
+  if (fixpos.vector[time] == 1){
+    rdv = rdv + d*(v1 - theta*v2) + rnorm(1,0,sd)
+  }
+
+  if (fixpos.vector[time] == 2){
+    rdv = rdv + d*(theta*v1 - v2) + rnorm(1,0,sd)
+  }
+
+  time = time + 1
+}
+```
+</small>
+
+
+
+aDDM: quick intro // visualization
+========================================================
+
+```{r, echo=FALSE, fig.align = 'center'}
 # Some Initializations
 rdv.vector = seq(1:1000)
 fixpos.vector = rep(c(1,2,1,2),each=250)
@@ -82,17 +113,35 @@ while (rdv < 1 & rdv > -1){
     break
   }
 }
+
+out.mat = data.frame(rdv = rdv.vector,
+                        time = seq(1:length(rdv.vector)),
+                        fixation.position = rep(c(1,2,1,2),each=250)[1:length(rdv.vector)])
+decision.time = which(out.mat[,1] >= 1 | out.mat[,1] <= -1)[1]
+out.mat$decision = 0
+out.mat$decision[decision.time] = 1
+
+
+addm.example.plot = ggplot(out.mat, aes(x=time,y=rdv)) +
+  geom_vline(xintercept = decision.time, size=1, color="red", linetype='dashed') + theme_bw(base_size = 14) +
+  geom_line(size=1, color="black") +
+  geom_hline(yintercep = 0, size = 0.5, linetype='dashed') +
+  geom_hline(yintercept = 1) +
+  geom_hline(yintercept = -1) +
+  geom_vline(xintercept = 250, size = 0.5, linetype = 'dashed') +
+  geom_vline(xintercept = 500, size = 0.5, linetype = 'dashed') +
+  geom_vline(xintercept = 750, size = 0.5, linetype = 'dashed') +
+  ylab("RDV") +
+  xlab("Time in ms") +
+  scale_x_continuous(expand = c(0, 0),limits = c(1,decision.time)) +
+  scale_y_continuous(limits = c(-1.2,1.2)) + theme(panel.border = element_blank(),
+                                                   axis.title.x=element_text(face="bold"),
+                                                   axis.title.y=element_text(face="bold"))
+
+addm.example.plot
 ```
-</small>
 
-
-
-aDDM: quick intro // visualization
-========================================================
-
-![plot of chunk unnamed-chunk-4](tutorial_intro-figure/unnamed-chunk-4-1.png) 
-
-aDDM quick intro // likelihood calculation
+aDDM quick intro // likelihood
 ========================================================
 
 We simulate the model (many times) with a given set of parameters...
@@ -153,6 +202,8 @@ addmtoolbox: functions
 
 Data Preprocessing
 
+Generate Fake Data
+
 Model Simulation
 
 Model Fitting
@@ -166,7 +217,9 @@ Plotting Results
 
 <br>
 
-**addm_dataprep()**
+**addm_preprocess()**
+
+**addm_generate...()**
 
 **addm_run...()**
 
@@ -212,22 +265,19 @@ Other functions with the same name are item general.
 addmtoolbox: documentation
 ========================================================
 General Package info:
-
-```r
+```{r}
 ?addmtoolbox
 ```
 
 Detailed function documentation:
 
-
-```r
+```{r}
 ?addm_dataprep
 ```
 
 Tutorials:
 
-
-```r
+```{r, eval = FALSE}
 # List Vignettes
 vignette(package = 'addmtoolbox')
 # Access Vignette
@@ -279,6 +329,45 @@ Detailed aDDM Output
 **addm_data_loglik_trial/condition**
 
 **addm_data_full_output**
+
+
+addmtoolbox: benchmarks //  1-6
+========================================================
+
+<img src="vary_setsize.png" align="right"></img>
+
+
+addmtoolbox: benchmarks //  2-6
+========================================================
+<img src="vary_statesteps.png" align="right"></img>
+
+addmtoolbox: benchmarks //  3-6
+========================================================
+
+<img src="vary_conditions.png" align="right"></img>
+
+addmtoolbox: benchmarks //  4-6
+========================================================
+
+<img src="vary_trials.png" align="right"></img>
+
+addmtoolbox: benchmarks //  5-6
+========================================================
+
+<img src="vary_numsimulations.png" align="right"></img>
+
+addmtoolbox: benchmark // 6-6
+========================================================
+<img src="vary_rt_dynamic.png" align="right"></img>
+
+wd
+========================================================
+<small style="font-size:.6em">
+```{r}
+getwd()
+
+```
+</small>
 
 addmtoolbox
 ========================================================
