@@ -6,13 +6,14 @@
 using namespace Rcpp;
 static Ziggurat::Ziggurat::Ziggurat zigg;
 
-//' Simulate aDDM process by unique trial condition (2 items)
+//' Simulate aDDM process by unique trial condition (2 items, multiattribute)
 //' @author Alexander Fengler, \email{alexanderfengler@@gmx.de}
 //' @title Simulate aDDM process (by condition, 2 items)
-//' \code{aevacc2_by_condition()}
+//' \code{aevaccma2_by_condition()}
 //' @return vector that stores decisions and rts for each simulation run
 //' @param sd standard deviation used for drift diffusion process
-//' @param theta theta used for drift diffusion process
+//' @param theta theta used for drift diffusion process [0,1]
+//' @param gamma secondary attentional bias which refers to attributes no inspected [0,1]
 //' @param drift drift-rate used for drift diffusion process
 //' @param non_decision_time non decision time used for drift diffusion process
 //' @param timestep timestep in ms associated with each step in the drift diffusion process
@@ -20,21 +21,19 @@ static Ziggurat::Ziggurat::Ziggurat zigg;
 //' @param maxdur maximum duration in ms that the process is allowed to simulate
 //' @param update Vector that stores the item valuations for the trial conditon simulated
 //' @param fixation_model a user supplied fixation model that will be utilized to supply fixation locations and potentially fixation durations
-//' @param gamma placeholder for interface consistency / see multiattribute versions for specification
-//' @param nr_attributes placeholder for interface consistency / see multiattribute versions for specification
 //' @export
 // [[Rcpp::export]]
-IntegerVector aevacc2_by_condition(float sd,
-                                   float theta,
-                                   float gamma,
-                                   float drift,
-                                   int non_decision_time,
-                                   int maxdur,
-                                   NumericVector update,
-                                   int nr_attributes,
-                                   Function fixation_model,
-                                   int nr_reps,
-                                   int timestep){
+IntegerVector aevaccma2_by_condition(float sd = 0,
+                                     float theta = 0,
+                                     float gamma = 0,
+                                     float drift = 0,
+                                     int non_decision_time = 0,
+                                     int maxdur = 0,
+                                     NumericVector update = 0,
+                                     int nr_attributes = 1,
+                                     Function fixation_model = 0,
+                                     int nr_reps = 0,
+                                     int timestep = 0){
 
   // Set seed for random sampler ------------------------------------------------------------------
   NumericVector seed(1);
@@ -47,8 +46,9 @@ IntegerVector aevacc2_by_condition(float sd,
   // ----------------------------------------------------------------------------------------------
 
   // Initialize Variables needed to propagate model -----------------------------------------------
-  int nr_items = update.size();
-    float rdv;
+  int nr_screen_positions = update.size();
+  int nr_items = nr_screen_positions / nr_attributes;
+  float rdv;
   bool decision = 0;
   int cur_rt = 0;
   int out_cnt = -2; // index for output vector
@@ -56,19 +56,51 @@ IntegerVector aevacc2_by_condition(float sd,
   int cur_fix_cnt = 0;
   int cur_fixpos_indice = 0;
 
-  NumericVector cur_update(nr_items);
-  for (int i = 0; i < nr_items; ++i){
-    update[i] = update[i]*drift;
-    cur_update[i] = theta*update[i];
-  }
-
   NumericMatrix fixdat = fixation_model(update);
   // ------------------------------------------------------------------------------------------------
 
-  // Outer loop cycles through simulation numbers --------------------------------------------------
+  // Precompute drifts for each fixation position ----------------------------------------------------
+  NumericMatrix updatemat(nr_attributes,2);
+  NumericVector drifts(2*nr_attributes);
+
+  // generate matrix that stores attribute wise values (rows) by item (columns)
+  for(int i = 0; i < nr_items; i++){
+    for (int j = 0; j < nr_attributes; j++){
+      updatemat(j,i) = update[((nr_attributes*i)+j)];
+    }
+  }
+
+  // use matrix to fill in drifts vector
+  for (int i = 0; i < nr_items; i++){
+    for (int j = 0; j < nr_attributes; j++){
+      for (int k = 0; k <nr_attributes; k++){
+        if (j == k){
+          if (i == 0){
+            drifts[((nr_attributes*i)+j)] += updatemat(j,i) - theta*updatemat(j,1);
+          } else {
+            drifts[((nr_attributes*i)+j)] += theta*updatemat(j,0) - updatemat(j,i);
+          }
+        } else {
+          if (i == 0){
+            drifts[((nr_attributes*i)+j)] += gamma*(updatemat(j,i) - theta*updatemat(j,1));
+          } else {
+            drifts[((nr_attributes*i)+j)] += gamma*(theta*updatemat(j,0) - updatemat(j,i));
+          }
+        }
+      }
+    }
+  }
+
+  // scale values in drifts vector according to current drift rate
+  for (int i = 0; i < drifts.size(); i++){
+    drifts[i] = drifts[i]*drift;
+  }
+  // -------------------------------------------------------------------------------------------------
+
+  // Outer loop cycles through simulation numbers ---------------------------------------------------
   for (int rep_cnt = 0; rep_cnt < nr_reps;++rep_cnt){
 
-    // Reset Variables before entering simulation ------------------------------------------------
+    // Reset Variables before entering simulation ---------------------------------------------------
     cur_rt = 0;
     cur_fix_cnt = 0;
     out_cnt += 2;
@@ -78,21 +110,20 @@ IntegerVector aevacc2_by_condition(float sd,
 
     // Compute fixation path
     fixdat = fixation_model(update);
-    // -------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------
 
-    // Propagate model through simulation run --------------------------------------------------
-    for (int fix_cnt = 0; fix_cnt < 1000; ++fix_cnt){  //
+    // Propagate model through simulation run ------------------------------------------------------
+    for (int fix_cnt = 0; fix_cnt < 1000; ++fix_cnt){
 
       // Make updates according to new fixation location ---------------------------------------
       cur_fixpos_indice = fixdat(fix_cnt,0) - 1;
-      cur_update[cur_fixpos_indice] = update[cur_fixpos_indice];
       // ---------------------------------------------------------------------------------------
 
       // Propagate Model through current fixation ----------------------------------------------
       for (int rt_cur_fix = 0; rt_cur_fix < fixdat(fix_cnt,1);rt_cur_fix += timestep){
 
         // Accumulate rdvence for current timestep
-        rdv += (cur_update[0] - cur_update[1]) + sd*zigg.norm();
+        rdv += drifts[cur_fixpos_indice] + sd*zigg.norm();
 
         //update RT
         cur_rt += timestep;
@@ -107,9 +138,6 @@ IntegerVector aevacc2_by_condition(float sd,
           break;
         }
       }
-
-      // revert back cur_update to neutral state (times theta for update everywhere)
-      cur_update[cur_fixpos_indice] = cur_update[cur_fixpos_indice]*theta;
 
       cur_fix_cnt +=  1;
 
@@ -141,3 +169,4 @@ IntegerVector aevacc2_by_condition(float sd,
 //void myzsetseed(unsigned long int x) {
 //  zigg.setSeed(x);
 //return; }
+

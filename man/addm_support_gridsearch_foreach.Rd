@@ -7,12 +7,15 @@
 addm_support_gridsearch_foreach(choice.dat = data.table(v1 = 0, v2 = 0, rt =
   0, decision = 0, id = 0), eye.dat = data.table(fixloc = 0, fixdur = 0, fixnr
   = 1, id = 0), conditions.dat = data.table(v1 = 0, v2 = 0, id = 0),
-  parameter.matrix = c(0.006, 0.6, 0.06, 0), nr.reps = 1000,
-  timestep = 10, model.type = "standard", fixation.model = "fixedpath",
-  fit.type = "condition", log.file = "defaultlog.txt", state.step = 0.1)
+  parameter.matrix = c(0.006, 0.6, 1, 0.06, 0), nr.attributes = 1,
+  nr.reps = 1000, timestep = 10, model.type = "standard",
+  fixation.model = "fixedpath", fit.type = "condition",
+  log.file = "defaultlog.txt", state.step = 0.1)
 }
 \arguments{
-\item{parameter.matrix}{matrix that provides the parameter space which is looped over. (drifts, thetas, sds, non decision times)}
+\item{parameter.matrix}{matrix that provides the parameter space which is looped over. (drifts, thetas, sds, non decision times / potentially gammas when using multiattribute case)}
+
+\item{nr.attributes}{integer providing the amount of attributes we consider per item}
 
 \item{nr.reps}{integer that tells the function how many simulation runs to use.}
 

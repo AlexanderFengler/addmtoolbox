@@ -5,13 +5,18 @@
 \title{Generate artificial dataset}
 \usage{
 addm_generate_artificial(set.size = 2, possible.valuations = c(0, 1, 2, 3),
-  model.parameters = c(0.002, 0.5, 0.07, 0), nr.reps = 100, timestep = 10,
-  rtbinsize = 100, nr.conditions = 10, model.type = "standard")
+  model.parameters = c(0.002, 0.5, 0.07, 0), nr.attributes = 1,
+  nr.reps = 100, timestep = 10, rtbinsize = 100, nr.conditions = 10,
+  model.type = "standard")
 }
 \arguments{
 \item{set.size}{Indicates the number of items that are allowed.}
 
 \item{possible.valuations}{Vector storing valuations that single items can hold in a choice set.}
+
+\item{model.parameters}{vector of parameters that will be used by the model to generate artificial choice/rt data}
+
+\item{nr.attributes}{integer providing the number of attributes that will be assigned to each item in the artificial choice set}
 
 \item{nr.reps}{An integer number that tells the function how many simulation runs to use.}
 

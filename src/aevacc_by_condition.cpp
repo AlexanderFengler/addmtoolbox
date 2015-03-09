@@ -24,14 +24,18 @@ static Ziggurat::Ziggurat::Ziggurat zigg;
 //' @param fixdur Vector that stores the fixation durations for a supplied fixed fixation pathway
 //' @param fixdursamples Vector from which fixation duration can be sampled once supplied fixations run out
 //' @param fixation_model a user supplied fixation model that will be utilized to supply fixation locations and potentially fixation durations
+//' @param gamma placeholder for interface consistency / see multiattribute versions for specification
+//' @param nr_attributes placeholder for interface consistency / see multiattribute versions for specification
 //' @export
 // [[Rcpp::export]]
 IntegerVector aevacc_by_condition(float sd,
                                   float theta,
+                                  float gamma,
                                   float drift,
                                   int non_decision_time,
                                   int maxdur,
                                   NumericVector update,
+                                  int nr_attributes,
                                   Function fixation_model,
                                   int nr_reps,
                                   int timestep){

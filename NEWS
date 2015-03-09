@@ -1,3 +1,10 @@
+addmtoolbox v0.2.27 =======================================================
+
+Enhancements:
+
+* partial implementation of multiattribute fitting for two item case: all fitting functions work,
+however it is not yet possible to get detailed model output (besides likelihood), likelihood plots that incoporate gamma and psychometric plots
+
 addmtoolbox v0.2.26 =======================================================
 
 Enhancements:

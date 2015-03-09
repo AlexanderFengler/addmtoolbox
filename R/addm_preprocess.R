@@ -22,6 +22,24 @@ addm_preprocess = function(choice.dat =  data.table(v1 = 0,v2 = 0,id = 0,rt = 0,
   setkey(eye,id)
   # ----------------------------------------------------------------------------------------------
 
+  # CHECK WHETHER WE ARE DEALING WITH MULTIPLE-ATTRIBUTE DATA-SET --------------------------------
+  num.attributes = 0
+  for (i in seq(1:1000)){
+    cur.str = paste("^v[0-9]",".a[",toString(i),"]",sep='')
+
+    if (length(grep(cur.str,names(choice))) < 1){
+      break
+    }
+    num.attributes = num.attributes + 1
+  }
+
+  if (num.attributes > 0){
+    attributes = num.attributes
+  } else {
+    attributes = 1
+  }
+  # ----------------------------------------------------------------------------------------------
+
   # PREPARE DATA TABLES --------------------------------------------------------------------------
 
   # We get a data.table that provides unique trial conditions
@@ -67,7 +85,8 @@ addm_preprocess = function(choice.dat =  data.table(v1 = 0,v2 = 0,id = 0,rt = 0,
   # RETURN LIST WITH CHOICE, EYE, CONDITIONS DATA ---------------------------------------------------
   return(list(choice.dat = choice,
               eye.dat = eye,
-              conditions.dat = conditions))
+              conditions.dat = conditions,
+              attributes = attributes))
   # -------------------------------------------------------------------------------------------------
   # -------------------------------------------------------------------------------------------------
 }

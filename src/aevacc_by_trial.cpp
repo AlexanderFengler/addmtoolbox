@@ -23,16 +23,20 @@ static Ziggurat::Ziggurat::Ziggurat zigg;
 //' @param update Vector that stores the item valuations for the trial conditon simulated
 //' @param fixpos Vector that stores the locations for a supplied fixed fixation pathway
 //' @param fixdur Vector that stores the fixation durations for a supplied fixed fixation pathway
+//' @param gamma placeholder for interface consistency / see multiattribute versions for specification
+//' @param nr_attributes placeholder for interface consistency / see multiattribute versions for specification
 //' @export
 // [[Rcpp::export]]
 int aevacc_by_trial(float sd,
                     float theta,
+                    float gamma,
                     float drift,
                     int non_decision_time,
                     int maxdur,
                     int mindur,
                     int cur_decision,
                     NumericVector update,
+                    int nr_attributes,
                     IntegerVector fixpos,
                     IntegerVector fixdur,
                     int nr_reps,

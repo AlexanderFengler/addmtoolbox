@@ -4,13 +4,17 @@
 \alias{aevacc2_by_trial}
 \title{Simulate aDDM process (by trial, 2 items)}
 \usage{
-aevacc2_by_trial(sd, theta, drift, non_decision_time, maxdur, mindur,
-  cur_decision, update, fixpos, fixdur, nr_reps, timestep)
+aevacc2_by_trial(sd = 0, theta = 0, gamma = 0, drift = 0,
+  non_decision_time = 0L, maxdur = 0L, mindur = 0L, cur_decision = 0L,
+  update = 0L, nr_attributes = 0L, fixpos = 0L, fixdur = 0L,
+  nr_reps = 0L, timestep = 0L)
 }
 \arguments{
 \item{sd}{standard deviation used for drift diffusion process}
 
 \item{theta}{theta (attentional bias) used for drift diffusion process}
+
+\item{gamma}{placeholder for interface consistency / see multiattribute versions for specification}
 
 \item{drift}{drift-rate used for drift diffusion process}
 
@@ -23,6 +27,8 @@ aevacc2_by_trial(sd, theta, drift, non_decision_time, maxdur, mindur,
 \item{cur_decision}{numeric variable that provides the empirical decision taken in trial}
 
 \item{update}{Vector that stores the item valuations for the trial conditon simulated}
+
+\item{nr_attributes}{placeholder for interface consistency / see multiattribute versions for specification}
 
 \item{fixpos}{Vector that stores the locations for a supplied fixed fixation pathway}
 

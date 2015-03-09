@@ -5,9 +5,10 @@
 \title{Fit addm using grid search}
 \usage{
 addm_fit_grid(data = list(choice.dat = NULL, eye.dat = NULL, conditions.dat =
-  NULL), drifts = seq(0.001, 0.0025, 5e-04), thetas = seq(0, 1, 0.25),
-  sds = seq(0.05, 0.09, 0.01), non.decision.times = 0, nr.reps = 1000,
-  timestep = 10, model.type = "standard", fixation.model = "fixedpath",
+  NULL, attributes = NULL), drifts = seq(0.001, 0.0025, 5e-04),
+  thetas = seq(0, 1, 0.25), gammas = 1, sds = seq(0.05, 0.09, 0.01),
+  non.decision.times = 0, nr.reps = 1000, timestep = 10,
+  model.type = "standard", fixation.model = "fixedpath",
   fit.type = "condition", allow.fine.grid = 0, coarse.to.fine.ratio = 4,
   log.file = "defaultlog.txt", parallel = 1, state.step = 0.1)
 }
@@ -16,7 +17,9 @@ addm_fit_grid(data = list(choice.dat = NULL, eye.dat = NULL, conditions.dat =
 
 \item{drifts}{vector of all driftrate values to be tested.}
 
-\item{thetas}{vector of all theta to be tested (between 0 and 1).}
+\item{thetas}{vector of all theta values to be tested [0,1].}
+
+\item{gammas}{vector of all gamma values to be tested [0,1] (matters only when supplying data with multiple attributes by item)}
 
 \item{sds}{vector of all standard deviation values to be tested.}
 

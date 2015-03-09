@@ -14,18 +14,18 @@ setkey(logliks,loglik)
 
 optimal.parameters = logliks[1,]
 
-p.coarse = ggplot(data = logliks[logliks$coarse == 1,], aes(y=loglik,x=sd,group = theta,color= theta))  +
+p.coarse = ggplot(data = logliks[logliks$coarse == 1,], aes(y = loglik,x = sd,group = theta,color = theta))  +
   facet_wrap(~ drift) +
   theme_bw(base_size = 14) +
-  theme(strip.background = element_blank(),axis.text.x = element_text(angle=-45,hjust=-0.05)) +
+  theme(strip.background = element_blank(),axis.text.x = element_text(angle = -45,hjust = -0.05)) +
   ggtitle("Log Likelihood (separated by drift rate)") +
   geom_line() + geom_point(data=optimal.parameters, size = 5, shape = 4, color = 'red')
 
 if (any(logliks[,coarse] == 0)){
-p.fine = ggplot(data = logliks[logliks$coarse == 0,], aes(y=loglik,x=sd,group = theta,color=as.factor(theta)))  +
+p.fine = ggplot(data = logliks[logliks$coarse == 0,], aes(y = loglik,x = sd,group = theta,color = as.factor(theta)))  +
   facet_wrap(~ drift) +
   theme_bw(base_size = 14) +
-  theme(strip.background = element_blank(),axis.text.x = element_text(angle=-45,hjust=-0.05)) +
+  theme(strip.background = element_blank(),axis.text.x = element_text(angle = -45,hjust = -0.05)) +
   ggtitle("Log Likelihood (separated by drift rate)") +
   geom_line()
 

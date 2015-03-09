@@ -20,14 +20,18 @@ static Ziggurat::Ziggurat::Ziggurat zigg;
 //' @param maxdur maximum duration in ms that the process is allowed to simulate
 //' @param update Vector that stores the item valuations for the trial conditon simulated
 //' @param fixation_model a user supplied fixation model that will be utilized to supply fixation locations and potentially fixation durations
+//' @param gamma placeholder for interface consistency / see multiattribute versions for specification
+//' @param nr_attributes placeholder for interface consistency / see multiattribute versions for specification
 //' @export
 // [[Rcpp::export]]
 NumericVector aevacc2_full_output(float sd,
                                   float theta,
+                                  float gamma,
                                   float drift,
                                   int non_decision_time,
                                   int maxdur,
                                   NumericVector update,
+                                  int nr_attributes,
                                   Function fixation_model,
                                   int nr_reps,
                                   int timestep){

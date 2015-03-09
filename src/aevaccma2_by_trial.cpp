@@ -7,13 +7,14 @@
 using namespace Rcpp;
 static Ziggurat::Ziggurat::Ziggurat zigg;
 
-//' Simulate aDDM process by unique trial (2 items)
-//' \code{aevacc2_by_trial()}
+//' Simulate aDDM process by unique trial (2 items // multiattribute)
+//' \code{aevaccma2_by_trial()}
 //' @author Alexander Fengler, \email{alexanderfengler@@gmx.de}
-//' @title Simulate aDDM process (by trial, 2 items)
+//' @title Simulate aDDM process (by trial, 2 items, multiattribute)
 //' @return numeric variable that provides a success count (runs that predicted a reaction time in the correct rt-bin and simultaneously the correct decision)
 //' @param sd standard deviation used for drift diffusion process
-//' @param theta theta (attentional bias) used for drift diffusion process
+//' @param theta theta (attentional bias) used for drift diffusion process [0,1]
+//' @param gamma secondary attentional bias which refers to attributes no inspected [0,1]
 //' @param drift drift-rate used for drift diffusion process
 //' @param non_decision_time non decision time used for drift diffusion process
 //' @param timestep timestep in ms associated with each step in the drift diffusion process
@@ -25,24 +26,22 @@ static Ziggurat::Ziggurat::Ziggurat zigg;
 //' @param fixpos Vector that stores the locations for a supplied fixed fixation pathway
 //' @param fixdur Vector that stores the fixation durations for a supplied fixed fixation pathway
 //' @param cur_maxfix integer that provides number of fixation in trial
-//' @param gamma placeholder for interface consistency / see multiattribute versions for specification
-//' @param nr_attributes placeholder for interface consistency / see multiattribute versions for specification
 //' @export
 // [[Rcpp::export]]
-int aevacc2_by_trial(float sd = 0,
-                     float theta = 0,
-                     float gamma = 0,
-                     float drift = 0,
-                     int non_decision_time = 0,
-                     int maxdur = 0,
-                     int mindur = 0,
-                     int cur_decision = 0,
-                     NumericVector update = 0,
-                     int nr_attributes = 0,
-                     IntegerVector fixpos = 0,
-                     IntegerVector fixdur = 0,
-                     int nr_reps = 0,
-                     int timestep = 0){
+int aevaccma2_by_trial(float sd,
+                       float theta,
+                       float gamma,
+                       float drift,
+                       int non_decision_time,
+                       int maxdur,
+                       int mindur,
+                       int cur_decision,
+                       NumericVector update,
+                       int nr_attributes,
+                       IntegerVector fixpos,
+                       IntegerVector fixdur,
+                       int nr_reps,
+                       int timestep){
 
   // Set seed for random sampler --------------------------------------------------------------------
   NumericVector seed(1);
@@ -55,27 +54,59 @@ int aevacc2_by_trial(float sd = 0,
   // ------------------------------------------------------------------------------------------------
 
   // Initialize Variables need for model propagation ------------------------------------------------
-  int nr_items = update.size();
+  int nr_screen_positions = update.size();
+  int nr_items = nr_screen_positions / nr_attributes;
   float rdv = 0;
   bool decision = 1;
   int maxpos = 0;
   int cur_rt = 0;
   int cur_fixpos_indice = 0;
   int num_fixpos = fixpos.size();
-  int cur_fixpos = 0;
   int cur_fix_cnt = 0;
+  // -------------------------------------------------------------------------------------------------
 
-  NumericVector cur_update(nr_items);
-  for (int i = 0; i < nr_items; ++i){
-    update[i] = update[i]*drift;
-    cur_update[i] = theta*update[i];
+  // Precompute drifts for each fixation position ----------------------------------------------------
+  NumericMatrix updatemat(nr_attributes,2);
+  NumericVector drifts(2*nr_attributes);
+
+  // generate matrix that stores attribute wise values (rows) by item (columns)
+  for(int i = 0; i < nr_items; i++){
+    for (int j = 0; j < nr_attributes; j++){
+      updatemat(j,i) = update[((nr_attributes*i)+j)];
+    }
   }
-  // ------------------------------------------------------------------------------------------------
 
-  // Cycle through simulations ----------------------------------------------------------------------
+  // use matrix to fill in drifts vector
+  for (int i = 0; i < nr_items; i++){
+    for (int j = 0; j < nr_attributes; j++){
+      for (int k = 0; k <nr_attributes; k++){
+        if (j == k){
+          if (i == 0){
+            drifts[((nr_attributes*i)+j)] += updatemat(j,i) - theta*updatemat(j,1);
+          } else {
+            drifts[((nr_attributes*i)+j)] += theta*updatemat(j,0) - updatemat(j,i);
+          }
+        } else {
+          if (i == 0){
+            drifts[((nr_attributes*i)+j)] += gamma*(updatemat(j,i) - theta*updatemat(j,1));
+          } else {
+            drifts[((nr_attributes*i)+j)] += gamma*(theta*updatemat(j,0) - updatemat(j,i));
+          }
+        }
+      }
+    }
+  }
+
+  // scale values in drifts vector according to current drift rate
+  for (int i = 0; i < drifts.size(); i++){
+    drifts[i] = drifts[i]*drift;
+  }
+  // -------------------------------------------------------------------------------------------------
+
+  // Cycle through simulations -----------------------------------------------------------------------
   for (int rep_cnt = 0; rep_cnt < nr_reps;++rep_cnt){
 
-    // reset variables before entering next simulation ----------------------------------------------
+    // reset variables before entering next simulation -----------------------------------------------
     cur_rt = 0;
     cur_fix_cnt = 0;
     decision = 0;
@@ -86,11 +117,8 @@ int aevacc2_by_trial(float sd = 0,
     for (int fix_cnt = 0; fix_cnt < num_fixpos; ++fix_cnt){  // maybe start fix_cnt at one?
 
       // get current fixation position
-      cur_fixpos = fixpos[fix_cnt];
-      cur_fixpos_indice = cur_fixpos - 1;
+      cur_fixpos_indice = fixpos[fix_cnt] - 1;
 
-      // adjust cur_update to reflect effect of current fixation
-      cur_update[cur_fixpos_indice] = update[cur_fixpos_indice];
 
       // propagate model ----------------------------------------------------------------------------
       for (int rt_cur_fix = 0; rt_cur_fix < fixdur[fix_cnt];rt_cur_fix += timestep){
@@ -98,7 +126,7 @@ int aevacc2_by_trial(float sd = 0,
         cur_rt += timestep;
 
         // accumulate evidence
-        rdv += cur_update[0] - cur_update[1] + sd*zigg.norm();
+        rdv += drifts[cur_fixpos_indice] + sd*zigg.norm();
 
         // check whether decision made
         if (rdv >= 1 || rdv <= -1){
@@ -110,9 +138,6 @@ int aevacc2_by_trial(float sd = 0,
           break;
         }
       }
-
-      // revert back cur_update to neutral state (times theta for update everywhere)
-      cur_update[cur_fixpos_indice] = cur_update[cur_fixpos_indice]*theta;
 
       // count fixation upwards
       cur_fix_cnt +=  1;

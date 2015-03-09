@@ -14,9 +14,9 @@ View(head(addm_data_eye))
 # --------------------------------------------------------------------------------------------
 
 # Preprocess data for easy usage with addmtoolbox --------------------------------------------
-addm_dat  = addm_dataprep(choice.dat = addm_data_choice,
-                          eye.dat = addm_data_eye,
-                          rtbinsize = 100, timestep = 10)
+addm_dat  = addm_preprocess(choice.dat = addm_data_choice,
+                            eye.dat = addm_data_eye,
+                            rtbinsize = 100, timestep = 10)
 
 # Look at the output
 addm_dat

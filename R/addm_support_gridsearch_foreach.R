@@ -5,12 +5,14 @@
 #' @return data.table with log likelihoods and corresponding parameter combinations
 #' @export
 #' @inheritParams addm_fit_grid
-#' @param parameter.matrix matrix that provides the parameter space which is looped over. (drifts, thetas, sds, non decision times)
+#' @param parameter.matrix matrix that provides the parameter space which is looped over. (drifts, thetas, sds, non decision times / potentially gammas when using multiattribute case)
+#' @param nr.attributes integer providing the amount of attributes we consider per item
 
 addm_support_gridsearch_foreach = function(choice.dat = data.table(v1 = 0, v2 = 0, rt = 0, decision = 0, id = 0),
                                            eye.dat = data.table(fixloc = 0, fixdur = 0, fixnr = 1, id = 0),
                                            conditions.dat = data.table(v1 = 0, v2 = 0, id = 0),
-                                           parameter.matrix = c(0.006,0.6,0.06,0),
+                                           parameter.matrix = c(0.006,0.6,1,0.06,0),
+                                           nr.attributes = 1,
                                            nr.reps = 1000,
                                            timestep = 10,
                                            model.type = 'standard',
@@ -18,7 +20,6 @@ addm_support_gridsearch_foreach = function(choice.dat = data.table(v1 = 0, v2 = 
                                            fit.type = 'condition',
                                            log.file = 'defaultlog.txt',
                                            state.step = 0.1){
-
   # Initialize iterator and output list --------------------------------------------------------------------------------------------------
   out = list(0)
   ita = iter(parameter.matrix,by="row")
@@ -31,6 +32,7 @@ addm_support_gridsearch_foreach = function(choice.dat = data.table(v1 = 0, v2 = 
     out[[1]] = foreach (i = ita,.combine='rbind') %dopar% addm_run_by_trial(choice.dat,
                                                                             eye.dat,
                                                                             i,
+                                                                            nr.attributes,
                                                                             nr.reps,
                                                                             timestep,
                                                                             model.type)
@@ -39,6 +41,7 @@ addm_support_gridsearch_foreach = function(choice.dat = data.table(v1 = 0, v2 = 
     out[[1]] = foreach (i = ita,.combine='rbind') %dopar% addm_run_by_condition(choice.dat,
                                                                                 conditions.dat,
                                                                                 i,
+                                                                                nr.attributes,
                                                                                 nr.reps,
                                                                                 timestep,
                                                                                 model.type,
@@ -49,6 +52,7 @@ addm_support_gridsearch_foreach = function(choice.dat = data.table(v1 = 0, v2 = 
     out[[1]] = foreach (i = ita,.combine='rbind') %dopar% addm_run_by_trial_dynamic(choice.dat,
                                                                                     eye.dat,
                                                                                     i,
+                                                                                    nr.attributes,
                                                                                     timestep,
                                                                                     state.step)
   }

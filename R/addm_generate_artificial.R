@@ -6,6 +6,8 @@
 #' @export
 #' @param set.size Indicates the number of items that are allowed.
 #' @param possible.valuations Vector storing valuations that single items can hold in a choice set.
+#' @param model.parameters vector of parameters that will be used by the model to generate artificial choice/rt data
+#' @param nr.attributes integer providing the number of attributes that will be assigned to each item in the artificial choice set
 #' @param timestep An integer number that provides the timestep-size that is used in the simulations (in ms).
 #' @param nr.reps An integer number that tells the function how many simulation runs to use.
 #' @param model.type A string that indicates which version of the model to run. 'standard' or 'memnoise' when memory effects shall be allowed.
@@ -16,6 +18,7 @@
 addm_generate_artificial = function(set.size = 2,
                                     possible.valuations = c(0,1,2,3),
                                     model.parameters = c(0.002,0.5,0.07,0),
+                                    nr.attributes = 1,
                                     nr.reps = 100,
                                     timestep = 10,
                                     rtbinsize = 100,
@@ -31,6 +34,7 @@ addm_generate_artificial = function(set.size = 2,
   test.dat = list(choice.dat = 0,
                   conditions.dat = conditions,
                   model.parameters = model.parameters,
+                  nr.attributes = 1,
                   nr.reps = nr.reps,
                   timestep = timestep,
                   model.type = model.type,

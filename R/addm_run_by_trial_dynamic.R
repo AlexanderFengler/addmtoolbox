@@ -7,20 +7,31 @@
 #' @param eye.dat data.table storing eyetracking data by trial. Fixation location (fixloc), Fixation number (fixnr), Fixation duration (fixdur) and a unique trial ids (id).
 #' @param choice.dat data.table storing the item valuations (v1,v2...), reaction times in ms (rt), decisions (decision) and unique trial ids (id).
 #' @param model.parameters vector with the four core addm parameters in order (drift.rate, theta, sd, non.decision.time).
+#' @param nr.attributes integer providing the amount of attributes we consider per item
 #' @param timestep integer number that provides the timestep-size that is used in the simulations (in ms).
 #' @param state.step numeric variable between 0 and 1, that indicate how finegrained the vertial grid is supposed to be
 
 addm_run_by_trial_dynamic = function(choice.dat = data.table(v1 = 0,v2 = 0, id = 0),
                                      eye.dat = data.table(fixloc = 0, fixdur = 0, fixnr = 1, id = 0),
                                      model.parameters = c(0.002,0.5,0.07,0),
+                                     nr.attributes = 1,
                                      timestep = 10,
                                      state.step = 0.1){
 
   # INITIALIZATION OF PARAMETERS -------------------------------------------------------------------------------------------------------
-  drift.rate = model.parameters[1]
-  theta = model.parameters[2]
-  cur.sd = model.parameters[3]
-  non.decision.time = model.parameters[4]
+  if (nr.attributes == 1){
+    drift.rate = model.parameters[1]
+    theta = model.parameters[2]
+    cur.sd = model.parameters[3]
+    non.decision.time = model.parameters[4]
+    gamma = 1
+  } else {
+    drift.rate = model.parameters[1]
+    theta = model.parameters[2]
+    gamma = model.parameters[3]
+    cur.sd = model.parameters[4]
+    non.decision.time = model.parameters[5]
+  }
   #-------------------------------------------------------------------------------------------------------------------------------------
 
   # OTHER INITIALIZATIONS --------------------------------------------------------------------------------------------------------------
@@ -31,13 +42,13 @@ addm_run_by_trial_dynamic = function(choice.dat = data.table(v1 = 0,v2 = 0, id =
   len.trials = length(choice.dat[,id])
 
   # Matrix that stores all valuations by trial
-  valuations=matrix(rep(0,len.trials*cur.set_size),nrow=cur.set_size,ncol=length(choice.dat[,id]))
+  valuations = matrix(rep(0,len.trials*cur.set_size),nrow=cur.set_size,ncol=length(choice.dat[,id]))
 
   # Define position of vector where valuations start
-  start.pos = which(names(choice.dat) == "v1")
+  start.pos = grep("^v1",names(choice.dat))[1]
 
   # fill up valuations matrix
-  for (i in seq(cur.set_size)){
+  for (i in seq_len(cur.set_size)){
     valuations[i,] = choice.dat[[start.pos + i - 1]]
   }
 
@@ -57,32 +68,49 @@ addm_run_by_trial_dynamic = function(choice.dat = data.table(v1 = 0,v2 = 0, id =
   rts = choice.dat[,rt]
   rts = rts / timestep
 
+  if (nr.attributes == 1){
+    aevacc = dynamicaddm
+  } else {
+    aevacc = dynamicmaaddm
+  }
+
   while(eye.row.cnt < len.eye){
     cur.maxfix[1] = eye.mat[eye.row.cnt,4]
 
     # Run Model
-     likelihoods[trial.cnt] = dynamicaddm(cur.sd,
-                                          theta,
-                                          drift.rate,
-                                          non.decision.time,
-                                          decisions[trial.cnt],
-                                          valuations[,trial.cnt],
-                                          eye.mat[eye.row.cnt:(eye.row.cnt + cur.maxfix - 1),1], # fixation locations
-                                          eye.mat[eye.row.cnt:(eye.row.cnt + cur.maxfix - 1),5], # fixation durations
-                                          rts[trial.cnt],
-                                          state.step)
+    likelihoods[trial.cnt] = aevacc(cur.sd,
+                                    theta,
+                                    gamma,
+                                    drift.rate,
+                                    non.decision.time,
+                                    decisions[trial.cnt],
+                                    valuations[,trial.cnt],
+                                    nr.attributes,
+                                    eye.mat[eye.row.cnt:(eye.row.cnt + cur.maxfix - 1),1], # fixation locations
+                                    eye.mat[eye.row.cnt:(eye.row.cnt + cur.maxfix - 1),5], # fixation durations
+                                    rts[trial.cnt],
+                                    state.step)
 
     trial.cnt[1] = trial.cnt + 1
     eye.row.cnt[1] = eye.row.cnt + cur.maxfix
   }
   # CONTINUE BY CALCULATING LOG LIKELIHOOD----------------------------------------------------------------------------------------------
-
-  total.log.lik = c(drift.rate,
-                    theta,
-                    cur.sd,
-                    non.decision.time,
-                    0,
-                    (-1)*sum(log(likelihoods)))
+  if (nr.attributes == 1){
+    total.log.lik = c(drift.rate,
+                      theta,
+                      cur.sd,
+                      non.decision.time,
+                      0,
+                      (-1)*sum(log(likelihoods)))
+  } else {
+    total.log.lik = c(drift.rate,
+                      theta,
+                      gamma,
+                      cur.sd,
+                      non.decision.time,
+                      0,
+                      (-1)*sum(log(likelihoods)))
+  }
 
   print(total.log.lik)
   return(total.log.lik)

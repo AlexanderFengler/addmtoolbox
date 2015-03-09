@@ -4,17 +4,17 @@
 \alias{addm_support_compute_finegrid}
 \title{Compute fine grid best parameters from coarse grid search (internal)}
 \usage{
-addm_support_compute_finegrid(drift.step.fine = 0, sd.step.fine = 0,
-  thetas = 0, non.decision.time.step.fine = 0, coarse.to.fine.ratio = 0,
-  log.liks = data.table(drift = 0, theta = 0, sd = 0, non.decision.time = 0,
-  nr.reps = 0, loglik = 0))
+addm_support_compute_finegrid(drift.step.fine = 0, thetas = 0, gammas = 0,
+  sd.step.fine = 0, non.decision.time.step.fine = 0,
+  coarse.to.fine.ratio = 0, nr.attributes = 1, log.liks = data.table(drift
+  = 0, theta = 0, sd = 0, non.decision.time = 0, nr.reps = 0, loglik = 0))
 }
 \arguments{
 \item{drift.step.fine}{numeric variable storing precision with which drift rate space is searched in the fine grid parameter matrix.}
 
-\item{sd.step.fine}{numeric variable storing precision with which standard deviation space is searched in the fine grid parameter matrix.}
-
 \item{thetas}{numeric variable storing testable thetas. The theta space is not changed in the fine parameter matrix.}
+
+\item{sd.step.fine}{numeric variable storing precision with which standard deviation space is searched in the fine grid parameter matrix.}
 
 \item{non.decision.time.step.fine}{numeric variable storing precision with which non.decision.time space is searched in the fine grid parameter matrix.}
 

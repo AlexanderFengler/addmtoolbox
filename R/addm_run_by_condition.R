@@ -7,6 +7,7 @@
 #' @param conditions.dat  data.table storing the item valuations (v1,v2...) by unique trial conditions. An id column (conditions_id) needs to be provided
 #' @param choice.dat data.table storing the item valuations (v1,v2...), reaction times in ms (rt), decisions as decision and an id column (conditions_id).
 #' @param model.parameters vector with the four core addm parameters in order (drift.rate, theta, sd, non.decision.time).
+#' @param nr.attributes integer providing the amount of attributes we consider per item
 #' @param nr.reps integer that tells the function how many simulation runs to use.
 #' @param model.type string that indicates which version of the model to run. 'standard' for standard (a)ddm model or 'memnoise' when memory effects shall be allowed.
 #' @param output.type string that indicates what output the model shall produce. 'full' for detailed model output, 'fit' for sparse output (rt,decision) by id variable.
@@ -17,6 +18,7 @@
 addm_run_by_condition = function(choice.dat = data.table(decision = 0, rt = 0, condition_id = 0),
                                  conditions.dat = data.table(v1 = 0, v2 = 0, condition_id = 0),
                                  model.parameters = c(0.002,0.6,0.07,0),
+                                 nr.attributes = 1,
                                  nr.reps = 1000,
                                  timestep = 10,
                                  model.type = 'standard',
@@ -25,11 +27,19 @@ addm_run_by_condition = function(choice.dat = data.table(decision = 0, rt = 0, c
                                  generate = 0){
 
   # INITIALIZATION OF PARAMETERS AND RELEVANT SUBSETS OF DATA FRAMES--------------------------------------------------------------------
-  # Initialize model parameters
-  drift.rate = model.parameters[1]
-  theta = model.parameters[2]
-  cur.sd = model.parameters[3]
-  non.decision.time = model.parameters[4]
+  if (nr.attributes == 1){
+    drift.rate = model.parameters[1]
+    theta = model.parameters[2]
+    cur.sd = model.parameters[3]
+    non.decision.time = model.parameters[4]
+    gamma = 1
+  } else {
+    drift.rate = model.parameters[1]
+    theta = model.parameters[2]
+    gamma = model.parameters[3]
+    cur.sd = model.parameters[4]
+    non.decision.time = model.parameters[5]
+  }
   #-------------------------------------------------------------------------------------------------------------------------------------
 
   # SOME MISCELLANEOUS VARIABLES THAT ARE UTILIZED LATER--------------------------------------------------------------------------------
@@ -52,9 +62,9 @@ addm_run_by_condition = function(choice.dat = data.table(decision = 0, rt = 0, c
   valuations=matrix(rep(0,len.trials*cur.set_size),nrow=cur.set_size,ncol=len.trials)
 
   # Define position of vector where valuations start
-  start.pos = which(names(conditions.dat) == "v1")
+  start.pos =  grep("^v1",names(conditions.dat))[1]
 
-  for (i in seq(cur.set_size)){
+  for (i in seq_len(cur.set_size)){
     valuations[i,] = conditions.dat[[start.pos + i - 1]]
   }
 
@@ -86,23 +96,47 @@ addm_run_by_condition = function(choice.dat = data.table(decision = 0, rt = 0, c
   # DEFINE CORRCT EVIDENCE ACCUMULATION FUNCTION GIVEN INPUTS---------------------------------------------------------------------------
   if (model.type == "standard"){
     if (output.type == "fit"){
-      if (cur.set_size == 2){
-        aevacc = aevacc2_by_condition
+      if (nr.attributes == 1){
+        if (cur.set_size == 2){
+          aevacc = aevacc2_by_condition
+        } else {
+          aevacc = aevacc_by_condition
+        }
       } else {
-        aevacc = aevacc_by_condition
+        if (cur.set_size == 2){
+          aevacc = aevaccma2_by_condition
+        } else {
+          stop('You attempted to run a set of > 2 items which have multiple attributes each: This is not yet implemented!')
+        }
       }
     } else if (output.type == "full"){
       if (cur.set_size == 2){
+        if (nr.attributes == 1){
         aevacc = aevacc2_full_output
+        } else {
+          stop('You attempted to get detailed model output for a multiattributes version of the model: This is not yet implemented!')
+        }
       } else {
-        aevacc = aevacc_full_output_memnoise
+        if (nr.attributes ==1){
+          aevacc = aevacc_full_output_memnoise
+        } else {
+          stop('You attempted to get detailed model output for a multiattributes version of the model: This is not yet implemented!')
+        }
       }
     }
   } else if (model.type == "memnoise"){
     if (output.type == "fit"){
+      if (nr.attributes == 1){
       aevacc = aevacc_by_condition_memnoise
+      } else {
+        stop('You attempted to fit a model with memory effects as well as multiple attributes per item: This is not yet implemented!')
+      }
     } else if (output.type == "full"){
+      if (nr.attributes == 1){
       aevacc = aevacc_full_output_memnoise
+      } else {
+        stop('You attempted to fit a model with memory effect as well as mutliple attributes per item: This is not yet implemented!')
+      }
     }
   }
   #-------------------------------------------------------------------------------------------------------------------------------------
@@ -110,7 +144,11 @@ addm_run_by_condition = function(choice.dat = data.table(decision = 0, rt = 0, c
   # INITIALIZE FIXATION PATHWAYS -------------------------------------------------------------------------------------------------------
   if (fixation.model == "fixedpath"){
     if (cur.set_size == 2){
-      fixation_model = addm2_fixation_model_fixedpath
+      if (nr.attributes == 1){
+        fixation_model = addm2_fixation_model_fixedpath
+      } else {
+        fixation_model = addm_fixation_model_fixedpath
+      }
     } else {
       fixation_model = addm_fixation_model_fixedpath
     }
@@ -118,7 +156,11 @@ addm_run_by_condition = function(choice.dat = data.table(decision = 0, rt = 0, c
 
   if (fixation.model == "random"){
     if (cur.set_size == 2){
-      fixation_model = addm2_fixation_model_random
+      if (nr.attributes == 1){
+        fixation_model = addm2_fixation_model_random
+      } else {
+        fixation_model = addm_fixation_model_random
+      }
     } else {
       fixation_model = addm_fixation_model_random
     }
@@ -138,10 +180,12 @@ addm_run_by_condition = function(choice.dat = data.table(decision = 0, rt = 0, c
   for (id in ids){
     output[] = aevacc(cur.sd,
                       theta,
+                      gamma,
                       drift.rate,
                       non.decision.time,
                       cur.max.RT,
                       valuations[,cnt],
+                      nr.attributes,
                       fixation_model,
                       nr.reps,
                       timestep)
@@ -208,7 +252,11 @@ addm_run_by_condition = function(choice.dat = data.table(decision = 0, rt = 0, c
     # -----------------------------------------------------------------------------------------------------------------------------------
 
     # STORE AND RETURN ------------------------------------------------------------------------------------------------------------------
-    total.log.lik = c(drift.rate,theta,cur.sd,non.decision.time,nr.reps,LogLik)
+    if (nr.attributes == 1){
+      total.log.lik = c(drift.rate,theta,cur.sd,non.decision.time,nr.reps,LogLik)
+    } else {
+      total.log.lik  = c(drift.rate, theta, gamma, cur.sd, non.decision.time, nr.reps, LogLik)
+    }
     print(total.log.lik)
     return(total.log.lik)
     # -----------------------------------------------------------------------------------------------------------------------------------

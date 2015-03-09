@@ -7,31 +7,31 @@ using namespace Rcpp;
 //' \code{dynamicaddm()}
 //' @return numeric variable storing likelihood value
 //' @param sd standard deviation used for drift diffusion process
-//' @param theta theta used for drift diffusion process
-//' @param gamma placeholder for interface consistency / see multiattribute versions for specification
+//' @param theta theta used for drift diffusion process [0,1]
+//' @param gamma secondary attentional bias which refers to attributes no inspected [0,1]
 //' @param drift drift-rate used for drift diffusion process
 //' @param non_decision_time non decision time used for drift diffusion process
 //' @param decision integer which gives choice in current trial (1 or 2)
 //' @param rt reaction time of provided trial
 //' @param valuations vector that stores the item valuations for the provided trial
-//' @param nr_attributes placeholder for interface consistency / see multiattribute versions for specification
+//' @param nr_attributes integer which gives the number of attributes by item
 //' @param fixpos vector with all empirical fixations positions encountered in provided trial
 //' @param fixdur vector with all empirical fixation durations encounrtered in provided trial
 //' @param stateStep numeric variable between [0,1] that indicates how finegrained the vertical grid of the model space shall be computed
 //' @export
 // [[Rcpp::export]]
-double dynamicaddm(float sd = 0,
-                   float theta = 0,
-                   float gamma = 0,
-                   float drift = 0,
-                   int non_decision_time = 0,
-                   int decision = 0,
-                   NumericVector valuations = 0,
-                   int nr_attributes = 0,
-                   NumericVector fixpos = 0,
-                   NumericVector fixdur = 0,
-                   int rt = 0,
-                   float stateStep = 0){
+double dynamicmaaddm(float sd = 0,
+                     float theta = 0,
+                     float gamma = 0,
+                     float drift = 0,
+                     int non_decision_time = 0,
+                     int decision = 0,
+                     NumericVector valuations = 0,
+                     int nr_attributes = 0,
+                     NumericVector fixpos = 0,
+                     NumericVector fixdur = 0,
+                     int rt = 0,
+                     float stateStep = 0){
 
   // INITIALIZATIONS -----------------------------------------------------------------------------------
 
@@ -40,11 +40,48 @@ double dynamicaddm(float sd = 0,
 
   // get number of fixations to consider
   int fixnum = fixpos.size();
+  int nr_screen_positions = valuations.size();
+  int nr_items = nr_screen_positions / nr_attributes;
 
-  // generate the two drifts corresponding to potential fixation locations
-  NumericVector drifts(2);
-  drifts[0] = drift*(valuations[0] - theta*valuations[1]);
-  drifts[1] = drift*(theta*valuations[0] - valuations[1]);
+  // Precompute drifts for each fixation position ----------------------------------------------------
+  NumericMatrix valuationsmat(nr_attributes,2);
+  NumericVector drifts(2*nr_attributes);
+
+  // generate matrix that stores attribute wise values (rows) by item (columns)
+  for(int i = 0; i < nr_items; i++){
+    for (int j = 0; j < nr_attributes; j++){
+      valuationsmat(j,i) = valuations[((nr_attributes*i)+j)];
+    }
+  }
+
+  // use matrix to fill in drifts vector
+  for (int i = 0; i < nr_items; i++){
+    for (int j = 0; j < nr_attributes; j++){
+      for (int k = 0; k <nr_attributes; k++){
+        if (j == k){
+          if (i == 0){
+            drifts[((nr_attributes*i)+j)] += valuationsmat(j,i) - theta*valuationsmat(j,1);
+          } else {
+            drifts[((nr_attributes*i)+j)] += theta*valuationsmat(j,0) - valuationsmat(j,i);
+          }
+        } else {
+          if (i == 0){
+            drifts[((nr_attributes*i)+j)] += gamma*(valuationsmat(j,i) - theta*valuationsmat(j,1));
+          } else {
+            drifts[((nr_attributes*i)+j)] += gamma*(theta*valuationsmat(j,0) - valuationsmat(j,i));
+          }
+        }
+      }
+    }
+  }
+
+  // scale values in drifts vector according to current drift rate
+  for (int i = 0; i < drifts.size(); i++){
+    drifts[i] = drifts[i]*drift;
+  }
+
+  // -------------------------------------------------------------------------------------------------
+
 
   // define barriers
   int barrierUp = 1;
@@ -87,14 +124,14 @@ double dynamicaddm(float sd = 0,
 
   // Now main loop that propagates the model through the grid
   // Initialize a few variables that will be used in the loop
-  NumericMatrix pCrossBarrierUp(numStates,2);
-  NumericMatrix pCrossBarrierDown(numStates,2);
+  NumericMatrix pCrossBarrierUp(numStates,nr_items*nr_attributes);
+  NumericMatrix pCrossBarrierDown(numStates,nr_items*nr_attributes);
 
-  for (int i = 0; i < numStates;i++){
-    pCrossBarrierUp(i,0) = R::pnorm(stateStep*i,drifts[0],sd,0,0);
-    pCrossBarrierDown(i,0) = R::pnorm((numStates-i-1)*stateStep,-drifts[0],sd,0,0);
-    pCrossBarrierUp(i,1) = R::pnorm(stateStep*i,drifts[1],sd,0,0);
-    pCrossBarrierDown(i,1) = R::pnorm((numStates-i-1)*stateStep,-drifts[1],sd,0,0);
+  for (int j = 0; j < drifts.size(); j++){
+    for (int i = 0; i < numStates;i++){
+      pCrossBarrierUp(i,j) = R::pnorm(stateStep*i,drifts[j],sd,0,0);
+      pCrossBarrierDown(i,j) = R::pnorm((numStates-i-1)*stateStep,-drifts[j],sd,0,0);
+    }
   }
 
   // fresh probability states vector
@@ -110,12 +147,13 @@ double dynamicaddm(float sd = 0,
   float temp = 0; // state variable used inside the for loop
 
   // we precompute pnorm probabilities used for barrier crossings
-  NumericMatrix pChange(numStates*2,2);
+  NumericMatrix pChange(numStates*2,nr_items*nr_attributes);
 
   int curmax = numStates*2;
-  for(int i = 0; i < curmax;i++){
-    pChange(i,0) = R::dnorm(stateStep*(i-numStates),drifts[0],sd,0);
-    pChange(i,1) = R::dnorm(stateStep*(i-numStates),drifts[1],sd,0);
+  for(int j = 0; j < drifts.size(); j++){
+    for(int i = 0; i < curmax;i++){
+      pChange(i,j) = R::dnorm(stateStep*(i-numStates),drifts[j],sd,0);
+    }
   }
   //---------------------------------------------------------------------------------------------------------
 
@@ -182,9 +220,9 @@ double dynamicaddm(float sd = 0,
 
   // Return correct likelihood depending on supplied decision -----------------------------------------------------
   if (decision == 1){
-    return(loglik= upCrossing[t]);
+    return(loglik = upCrossing[t]);
   }  else {
-    return(loglik= downCrossing[t]);
+    return(loglik = downCrossing[t]);
   }
   //---------------------------------------------------------------------------------------------------------------
 }
@@ -193,3 +231,4 @@ double dynamicaddm(float sd = 0,
 //                        _["downCrossing"] = downCrossing,
 //                        _["pCrossBarrierUp"] = pCrossBarrierUp,
 //                        _["pCrossBarrierDown"] = pCrossBarrierDown);
+

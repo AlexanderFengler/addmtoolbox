@@ -13,10 +13,12 @@
 
 
 addm_support_compute_finegrid = function(drift.step.fine = 0,
-                                         sd.step.fine = 0,
                                          thetas = 0,
+                                         gammas = 0,
+                                         sd.step.fine = 0,
                                          non.decision.time.step.fine = 0,
                                          coarse.to.fine.ratio = 0,
+                                         nr.attributes = 1,
                                          log.liks = data.table(drift = 0, theta = 0, sd = 0, non.decision.time = 0, nr.reps = 0, loglik = 0)){
 
   # Get parameter values at minimum log likelihood -------------------------------------------------------------------
@@ -47,10 +49,23 @@ addm_support_compute_finegrid = function(drift.step.fine = 0,
   fine.sds = seq(center.sd-(coarse.to.fine.ratio-1)*sd.step.fine,
                  center.sd+(coarse.to.fine.ratio-1)*sd.step.fine*2,
                  sd.step.fine)
+
+  fine.gammas = gammas
   # ------------------------------------------------------------------------------------------------------------------
 
   # Make and return parameter matrix ---------------------------------------------------------------------------------
-  fine.grid = as.matrix(expand.grid(fine.drifts,fine.sds,fine.thetas,fine.non.decision.times))
+  if (nr.attributes == 1){
+    fine.grid = as.matrix(expand.grid(fine.drifts,
+                                      fine.thetas,
+                                      fine.sds,
+                                      fine.non.decision.times))
+  } else {
+    fine.grid = as.matrix(expand.grid(fine.drifts,
+                                      fine.thetas,
+                                      fine.gammas,
+                                      fine.sds,
+                                      fine.non.decision.times))
+  }
   return(fine.grid)
   # ------------------------------------------------------------------------------------------------------------------
 }
