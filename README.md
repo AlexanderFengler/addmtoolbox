@@ -14,17 +14,11 @@ Having that said, the package will improve dramatically in the next weeks/month 
 ---
 The following guide is specifically for Mac OS systems. Windows systems have not yet been tested. On Linux/Ubuntu system, directly follow up with step: *"Installing addmtoolbox from github"*,  as gsl is often/always included in the distribution as well as all utilities that you gain on Macs by installing [***Xcode***](https://developer.apple.com/xcode/). This guide will carry you through the complete installation process, starting from the installation of the ***R progamming language*** on your system.
 
-### R
-As the ***addmtoolbox*** is designed for ***R***, we should start with getting the ***R*** programming language ready for usage on our system (if not present). The package is built under ***R Version 3.1.2.*** and I strongly suggest to [install this](http://cran.cnr.berkeley.edu) or (if present) a later version.
-
-### RStudio
-The de-facto standard ***IDE*** for ***R*** programming. I strongly suggest that you download [this version](http://www.rstudio.com/products/rstudio/download/preview/). In the following I assume that you use [***RStudio***](http://www.rstudio.com/) as your ***IDE***.
-
-
 ### Installation relevant dependencies
 The ***addmtoolbox*** package depends notably on the ***RcppZiggurat*** package which in turn depends on the ***RcppGSL*** package. For the ***RcppGSL*** package to work, we need to install the [***GNU GSL scientific library***](http://www.gnu.org/software/gsl/). 
 
-Moreover, you need to have [***Xcode***](https://developer.apple.com/xcode/) installed on your system, which if not present can be downloaded for free from the [***Apple Appstore***](https://itunes.apple.com/de/app/xcode/id497799835?mt=12).
+First, you need to have [***Xcode***](https://developer.apple.com/xcode/) installed on your system, which if not present can be downloaded for free from the [***Apple Appstore***](https://itunes.apple.com/de/app/xcode/id497799835?mt=12). After installing 
+[***Xcode***](https://developer.apple.com/xcode/), you also need the [***command line tools***](https://idmsa.apple.com/IDMSWebAuth/login?&appIdKey=891bd3417a7776362562d2197f89480a8547b108fd934911bcbea0110d07f757&path=%2F%2Fdownloads%2Findex.action) from Apple (Apple wants you to sign in to download those).
 
 ### Installing GSL Library
 Below is a step by step guide to installing the [***GNU GSL scientific library***](http://www.gnu.org/software/gsl/).
@@ -34,7 +28,15 @@ Below is a step by step guide to installing the [***GNU GSL scientific library**
 3. Type ```./configure``` wait until the the execution finished and then type ```make``` to build the library. (you can find these instructions in the ***INSTALL*** file inside of the downloaded ***gsl*** folder). The build process takes a while now.
 4. Lastly type ```make install```, which will finally install the library on your system. It is likely that you have to use ```sudo make install```, as the default folder which the library is installed in requires superuser access.
 
-By now we can proceed by opening [***RStudio***](http://www.rstudio.com/).
+### R
+Please proceed only if you have successfully installed [***Xcode***](https://developer.apple.com/xcode/) and the [***command line tools***](https://idmsa.apple.com/IDMSWebAuth/login?&appIdKey=891bd3417a7776362562d2197f89480a8547b108fd934911bcbea0110d07f757&path=%2F%2Fdownloads%2Findex.action). If you install ***R*** without these things present on you system, there is some risk that the ***addmtoolbox*** will not run/install. 
+
+Given that you followed the instructions so far, we are now ready to  get the ***R*** programming language ready for usage on our system (if not present). The package is built under ***R Version 3.1.2.*** and I strongly suggest to [install this](http://cran.cnr.berkeley.edu) or (if present) a later version.
+
+### RStudio
+The de-facto standard ***IDE*** for ***R*** programming. I strongly suggest that you download [this version](http://www.rstudio.com/products/rstudio/download/preview/). In the following I assume that you use [***RStudio***](http://www.rstudio.com/) as your ***IDE***.
+
+We can proceed by opening [***RStudio***](http://www.rstudio.com/).
 
 ### Installing addmtoolbox from github
 
