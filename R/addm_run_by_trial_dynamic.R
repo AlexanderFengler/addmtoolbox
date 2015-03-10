@@ -36,7 +36,12 @@ addm_run_by_trial_dynamic = function(choice.dat = data.table(v1 = 0,v2 = 0, id =
 
   # OTHER INITIALIZATIONS --------------------------------------------------------------------------------------------------------------
   # Get set size of current data set
-  cur.set_size = length(grep("^v[0-9]$",names(choice.dat)))
+  cur.set_size = length(grep("^v[0-9]",names(choice.dat)))
+
+  if ((cur.set_size / nr.attributes) != 2) {
+    print(cur.set_size/nr.attributes)
+    stop('You attempted to run a set of > 2 items which have multiple attributes each (dynamic): This is not yet implemented!')
+  }
 
   # Initialize amount of trials supplied
   len.trials = length(choice.dat[,id])
@@ -69,7 +74,11 @@ addm_run_by_trial_dynamic = function(choice.dat = data.table(v1 = 0,v2 = 0, id =
   rts = rts / timestep
 
   if (nr.attributes == 1){
-    aevacc = dynamicaddm
+    if (theta == 1){
+      aevacc = dynamicddm
+    } else{
+      aevacc = dynamicaddm
+    }
   } else {
     aevacc = dynamicmaaddm
   }

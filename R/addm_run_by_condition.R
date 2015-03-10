@@ -79,8 +79,8 @@ addm_run_by_condition = function(choice.dat = data.table(decision = 0, rt = 0, c
   }
 
   if (output.type == "full"){
+    if (nr.attributes == 1){
     addm.output = matrix(rep(-1,nr_rows*(4 + 6 +(2*cur.set_size))),nrow = nr_rows, ncol = 4 + 6 +(2*cur.set_size))
-
     addm.output[,1] = drift.rate
     addm.output[,2] = theta
     addm.output[,3] = cur.sd
@@ -88,8 +88,21 @@ addm_run_by_condition = function(choice.dat = data.table(decision = 0, rt = 0, c
 
     # output cols are the columns in which the output (Choices and RT's) will be stored
     output = rep(0,(6+(2*cur.set_size))*nr.reps)
-    output.cols = seq(5,4 + 6 +(2*cur.set_size))
+    output.cols = seq(5, 4 + 6 +(2*cur.set_size))
     nr.output.cols = length(output.cols)
+    } else {
+      addm.output = matrix(rep(-1,nr_rows*(5 + 6 +(2*cur.set_size))),nrow = nr_rows, ncol = 5 + 6 +(2*cur.set_size))
+      addm.output[,1] = drift.rate
+      addm.output[,2] = theta
+      addm.output[,3] = gamma
+      addm.output[,4] = cur.sd
+      addm.output[,5] = non.decision.time
+
+      # output cols are the columns in which the output (Choices and RT's) will be stored
+      output = rep(0, (6 + (2*cur.set_size))*nr.reps)
+      output.cols = seq(6, 5 + 6 + (2*cur.set_size))
+      nr.output.cols = length(output.cols)
+    }
   }
   #-------------------------------------------------------------------------------------------------------------------------------------
 
@@ -97,27 +110,31 @@ addm_run_by_condition = function(choice.dat = data.table(decision = 0, rt = 0, c
   if (model.type == "standard"){
     if (output.type == "fit"){
       if (nr.attributes == 1){
-        if (cur.set_size == 2){
-          aevacc = aevacc2_by_condition
+        if (cur.set_size / nr.attributes == 2){
+          if (theta ==1){
+            aevacc = evacc2_by_condition
+          } else {
+            aevacc = aevacc2_by_condition
+          }
         } else {
           aevacc = aevacc_by_condition
         }
       } else {
-        if (cur.set_size == 2){
+        if (cur.set_size / nr.attributes == 2){
           aevacc = aevaccma2_by_condition
         } else {
-          stop('You attempted to run a set of > 2 items which have multiple attributes each: This is not yet implemented!')
+          stop('You attempted to run a set of > 2 items which have multiple attributes each (by condition): This is not yet implemented!')
         }
       }
     } else if (output.type == "full"){
-      if (cur.set_size == 2){
+      if (cur.set_size / nr.attributes == 2){
         if (nr.attributes == 1){
-        aevacc = aevacc2_full_output
+          aevacc = aevacc2_full_output
         } else {
-          stop('You attempted to get detailed model output for a multiattributes version of the model: This is not yet implemented!')
+          aevacc = aevaccma2_full_output
         }
       } else {
-        if (nr.attributes ==1){
+        if (nr.attributes == 1){
           aevacc = aevacc_full_output_memnoise
         } else {
           stop('You attempted to get detailed model output for a multiattributes version of the model: This is not yet implemented!')
@@ -139,11 +156,12 @@ addm_run_by_condition = function(choice.dat = data.table(decision = 0, rt = 0, c
       }
     }
   }
+
   #-------------------------------------------------------------------------------------------------------------------------------------
 
   # INITIALIZE FIXATION PATHWAYS -------------------------------------------------------------------------------------------------------
   if (fixation.model == "fixedpath"){
-    if (cur.set_size == 2){
+    if (cur.set_size / nr.attributes == 2){
       if (nr.attributes == 1){
         fixation_model = addm2_fixation_model_fixedpath
       } else {
@@ -155,7 +173,7 @@ addm_run_by_condition = function(choice.dat = data.table(decision = 0, rt = 0, c
   }
 
   if (fixation.model == "random"){
-    if (cur.set_size == 2){
+    if (cur.set_size / nr.attributes == 2){
       if (nr.attributes == 1){
         fixation_model = addm2_fixation_model_random
       } else {
@@ -199,27 +217,53 @@ addm_run_by_condition = function(choice.dat = data.table(decision = 0, rt = 0, c
 
   # STORING DATA FRAME THAT COLLECTS ALL RELEVANT INFORMATION CONCERNING MODEL OUTPUT---------------------------------------------------
   if (output.type == "full"){
-    output.names = c("condition_id",
-                     "sd",
-                     "theta",
-                     "drift.rate",
-                     "non.decision.time",
-                     "decision",
-                     "nr.fixations",
-                     "rt",
-                     "item.last.attended",
-                     "value.last.attended",
-                     "chosen.last.attended")
+    if (nr.attributes == 1){
+      output.names = c("condition_id",
+                       "sd",
+                       "theta",
+                       "drift.rate",
+                       "non.decision.time",
+                       "decision",
+                       "nr.fixations",
+                       "rt",
+                       "item.last.attended",
+                       "value.last.attended",
+                       "chosen.last.attended")
 
-    namelen = length(output.names)
-    for (i in seq_len(cur.set_size)){
-      output.names[namelen + i] = paste("duration.",toString(i),sep='')
-      output.names[namelen + cur.set_size + i] = paste("nr.fix.",toString(i),sep='')
-    }
+      namelen = length(output.names)
+      for (i in seq_len(cur.set_size)){
+        output.names[namelen + i] = paste("duration.",toString(i),sep='')
+        output.names[namelen + cur.set_size + i] = paste("nr.fix.",toString(i),sep='')
+      }
 
     addm.output.frame = cbind(data.table(condition_id = rep(ids,each=nr.reps)),as.data.table(addm.output))
     setnames(addm.output.frame,output.names)
     return(addm.output.frame)
+    } else {
+      output.names = c("condition_id",
+                       "sd",
+                       "theta",
+                       'gamma',
+                       "drift.rate",
+                       "non.decision.time",
+                       "decision",
+                       "nr.fixations",
+                       "rt",
+                       "item.last.attended",
+                       "value.last.attended",
+                       "chosen.last.attended")
+
+      namelen = length(output.names)
+      for (i in seq_len(cur.set_size)){
+        output.names[namelen + i] = paste("duration.",toString(i),sep='')
+        output.names[namelen + cur.set_size + i] = paste("nr.fix.",toString(i),sep='')
+      }
+
+      addm.output.frame = cbind(data.table(condition_id = rep(ids,each=nr.reps)),as.data.table(addm.output))
+      setnames(addm.output.frame,output.names)
+      return(addm.output.frame)
+    }
+
   } else if (output.type == "fit"){
 
     addm.output.frame = data.table(decision=addm.output[,1],

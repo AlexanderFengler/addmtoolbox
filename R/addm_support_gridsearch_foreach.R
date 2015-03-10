@@ -68,12 +68,22 @@ addm_support_gridsearch_foreach = function(choice.dat = data.table(v1 = 0, v2 = 
   # Format and return output -------------------------------------------------------------------------------------------------------------
   print(out)
   temp = do.call(rbind,out)
-  out = data.table(drift = temp[,1],
-                   theta = temp[,2],
-                   sd = temp[,3],
-                   non.decision.time = temp[,4],
-                   nr.reps = temp[,5],
-                   loglik = temp[,6]);
+  if (nr.attributes == 1){
+    out = data.table(drift = temp[,1],
+                     theta = temp[,2],
+                     sd = temp[,3],
+                     non.decision.time = temp[,4],
+                     nr.reps = temp[,5],
+                     loglik = temp[,6]);
+  } else {
+    out = data.table(drift = temp[,1],
+                     theta = temp[,2],
+                     gamma = temp[,3],
+                     sd = temp[,4],
+                     non.decision.time = temp[,5],
+                     nr.reps = temp[,6],
+                     loglik = temp[,7]);
+  }
   return(out)
   # --------------------------------------------------------------------------------------------------------------------------------------
 }

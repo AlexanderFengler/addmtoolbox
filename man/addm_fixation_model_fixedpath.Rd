@@ -4,7 +4,7 @@
 \alias{addm_fixation_model_fixedpath}
 \title{Example for user-supplied fixation model (aevacc functions)}
 \usage{
-addm_fixation_model_fixedpath(cur.valuations = c(0, 0), set.size = 2)
+addm_fixation_model_fixedpath(cur.valuations = 2, set.size = 4)
 }
 \arguments{
 \item{cur.valuations}{vector of valuations in current choice set}

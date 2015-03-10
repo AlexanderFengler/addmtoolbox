@@ -143,15 +143,13 @@ addm_fit_grid = function(data = list(choice.dat = NULL, eye.dat = NULL, conditio
       setkey(log.liks,loglik)
       if (nr.attributes == 1){
         writeLines(paste(' \nOptimal Parameters... \n \n',
-                         'Drift Rate: ',
-                         toString(log.liks[1,drift]),'\n',
+                         'Drift Rate: ', toString(log.liks[1,drift]),'\n',
                          'Theta: ',toString(log.liks[1,theta]),'\n',
                          'SD: ', toString(log.liks[1,sd]), '\n',
                          'Non decision time: ', toString(log.liks[1,non.decision.time]),sep=''))
       } else {
         writeLines(paste(' \nOptimal Parameters... \n \n',
-                         'Drift Rate: ',
-                         toString(log.liks[1,drift]),'\n',
+                         'Drift Rate: ', toString(log.liks[1,drift]),'\n',
                          'Theta: ',toString(log.liks[1,theta]),'\n',
                          'Gamma: ',toString(log.liks[1,gamma]), '\n',
                          'SD: ', toString(log.liks[1,sd]), '\n',

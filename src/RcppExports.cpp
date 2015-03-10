@@ -268,6 +268,31 @@ BEGIN_RCPP
     return __sexp_result;
 END_RCPP
 }
+// aevaccma2_full_output
+NumericVector aevaccma2_full_output(float sd, float theta, float gamma, float drift, int non_decision_time, int maxdur, NumericVector update, int nr_attributes, Function fixation_model, int nr_reps, int timestep);
+RcppExport SEXP addmtoolbox_aevaccma2_full_output(SEXP sdSEXP, SEXP thetaSEXP, SEXP gammaSEXP, SEXP driftSEXP, SEXP non_decision_timeSEXP, SEXP maxdurSEXP, SEXP updateSEXP, SEXP nr_attributesSEXP, SEXP fixation_modelSEXP, SEXP nr_repsSEXP, SEXP timestepSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< float >::type sd(sdSEXP );
+        Rcpp::traits::input_parameter< float >::type theta(thetaSEXP );
+        Rcpp::traits::input_parameter< float >::type gamma(gammaSEXP );
+        Rcpp::traits::input_parameter< float >::type drift(driftSEXP );
+        Rcpp::traits::input_parameter< int >::type non_decision_time(non_decision_timeSEXP );
+        Rcpp::traits::input_parameter< int >::type maxdur(maxdurSEXP );
+        Rcpp::traits::input_parameter< NumericVector >::type update(updateSEXP );
+        Rcpp::traits::input_parameter< int >::type nr_attributes(nr_attributesSEXP );
+        Rcpp::traits::input_parameter< Function >::type fixation_model(fixation_modelSEXP );
+        Rcpp::traits::input_parameter< int >::type nr_reps(nr_repsSEXP );
+        Rcpp::traits::input_parameter< int >::type timestep(timestepSEXP );
+        NumericVector __result = aevaccma2_full_output(sd, theta, gamma, drift, non_decision_time, maxdur, update, nr_attributes, fixation_model, nr_reps, timestep);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
 // dynamicaddm
 double dynamicaddm(float sd = 0, float theta = 0, float gamma = 0, float drift = 0, int non_decision_time = 0, int decision = 0, NumericVector valuations = 0, int nr_attributes = 0, NumericVector fixpos = 0, NumericVector fixdur = 0, int rt = 0, float stateStep = 0);
 RcppExport SEXP addmtoolbox_dynamicaddm(SEXP sdSEXP, SEXP thetaSEXP, SEXP gammaSEXP, SEXP driftSEXP, SEXP non_decision_timeSEXP, SEXP decisionSEXP, SEXP valuationsSEXP, SEXP nr_attributesSEXP, SEXP fixposSEXP, SEXP fixdurSEXP, SEXP rtSEXP, SEXP stateStepSEXP) {
@@ -294,6 +319,32 @@ BEGIN_RCPP
     return __sexp_result;
 END_RCPP
 }
+// dynamicddm
+double dynamicddm(float sd = 0, float theta = 0, float gamma = 0, float drift = 0, int non_decision_time = 0, int decision = 0, NumericVector valuations = 0, int nr_attributes = 0, NumericVector fixpos = 0, NumericVector fixdur = 0, int rt = 0, float stateStep = 0);
+RcppExport SEXP addmtoolbox_dynamicddm(SEXP sdSEXP, SEXP thetaSEXP, SEXP gammaSEXP, SEXP driftSEXP, SEXP non_decision_timeSEXP, SEXP decisionSEXP, SEXP valuationsSEXP, SEXP nr_attributesSEXP, SEXP fixposSEXP, SEXP fixdurSEXP, SEXP rtSEXP, SEXP stateStepSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< float >::type sd(sdSEXP );
+        Rcpp::traits::input_parameter< float >::type theta(thetaSEXP );
+        Rcpp::traits::input_parameter< float >::type gamma(gammaSEXP );
+        Rcpp::traits::input_parameter< float >::type drift(driftSEXP );
+        Rcpp::traits::input_parameter< int >::type non_decision_time(non_decision_timeSEXP );
+        Rcpp::traits::input_parameter< int >::type decision(decisionSEXP );
+        Rcpp::traits::input_parameter< NumericVector >::type valuations(valuationsSEXP );
+        Rcpp::traits::input_parameter< int >::type nr_attributes(nr_attributesSEXP );
+        Rcpp::traits::input_parameter< NumericVector >::type fixpos(fixposSEXP );
+        Rcpp::traits::input_parameter< NumericVector >::type fixdur(fixdurSEXP );
+        Rcpp::traits::input_parameter< int >::type rt(rtSEXP );
+        Rcpp::traits::input_parameter< float >::type stateStep(stateStepSEXP );
+        double __result = dynamicddm(sd, theta, gamma, drift, non_decision_time, decision, valuations, nr_attributes, fixpos, fixdur, rt, stateStep);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
 // dynamicmaaddm
 double dynamicmaaddm(float sd = 0, float theta = 0, float gamma = 0, float drift = 0, int non_decision_time = 0, int decision = 0, NumericVector valuations = 0, int nr_attributes = 0, NumericVector fixpos = 0, NumericVector fixdur = 0, int rt = 0, float stateStep = 0);
 RcppExport SEXP addmtoolbox_dynamicmaaddm(SEXP sdSEXP, SEXP thetaSEXP, SEXP gammaSEXP, SEXP driftSEXP, SEXP non_decision_timeSEXP, SEXP decisionSEXP, SEXP valuationsSEXP, SEXP nr_attributesSEXP, SEXP fixposSEXP, SEXP fixdurSEXP, SEXP rtSEXP, SEXP stateStepSEXP) {
@@ -314,6 +365,59 @@ BEGIN_RCPP
         Rcpp::traits::input_parameter< int >::type rt(rtSEXP );
         Rcpp::traits::input_parameter< float >::type stateStep(stateStepSEXP );
         double __result = dynamicmaaddm(sd, theta, gamma, drift, non_decision_time, decision, valuations, nr_attributes, fixpos, fixdur, rt, stateStep);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
+// evacc2_by_condition
+IntegerVector evacc2_by_condition(float sd, float theta, float gamma, float drift, int non_decision_time, int maxdur, NumericVector update, int nr_attributes, Function fixation_model, int nr_reps, int timestep);
+RcppExport SEXP addmtoolbox_evacc2_by_condition(SEXP sdSEXP, SEXP thetaSEXP, SEXP gammaSEXP, SEXP driftSEXP, SEXP non_decision_timeSEXP, SEXP maxdurSEXP, SEXP updateSEXP, SEXP nr_attributesSEXP, SEXP fixation_modelSEXP, SEXP nr_repsSEXP, SEXP timestepSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< float >::type sd(sdSEXP );
+        Rcpp::traits::input_parameter< float >::type theta(thetaSEXP );
+        Rcpp::traits::input_parameter< float >::type gamma(gammaSEXP );
+        Rcpp::traits::input_parameter< float >::type drift(driftSEXP );
+        Rcpp::traits::input_parameter< int >::type non_decision_time(non_decision_timeSEXP );
+        Rcpp::traits::input_parameter< int >::type maxdur(maxdurSEXP );
+        Rcpp::traits::input_parameter< NumericVector >::type update(updateSEXP );
+        Rcpp::traits::input_parameter< int >::type nr_attributes(nr_attributesSEXP );
+        Rcpp::traits::input_parameter< Function >::type fixation_model(fixation_modelSEXP );
+        Rcpp::traits::input_parameter< int >::type nr_reps(nr_repsSEXP );
+        Rcpp::traits::input_parameter< int >::type timestep(timestepSEXP );
+        IntegerVector __result = evacc2_by_condition(sd, theta, gamma, drift, non_decision_time, maxdur, update, nr_attributes, fixation_model, nr_reps, timestep);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
+// evacc2_by_trial
+int evacc2_by_trial(float sd = 0, float theta = 0, float gamma = 0, float drift = 0, int non_decision_time = 0, int maxdur = 0, int mindur = 0, int cur_decision = 0, NumericVector update = 0, int nr_attributes = 0, IntegerVector fixpos = 0, IntegerVector fixdur = 0, int nr_reps = 0, int timestep = 0);
+RcppExport SEXP addmtoolbox_evacc2_by_trial(SEXP sdSEXP, SEXP thetaSEXP, SEXP gammaSEXP, SEXP driftSEXP, SEXP non_decision_timeSEXP, SEXP maxdurSEXP, SEXP mindurSEXP, SEXP cur_decisionSEXP, SEXP updateSEXP, SEXP nr_attributesSEXP, SEXP fixposSEXP, SEXP fixdurSEXP, SEXP nr_repsSEXP, SEXP timestepSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< float >::type sd(sdSEXP );
+        Rcpp::traits::input_parameter< float >::type theta(thetaSEXP );
+        Rcpp::traits::input_parameter< float >::type gamma(gammaSEXP );
+        Rcpp::traits::input_parameter< float >::type drift(driftSEXP );
+        Rcpp::traits::input_parameter< int >::type non_decision_time(non_decision_timeSEXP );
+        Rcpp::traits::input_parameter< int >::type maxdur(maxdurSEXP );
+        Rcpp::traits::input_parameter< int >::type mindur(mindurSEXP );
+        Rcpp::traits::input_parameter< int >::type cur_decision(cur_decisionSEXP );
+        Rcpp::traits::input_parameter< NumericVector >::type update(updateSEXP );
+        Rcpp::traits::input_parameter< int >::type nr_attributes(nr_attributesSEXP );
+        Rcpp::traits::input_parameter< IntegerVector >::type fixpos(fixposSEXP );
+        Rcpp::traits::input_parameter< IntegerVector >::type fixdur(fixdurSEXP );
+        Rcpp::traits::input_parameter< int >::type nr_reps(nr_repsSEXP );
+        Rcpp::traits::input_parameter< int >::type timestep(timestepSEXP );
+        int __result = evacc2_by_trial(sd, theta, gamma, drift, non_decision_time, maxdur, mindur, cur_decision, update, nr_attributes, fixpos, fixdur, nr_reps, timestep);
         PROTECT(__sexp_result = Rcpp::wrap(__result));
     }
     UNPROTECT(1);

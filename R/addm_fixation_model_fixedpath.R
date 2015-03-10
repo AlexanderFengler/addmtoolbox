@@ -7,7 +7,7 @@
 #' @param set.size number of items present in current choice set
 #' @export
 
-addm_fixation_model_fixedpath = function(cur.valuations = c(0,0), set.size = 2){
+addm_fixation_model_fixedpath = function(cur.valuations = 2, set.size = 4){
 
   # Get fixation durations and location for simulation run -------------------------------------
   reps = ceiling(250/set.size)

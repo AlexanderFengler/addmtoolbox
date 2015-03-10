@@ -60,9 +60,13 @@ addm_run_by_trial = function(choice.dat = data.table(v1 = 0,v2 = 0, id = 0),
 
   # INITIALIZE EVIDENCE ACCUMULATION FUNCTION ------------------------------------------------------------------------------------------
   if (model.type == 'standard'){
-    if (cur.set_size == 2){
+    if (cur.set_size / nr.attributes == 2){
       if (nr.attributes == 1){
-        aevacc = aevacc2_by_trial
+        if (theta == 1){
+          aevacc = evacc2_by_trial
+        } else {
+          aevacc = aevacc2_by_trial
+        }
       } else {
         aevacc = aevaccma2_by_trial
       }
@@ -70,7 +74,7 @@ addm_run_by_trial = function(choice.dat = data.table(v1 = 0,v2 = 0, id = 0),
       if (nr.attributes == 1){
         aevacc = aevacc_by_trial
       } else {
-        stop('You attempted to run a set of > 2 items which have multiple attributes each: This is not implemented at the moment!')
+        stop('You attempted to run a set of > 2 items which have multiple attributes each (by trial): This is not implemented at the moment!')
       }
     }
   } else if (model.type == 'memnoise'){
@@ -117,14 +121,16 @@ addm_run_by_trial = function(choice.dat = data.table(v1 = 0,v2 = 0, id = 0),
                       theta,
                       cur.sd,
                       non.decision.time,
-                      nr.reps,(-1)*sum(log(success.counts/nr.reps)))
+                      nr.reps,
+                      (-1)*sum(log(success.counts/nr.reps)))
   } else {
     total.log.lik = c(drift.rate,
                       theta,
                       gamma,
                       cur.sd,
                       non.decision.time,
-                      nr.reps,(-1)*sum(log(success.counts/nr.reps)))
+                      nr.reps,
+                      (-1)*sum(log(success.counts/nr.reps)))
   }
 
   print(total.log.lik)

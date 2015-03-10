@@ -423,3 +423,83 @@ pl = ggplot(data = temp, aes(x = rt, y = mean.time, color = model.type)) +
 # Save
 ggsave(plot = pl, filename = 'temp/benchmarks/plots/benchmark_plots/vary_rt_dynamic.png' )
 # ------------------------------------------------------------------------------------------------------------
+
+# CHECK DDM VS ADDM VERSIONS ---------------------------------------------------------------------------------
+
+# Dynamic aDDM ----------------------------------------------------------------------------------------------
+# Generate Data
+num.trials = rep(0,10)
+mean.time = rep(0,10)
+sim.nums = c(10,20,40,80,160,320,640,1280,2560,5120)
+
+cur.num.conditions = 100
+num.reps = 10
+cnt = 1
+for(cur.sim.num in sim.nums){
+  x = addm_generate_artificial(nr.reps = cur.num.reps,nr.conditions = cur.num.conditions)
+  ch = x$choice.dat
+  ey = x$eye.dat
+
+  mean.time[cnt] = mean(microbenchmark(addm_run_by_trial_dynamic(choice.dat = ch, eye.dat = ey),times=5)$time/1e+09)
+  num.trials[cnt] = cur.num.reps*cur.num.conditions
+  cnt = cnt + 1
+}
+
+out.frame.1  = data.frame(model.type = 'dynamic',
+                          number.trials = num.trials,
+                          number.conditions = cur.num.conditions,
+                          number.simulations = sim.nums,
+                          mean.time = mean.time)
+# -----------------------------------------------------------------------------------------------------------
+
+# Simulation by Trial ---------------------------------------------------------------------------------------
+# Generate Data
+num.trials = rep(0,10)
+mean.time = rep(0,10)
+sim.nums = c(10,20,40,80,160,320,640,1280,2560,5120)
+
+cur.num.conditions = 100
+num.reps = 10
+cnt = 1
+for(cur.sim.num in sim.nums){
+  x = addm_generate_artificial(nr.reps = cur.num.reps,nr.conditions = cur.num.conditions)
+  ch = x$choice.dat
+  ey = x$eye.dat
+
+  mean.time[cnt] = mean(microbenchmark(addm_run_by_trial(choice.dat = ch, eye.dat = ey , nr.reps = cur.sim.num),times=5)$time/1e+09)
+  num.trials[cnt] = cur.num.reps*cur.num.conditions
+  cnt = cnt + 1
+}
+
+out.frame.2  = data.frame(model.type = 'sim_by_trial',
+                          number.trials = num.trials,
+                          number.conditions = cur.num.conditions,
+                          number.simulations = sim.nums,
+                          mean.time = mean.time)
+# -------------------------------------------------------------------------------------------------------------
+
+# Simulation by Conditions ------------------------------------------------------------------------------------
+# Generate Data
+mean.time = rep(0,2)
+sim.nums = c(1000)
+
+cur.num.conditions = 1000
+num.reps = 10
+cnt = 1
+
+  x = addm_generate_artificial(nr.reps = num.reps,nr.conditions = cur.num.conditions)
+  ch = x$choice.dat
+  ey = x$eye.dat
+  co = x$conditions.dat
+
+  mean.time[1] = mean(microbenchmark(addm_run_by_condition(choice.dat = ch, conditions.dat = co, nr.reps = sim.nums),times=5)$time/1e+09)
+  mean.time[2] = mean(microbenchmark(addm_run_by_condition(choice.dat = ch, conditions.dat = co, nr.reps = sim.nums, model.parameters = c(0.002,1,0.07,0)),times=5)$time/1e+09)
+
+  mean.time[1] = mean(microbenchmark(addm_run_by_trial(choice.dat = ch, eye.dat = ey, nr.reps = sim.nums),times=5)$time/1e+09)
+  mean.time[2] = mean(microbenchmark(addm_run_by_trial(choice.dat = ch, eye.dat = ey, nr.reps = sim.nums, model.parameters = c(0.002,1,0.07,0)),times=5)$time/1e+09)
+
+  mean.time[1] = mean(microbenchmark(addm_run_by_trial_dynamic(choice.dat = ch, eye.dat = ey),times=5)$time/1e+09)
+  mean.time[2] = mean(microbenchmark(addm_run_by_trial_dynamic(choice.dat = ch, eye.dat = ey, model.parameters = c(0.002,1,0.07,0)),times=5)$time/1e+09)
+# -------------------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------------------------------------
+
