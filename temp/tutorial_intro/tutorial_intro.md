@@ -13,9 +13,8 @@ font-family: 'Helvetica';
 
 
 
-aDDM: quick intro // equations
+aDDM: quick intro // equations 2 items
 ========================================================
-<br>
 
 <p class="test"> <strong>Equations: 2 Items</strong></p>
  <br>
@@ -23,7 +22,7 @@ aDDM: quick intro // equations
 <br> <br>
 $$
 \begin{aligned}
-  V_t = V_{t-1} + d*(r_{left} - \theta*r_{right}) + e_{t}
+  RDV_t = RDV_{t-1} + d*(r_{left} - \theta*r_{right}) + e_{t}
 \end{aligned}
 $$
 
@@ -31,12 +30,56 @@ $$
 <br> <br>
 $$
 \begin{aligned}
-  V_t = V_{t-1} + d*(\theta*r_{left} - r_{right}) + e_t
+  RDV_t = RDV_{t-1} + d*(\theta*r_{left} - r_{right}) + e_t
 \end{aligned}
 $$
 
 <br>
-Decision taken if $V_t > 1$ | $V_t < -1$ ....
+Decision taken if $RDV_t > 1$ | $RDV_t < -1$ ....
+
+aDDM: quick intro // n > 2 items
+==========================================================
+
+<span><strong>Acummulate Evidence (Item 1 Fixated): </strong></span>
+<br>
+
+$$
+\begin{align*}
+  E1_t &= E1_{t-1} + d*V1 + e_{t} \\
+  E2_t &= E2_{t-1} + \theta*d*V2 + e_{t} \\
+  E3_t &= E3_{t-1} + \theta*d*V3 + e_{t} \\
+\end{align*}
+$$
+
+<span><strong>Compute Global RDV:</strong></span>
+
+$$
+\begin{align*}
+  RDV1_t &= E1_t - max(E2_t,E3_t) \\
+  RDV2_t &= E2_t - max(E1_t,E3_t) \\
+  RDV3_t &= E3_t - max(E1_t,E2_t) \\
+\end{align*}
+$$
+
+$$
+\begin{align*}
+  RDVG_t &= max(RDV1_t, RDV2_t, RDV3_t) \\
+\end{align*}
+$$
+
+aDDM: quick intro // multiattribute (2)
+==========================================================
+
+<span><strong>Fixation left (Attribute 1):</strong></span>
+
+$$
+\begin{align*}
+
+RDV_t = RDV_{t-1} +
+
+
+\end{align*}
+$$
 
 
 aDDM: quick intro // code
