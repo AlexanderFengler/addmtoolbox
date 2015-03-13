@@ -1,9 +1,71 @@
+# RUN PRIOR TO TUTORIAL ----------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------
+
+# Prepare multi-item data --------------------------------------------------------------------
+
+# Read in my addm project data ---------------------------------------------------------------
+afdat_eye8 = as.data.table(read.table(file = 'temp/data/eye8.txt',
+                                      header = TRUE,
+                                      sep = ' '))
+
+afdat_choice8 = as.data.table(read.table(file = 'temp/data/choice8.txt',
+                                         header = TRUE,
+                                         sep = ' '))
+# --------------------------------------------------------------------------------------------
+
+# Take Subset --------------------------------------------------------------------------------
+rows.usable = createDataPartition(1:length(afdat_choice8$id),times=1, p=0.05)
+afdat_choice = afdat_choice8[rows.usable[[1]],]
+
+setkey(afdat_choice, id)
+setkey(afdat_eye8, id)
+
+afdat_eye = afdat_choice[afdat_eye8]
+afdat_eye = afdat_eye[complete.cases(afdat_eye)] %>% select(id,fixloc,fixdur,fixnr)
+
+# Prepare multiattribute data ----------------------------------------------------------------
+ma_eye = as.data.table(read.table(file = 'temp/data/addm_data_eye_ma.txt',
+                                  header = TRUE,
+                                  sep = ' '))
+
+ma_choice = as.data.table(read.table(file = 'temp/data/addm_data_choice_ma.txt',
+                                     header = TRUE,
+                                     sep = ' '))
+
+ma_choice$decision = ma_choice$decision + 1
+# --------------------------------------------------------------------------------------------
+rm(rows.usable)
+# --------------------------------------------------------------------------------------------
+
+
+
+
+
+
+########################### START TUTORIAL ###################################################
+
 # INSTALL PACKAGE IF NECESSARY ---------------------------------------------------------------
+# --------------------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------
 devtools::install_github('AlexanderFengler/addmtoolbox',build_vignette=TRUE)
 library("addmtoolbox")
 # --------------------------------------------------------------------------------------------
 
-# Understanding the format need for input data -----------------------------------------------
+
+
+
+
+
+
+# INPUT DATA ---------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------
+
+# STANDARD 2 ITEM ----------------------------------------------------------------------------
 # Choice Data
 View(head(addm_data_choice))
 
@@ -11,83 +73,176 @@ View(head(addm_data_choice))
 View(head(addm_data_eye))
 # --------------------------------------------------------------------------------------------
 
-# Preprocess data for easy usage with addmtoolbox --------------------------------------------
+# MORE ITEMS ---------------------------------------------------------------------------------
+# Choice Data
+View(head(afdat_choice))
 
-# EITHER GENERATE FAKE DATA
-addm_dat = addm_generate_artificial(set.size = 2,
-                                    nr.reps = 50,
-                                    nr.conditions = 10,
-                                    timestep = 10,
-                                    rtbinsize = 100,
-                                    possible.valuations = c(0,1,2,3),
-                                    model.parameters = c(0,0.002,0.015,0.5))
-
-cur_dat = addm_dat$choice.dat
-cur_dat$val.diff = cur_dat$v1-cur_dat$v2
-cur_dat = cur_dat %>% group_by(val.diff) %>% summarise(rt = mean(rt))
-hist(addm_dat$choice.dat$rt)
-p = ggplot(data=cur_dat,aes(y=rt, x = val.diff)) + geom_line()
-
-# OR READ IN SUPPLIED DATA FRAME
-addm_dat  = addm_preprocess(choice.dat = addm_data_choice,
-                            eye.dat = addm_data_eye,
-                            rtbinsize = 100, timestep = 10)
-
-# Look at the output
-addm_dat
-
-# View it separately
-addm_dat$choice.dat
-
-addm_dat$eye.dat
-
-addm_dat$conditions.dat
+# Eyetracking Data
+View(head(afdat_eye))
 # --------------------------------------------------------------------------------------------
 
-# Run model by trial -------------------------------------------------------------------------
-addm_loglik_trial = addm_fit_grid(addm_dat,
-                                  fit.type = 'trial',
-                                  drifts = c(0.001,0.0015,0.002,0.0025,0.003),
-                                  sd = c(0.05,0.06,0.07,0.08,0.09),
-                                  nr.reps = 2000)
-# Plot Log likelihood ------------------------------------------------------------------------
+# MULTIATTRIBUTE -----------------------------------------------------------------------------
+# Choice Data
+View(head(ma_choice))
+
+# Eyetracking
+View(head(ma_eye))
+# --------------------------------------------------------------------------------------------
+
+
+
+
+
+
+# PREPROCESS DATA FOR USAGE WITH ADDMTOOLBOX -------------------------------------------------
+# --------------------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------
+
+# Preprocess supplied data-frame -------------------------------------------------------------
+addm.dat = addm_preprocess(choice.dat = addm_data_choice,
+                           eye.dat = addm_data_eye,
+                           rtbinsize = 100,
+                           timestep = 10)
+# --------------------------------------------------------------------------------------------
+
+# Look at what we get ------------------------------------------------------------------------
+addm.dat
+# --------------------------------------------------------------------------------------------
+
+
+
+
+
+
+# DO A GRID SEARCH ---------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------
+
+# Perform grid search by trial:
+addm_loglik_trial = addm_fit_grid(addm.dat,
+                                 nr.reps = 1000,
+                                 drifts = c(0.001,0.003,0.005),
+                                 thetas = c(0, 0.5, 1),
+                                 sds = c(0.02,0.04,0.06,0.08,0.1),
+                                 fit.type = 'trial')
+
 addm_plot_loglik(addm_loglik_trial)
-# --------------------------------------------------------------------------------------------
 
-# --------------------------------------------------------------------------------------------
-
-# Run model by condition ---------------------------------------------------------------------
-addm_loglik_condition = addm_fit_grid(addm_dat,
+# Perform grid search by condition
+addm_loglik_condition = addm_fit_grid(addm.dat,
+                                      nr.reps = 1000,
+                                      drifts = c(0.001,0.003,0.005),
+                                      thetas = c(0,0.5,1),
+                                      sds = c(0.06,0.08,0.1),
                                       fit.type = 'condition',
-                                      fixation.model = 'fixedpath',
-                                      parallel = 1,
-                                      nr.reps = 5000,
-                                      drifts = rep(0.0015,100),
-                                      sds = 0.07,
-                                      theta = 1)
-# Plot Log likelihood ------------------------------------------------------------------------
+                                      fixation.model = 'random') # mention 'user'
+
 addm_plot_loglik(addm_loglik_condition)
+
+
+# EXPERIMENTAL
+addm_loglik_dyn = addm_fit_grid(addm.dat,
+                                drifts = c(0.001,0.003,0.005),
+                                thetas = c(0,0.5,1),
+                                sds = c(0.06,0.08,0.1),
+                                fit.type = 'dyn')
+
+addm_plot_loglik(addm_loglik_dyn)
 # --------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+# GENERATE DETAILED OUTPUT -------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------
+
+# Generate
+addm_output = addm_run_by_condition(choice.dat = addm.dat$choice.dat,
+                                    conditions.dat = addm.dat$conditions.dat,
+                                    model.parameters = c(0,0.0014,0.071,1), # mention order
+                                    nr.reps = 500,
+                                    fixation.model = 'random',
+                                    output.type = 'full')
+
+# Take a look at whats included
+View(addm_output)
+# --------------------------------------------------------------------------------------------
+
+
+
+
+
+
+# PLOT PSYCHOMETRICS -------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------
+
+addm2_plot_family(choice.dat = addm.dat$choice.dat,
+                  addm.output = addm_output)
 
 # --------------------------------------------------------------------------------------------
 
-# Run model dynamic --------------------------------------------------------------------------
-addm_loglik_trial = addm_fit_grid(addm_dat,
-                                  fit.type = 'dyn',
-                                  drifts = c(0.001,0.0015,0.002,0.0025,0.003),
-                                  sds = c(0.05,0.06,0.07,0.08,0.09,0.1))
+
+
+
+
+
+# GENERATE FAKE DATA -------------------------------------------------------------------------
+
+addm.fake = addm_generate_artificial(set.size = 6,
+                                     possible.valuations = c(0,1,2,3),
+                                     model.parameters = c(0,0.006,0.06,0.5),
+                                     nr.attributes = 1,
+                                     nr.condition = 20,
+                                     nr.reps = 1000,
+                                     timestep = 10,
+                                     rtbinsize = 100,
+                                     model.type = 'standard')
+
 # --------------------------------------------------------------------------------------------
 
-# Simulate Data ------------------------------------------------------------------------------
-addm_data_full_output = addm_run_by_condition(choice.dat = addm_dat$choice.dat,
-                                              conditions.dat = addm_dat$conditions.dat,
-                                              model.parameters = c(0,0.001,0.07,0.75),
-                                              output.type = 'full',
-                                              fixation.model = 'fixedpath',
-                                              nr.reps = 1000)
+
+
+
+
+
+# MULTIPLE -----------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------
 # --------------------------------------------------------------------------------------------
 
-# Plot some psychometrics --------------------------------------------------------------------
-addm2_plot_family(choice.dat = addm_dat$choice.dat,
-                  addm.output = addm_data_full_output)
+# SET SIZE 8 ---------------------------------------------------------------------------------
+# Preprocess my data
+afdat = addm_preprocess(choice.dat = afdat_choice, eye.dat = afdat_eye)
+
+# Run Grid Search
+afloglik = addm_fit_grid(afdat,
+                         drifts = c(0.005,0.006,0.007),
+                         sds = c(0.08, 0.06, 0.04),
+                         theta = c(0,0.5,1),
+                         fit.type = 'trial')
+addm_plot_loglik(afloglik)
 # --------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+

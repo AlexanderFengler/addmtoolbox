@@ -145,9 +145,9 @@ int aevacc_by_trial(NumericVector parameters,
          break;
        }
      }
-     // -------------------------------------------------------------------------------------------
+     // -----------------------------------------------------------------------------------------------
 
-     // determine whether outcome is success (correct rt and decision) ----------------------------
+     // determine whether outcome is success (correct rt and decision) --------------------------------
      if (decision == 1){
        if (maxpos == cur_decision){
          if ((cur_rt + non_decision_time <= maxdur) && (cur_rt + non_decision_time >= mindur)){
@@ -157,8 +157,9 @@ int aevacc_by_trial(NumericVector parameters,
      }
      // ---------------------------------------------------------------------------------------------
    }
-   // ---------------------------------------------------------------------------------------------
-   return out;
+   // -----------------------------------------------------------------------------------------------
+  // return cur_rt;
+  return out;
 }
 
 //// [[Rcpp::export]]

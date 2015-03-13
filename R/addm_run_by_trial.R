@@ -35,6 +35,7 @@ addm_run_by_trial = function(choice.dat = data.table(v1 = 0,v2 = 0, id = 0),
   # OTHER INITIALIZATIONS --------------------------------------------------------------------------------------------------------------
   # Get set size of current data set
   cur.set_size = length(grep("^v[0-9]*",names(choice.dat)))
+  #return(cur.set_size)
 
   # Initialize amount of trials supplied
   len.trials = length(choice.dat[,id])
@@ -81,7 +82,7 @@ addm_run_by_trial = function(choice.dat = data.table(v1 = 0,v2 = 0, id = 0),
     }
   }
   # ------------------------------------------------------------------------------------------------------------------------------------
-
+  #return(aevacc)
   # RUN MODEL --------------------------------------------------------------------------------------------------------------------------
   success.counts = rep(0,len.trials)
   trial.cnt = 1
@@ -91,7 +92,6 @@ addm_run_by_trial = function(choice.dat = data.table(v1 = 0,v2 = 0, id = 0),
   cur.maxfix = 0
   cur.rtbin.up = choice.dat[,rtup]
   cur.rtbin.down = choice.dat[,rtdown]
-
   while(eye.row.cnt < len.eye){
     cur.maxfix[1] = eye.mat[eye.row.cnt,4]
 
