@@ -7,5 +7,6 @@ src/*.dll
 inst/doc
 .DS_Store
 *DS_Store
+temp/.DS_store
 temp/data/*.txt
 temp/data/*.R
