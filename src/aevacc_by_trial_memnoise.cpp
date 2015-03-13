@@ -11,10 +11,7 @@ static Ziggurat::Ziggurat::Ziggurat zigg;
 //' @author Alexander Fengler, \email{alexanderfengler@@gmx.de}
 //' @title Simulate aDDM process by unique trial (>2 items, allow memory effects)
 //' @return numeric variable that provides a success count (runs that predicted a reaction time in the correct rt-bin and simultaneously the correct decision)
-//' @param sd standard deviation used for drift diffusion process
-//' @param theta theta (attentional bias) used for drift diffusion process
-//' @param drift drift-rate used for drift diffusion process
-//' @param non_decision_time non decision time used for drift diffusion process
+//' @param parameters vector that stores the parameters used for the simulations (Order: [non.decision.time, drift, sd, theta, gamma, scalar_items_seen_drift, scala_items_seen_noise])
 //' @param timestep timestep in ms associated with each step in the drift diffusion process
 //' @param nr_reps number of repitions (simulation runs)
 //' @param maxdur numeric variable that supplies the maximum reaction time considered a success in simulations
@@ -27,16 +24,12 @@ static Ziggurat::Ziggurat::Ziggurat zigg;
 //' @param items_seen_noise_bias Numeric Variable storing the relative noise sd that unseen items receive
 //' @export
 // [[Rcpp::export]]
-int aevacc_by_trial_memnoise(float sd,
-                             float theta,
-                             float drift,
-                             int non_decision_time,
-                             float items_seen_bias,
-                             float items_seen_noise_bias,
+int aevacc_by_trial_memnoise(NumericVector parameters,
                              int maxdur,
                              int mindur,
                              int cur_decision,
                              NumericVector update,
+                             int nr_attributes,
                              IntegerVector fixpos,
                              IntegerVector fixdur,
                              int nr_reps,
@@ -52,6 +45,15 @@ int aevacc_by_trial_memnoise(float sd,
   int out = 0;
   // ----------------------------------------------------------------------------------------------
 
+  // Initialize parameters ------------------------------------------------------------------------
+  int non_decision_time = parameters[0];
+  float drift = parameters[1];
+  float sd = parameters[2];
+  float theta = parameters[3];
+  // float gamma = parameters[4] not used but for completeness as placeholder
+  float items_seen_bias = parameters[5];
+  float items_seen_noise_bias= parameters[6];
+  // ----------------------------------------------------------------------------------------------
 
   // Initialize Variables need for model propagation ----------------------------------------------
   int nr_items = update.size();

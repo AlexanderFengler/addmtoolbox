@@ -13,6 +13,7 @@ addm_support_gridsearch_foreach = function(choice.dat = data.table(v1 = 0, v2 = 
                                            conditions.dat = data.table(v1 = 0, v2 = 0, id = 0),
                                            parameter.matrix = c(0.006,0.6,1,0.06,0),
                                            nr.attributes = 1,
+                                           boundaryfun = 1,
                                            nr.reps = 1000,
                                            timestep = 10,
                                            model.type = 'standard',
@@ -33,6 +34,7 @@ addm_support_gridsearch_foreach = function(choice.dat = data.table(v1 = 0, v2 = 
                                                                             eye.dat,
                                                                             i,
                                                                             nr.attributes,
+                                                                            boundaryfun,
                                                                             nr.reps,
                                                                             timestep,
                                                                             model.type)
@@ -42,6 +44,7 @@ addm_support_gridsearch_foreach = function(choice.dat = data.table(v1 = 0, v2 = 
                                                                                 conditions.dat,
                                                                                 i,
                                                                                 nr.attributes,
+                                                                                boundaryfun,
                                                                                 nr.reps,
                                                                                 timestep,
                                                                                 model.type,
@@ -53,6 +56,7 @@ addm_support_gridsearch_foreach = function(choice.dat = data.table(v1 = 0, v2 = 
                                                                                     eye.dat,
                                                                                     i,
                                                                                     nr.attributes,
+                                                                                    boundaryfun,
                                                                                     timestep,
                                                                                     state.step)
   }
@@ -68,22 +72,11 @@ addm_support_gridsearch_foreach = function(choice.dat = data.table(v1 = 0, v2 = 
   # Format and return output -------------------------------------------------------------------------------------------------------------
   print(out)
   temp = do.call(rbind,out)
-  if (nr.attributes == 1){
-    out = data.table(drift = temp[,1],
-                     theta = temp[,2],
-                     sd = temp[,3],
-                     non.decision.time = temp[,4],
-                     nr.reps = temp[,5],
-                     loglik = temp[,6]);
-  } else {
-    out = data.table(drift = temp[,1],
-                     theta = temp[,2],
-                     gamma = temp[,3],
-                     sd = temp[,4],
-                     non.decision.time = temp[,5],
-                     nr.reps = temp[,6],
-                     loglik = temp[,7]);
-  }
+
+  out.names = c('non.decision.time', 'drift', 'sd', 'theta', 'gamma', 'scalar_item_not_seen_drift', 'scalar_item_not_seen_noise','loglik')
+  out = as.data.table(out[[1]])
+  setnames(out,out.names)
+
   return(out)
   # --------------------------------------------------------------------------------------------------------------------------------------
 }

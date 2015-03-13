@@ -20,6 +20,8 @@
 #' @param parallel boolean varible that indicates whether to initialize local cluster on start (1) or not (0).
 #' @param coarse.to.fine.ratio integer defining the ratio between parameter steps in the coarse versus the fine grid.
 #' @param state.step parameter only relevant when using fit.type = 'dyn', for which case it given the precision of the vertical grid utilized in the dynammic programming algorithm
+#' @param boundaryfun function that is supplied by user for the decision boundaries (has to have at least two inputs: maxrt, timestep)
+#' @param boundary.parameters matrix or vector that provides a parameter-space for all parameter sets that shall be tested on the boundary function
 
 addm_fit_grid = function(data = list(choice.dat = NULL, eye.dat = NULL, conditions.dat = NULL, attributes = NULL),
                          drifts = seq(0.001,0.0025,0.0005),
@@ -27,6 +29,10 @@ addm_fit_grid = function(data = list(choice.dat = NULL, eye.dat = NULL, conditio
                          gammas = 1,
                          sds = seq(0.05,0.09,0.01),
                          non.decision.times = 0,
+                         scalar_item_not_seen_drift = 1,
+                         scalar_item_not_seen_noise = 1,
+                         boundaryfun = 1,
+                         boundary.parameters = 0,
                          nr.reps = 1000,
                          timestep = 10,
                          model.type = 'standard',
@@ -68,13 +74,13 @@ addm_fit_grid = function(data = list(choice.dat = NULL, eye.dat = NULL, conditio
       setkey(choice.dat,id)
       setkey(eye.dat,id)
       # ---------------------------------------------------------------------------------------------
-
+      #return(list(choice = choice.dat, eye = eye.dat))
       # GENERATE PARAMETER MATRIX -------------------------------------------------------------------
-      if (nr.attributes == 1){
-        parameter.matrix = as.matrix(expand.grid(drifts,thetas,sds,non.decision.times))
-      } else {
-        parameter.matrix = as.matrix(expand.grid(drifts,thetas,gammas,sds,non.decision.times))
+      parameter.matrix = as.matrix(expand.grid(non.decision.times, drifts, sds, thetas, gammas, scalar_item_not_seen_drift, scalar_item_not_seen_noise))
 
+      # If we have a function supplied for the boundary then we will complement the parameter.matrix
+      if (class(boundaryfun) == 'function'){
+        parameter.matrix = as.matrix(do.call('expand.grid', c(as.data.frame(parameter.matrix), as.data.frame(boundary.parameters))))
       }
       # ---------------------------------------------------------------------------------------------
 
@@ -84,6 +90,7 @@ addm_fit_grid = function(data = list(choice.dat = NULL, eye.dat = NULL, conditio
                                                  conditions.dat,
                                                  parameter.matrix,
                                                  nr.attributes,
+                                                 boundaryfun,
                                                  nr.reps,
                                                  timestep,
                                                  model.type,
@@ -108,6 +115,7 @@ addm_fit_grid = function(data = list(choice.dat = NULL, eye.dat = NULL, conditio
                                                               non.decision.time.step.fine,
                                                               coarse.to.fine.ratio,
                                                               nr.attributes,
+                                                              boundary.parameters,
                                                               log.liks)
         # ---------------------------------------------------------------------------------------------
 
@@ -117,6 +125,7 @@ addm_fit_grid = function(data = list(choice.dat = NULL, eye.dat = NULL, conditio
                                                         conditions.dat,
                                                         fine.parameter.matrix,
                                                         nr.attributes,
+                                                        boundaryfun,
                                                         nr.reps,
                                                         timestep,
                                                         model.type,
@@ -141,19 +150,31 @@ addm_fit_grid = function(data = list(choice.dat = NULL, eye.dat = NULL, conditio
       writeLines(paste("Model was fit successfully and logs are saved in: ",log.file,sep=''))
 
       setkey(log.liks,loglik)
-      if (nr.attributes == 1){
-        writeLines(paste(' \nOptimal Parameters... \n \n',
+      if (model.type == 'standard'){
+        if (nr.attributes == 1){
+          writeLines(paste(' \n Optimal Parameters... \n \n',
+                           'Drift Rate: ', toString(log.liks[1,drift]),'\n',
+                           'Theta: ',toString(log.liks[1,theta]),'\n',
+                           'SD: ', toString(log.liks[1,sd]), '\n',
+                           'Non decision time: ', toString(log.liks[1,non.decision.time]),sep=''))
+        } else {
+          writeLines(paste(' \n Optimal Parameters... \n \n',
+                           'Drift Rate: ', toString(log.liks[1,drift]),'\n',
+                           'Theta: ',toString(log.liks[1,theta]),'\n',
+                           'Gamma: ',toString(log.liks[1,gamma]), '\n',
+                           'SD: ', toString(log.liks[1,sd]), '\n',
+                           'Non decision time: ', toString(log.liks[1,non.decision.time]),sep=''))
+        }
+      }
+
+      if (model.type == 'memnoise'){
+        writeLines(paste(' \n Optimal Parameters... \n \n',
                          'Drift Rate: ', toString(log.liks[1,drift]),'\n',
                          'Theta: ',toString(log.liks[1,theta]),'\n',
                          'SD: ', toString(log.liks[1,sd]), '\n',
-                         'Non decision time: ', toString(log.liks[1,non.decision.time]),sep=''))
-      } else {
-        writeLines(paste(' \nOptimal Parameters... \n \n',
-                         'Drift Rate: ', toString(log.liks[1,drift]),'\n',
-                         'Theta: ',toString(log.liks[1,theta]),'\n',
-                         'Gamma: ',toString(log.liks[1,gamma]), '\n',
-                         'SD: ', toString(log.liks[1,sd]), '\n',
-                         'Non decision time: ', toString(log.liks[1,non.decision.time]),sep=''))
+                         'Non decision time: ', toString(log.liks[1,non.decision.time]),
+                         'Scalar item not seen - drift: ', toString(log.liks[1,scalar_item_not_seen_drift]),
+                         'Scalar item not seen - noise: ', toString(log.liks[1,scalar_item_not_seen_noise]), sep=''))
       }
       # -----------------------------------------------------------------------------------------------
       file.remove('cur_addm_log.txt')

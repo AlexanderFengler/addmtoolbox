@@ -6,20 +6,16 @@
 #' @title Simulate aDDM process (by condition, 2 items)
 #' \code{aevacc2_by_condition()}
 #' @return vector that stores decisions and rts for each simulation run
-#' @param sd standard deviation used for drift diffusion process
-#' @param theta theta used for drift diffusion process
-#' @param drift drift-rate used for drift diffusion process
-#' @param non_decision_time non decision time used for drift diffusion process
+#' @param parameters vector that stores the parameters used for the simulations (Order: [non.decision.time, drift, sd, theta])
 #' @param timestep timestep in ms associated with each step in the drift diffusion process
 #' @param nr_reps number of repitions (simulation runs)
 #' @param maxdur maximum duration in ms that the process is allowed to simulate
 #' @param update Vector that stores the item valuations for the trial conditon simulated
 #' @param fixation_model a user supplied fixation model that will be utilized to supply fixation locations and potentially fixation durations
-#' @param gamma placeholder for interface consistency / see multiattribute versions for specification
 #' @param nr_attributes placeholder for interface consistency / see multiattribute versions for specification
 #' @export
-aevacc2_by_condition <- function(sd, theta, gamma, drift, non_decision_time, maxdur, update, nr_attributes, fixation_model, nr_reps, timestep) {
-    .Call('addmtoolbox_aevacc2_by_condition', PACKAGE = 'addmtoolbox', sd, theta, gamma, drift, non_decision_time, maxdur, update, nr_attributes, fixation_model, nr_reps, timestep)
+aevacc2_by_condition <- function(parameters, maxdur, update, nr_attributes, fixation_model, nr_reps, timestep) {
+    .Call('addmtoolbox_aevacc2_by_condition', PACKAGE = 'addmtoolbox', parameters, maxdur, update, nr_attributes, fixation_model, nr_reps, timestep)
 }
 
 #' Simulate aDDM process by unique trial (2 items)
@@ -27,10 +23,7 @@ aevacc2_by_condition <- function(sd, theta, gamma, drift, non_decision_time, max
 #' @author Alexander Fengler, \email{alexanderfengler@@gmx.de}
 #' @title Simulate aDDM process (by trial, 2 items)
 #' @return numeric variable that provides a success count (runs that predicted a reaction time in the correct rt-bin and simultaneously the correct decision)
-#' @param sd standard deviation used for drift diffusion process
-#' @param theta theta (attentional bias) used for drift diffusion process
-#' @param drift drift-rate used for drift diffusion process
-#' @param non_decision_time non decision time used for drift diffusion process
+#' @param parameters vector that stores the parameters used for the simulations (Order: [non.decision.time, drift, sd, theta])
 #' @param timestep timestep in ms associated with each step in the drift diffusion process
 #' @param nr_reps number of repitions (simulation runs)
 #' @param maxdur numeric variable that supplies the maximum reaction time considered a success in simulations
@@ -40,11 +33,10 @@ aevacc2_by_condition <- function(sd, theta, gamma, drift, non_decision_time, max
 #' @param fixpos Vector that stores the locations for a supplied fixed fixation pathway
 #' @param fixdur Vector that stores the fixation durations for a supplied fixed fixation pathway
 #' @param cur_maxfix integer that provides number of fixation in trial
-#' @param gamma placeholder for interface consistency / see multiattribute versions for specification
 #' @param nr_attributes placeholder for interface consistency / see multiattribute versions for specification
 #' @export
-aevacc2_by_trial <- function(sd = 0, theta = 0, gamma = 0, drift = 0, non_decision_time = 0L, maxdur = 0L, mindur = 0L, cur_decision = 0L, update = 0L, nr_attributes = 0L, fixpos = 0L, fixdur = 0L, nr_reps = 0L, timestep = 0L) {
-    .Call('addmtoolbox_aevacc2_by_trial', PACKAGE = 'addmtoolbox', sd, theta, gamma, drift, non_decision_time, maxdur, mindur, cur_decision, update, nr_attributes, fixpos, fixdur, nr_reps, timestep)
+aevacc2_by_trial <- function(parameters, maxdur = 0L, mindur = 0L, cur_decision = 0L, update = 0L, nr_attributes = 0L, fixpos = 0L, fixdur = 0L, nr_reps = 0L, timestep = 0L) {
+    .Call('addmtoolbox_aevacc2_by_trial', PACKAGE = 'addmtoolbox', parameters, maxdur, mindur, cur_decision, update, nr_attributes, fixpos, fixdur, nr_reps, timestep)
 }
 
 #' Simulate aDDM process (2 items) with detailed output
@@ -52,10 +44,7 @@ aevacc2_by_trial <- function(sd = 0, theta = 0, gamma = 0, drift = 0, non_decisi
 #' @title Simulate aDDM process (2 items) with detailed output
 #' \code{aevacc2_full_output()}
 #' @return vector that stores detailed output by simulation run
-#' @param sd standard deviation used for drift diffusion process
-#' @param theta theta (attentional bias) used for drift diffusion process
-#' @param drift drift-rate used for drift diffusion process
-#' @param non_decision_time non decision time used for drift diffusion process
+#' @param parameters vector that stores the parameters used for the simulations (Order: [non.decision.time, drift, sd, theta])
 #' @param timestep timestep in ms associated with each step in the drift diffusion process
 #' @param nr_reps number of repitions (simulation runs)
 #' @param maxdur maximum duration in ms that the process is allowed to simulate
@@ -64,8 +53,8 @@ aevacc2_by_trial <- function(sd = 0, theta = 0, gamma = 0, drift = 0, non_decisi
 #' @param gamma placeholder for interface consistency / see multiattribute versions for specification
 #' @param nr_attributes placeholder for interface consistency / see multiattribute versions for specification
 #' @export
-aevacc2_full_output <- function(sd, theta, gamma, drift, non_decision_time, maxdur, update, nr_attributes, fixation_model, nr_reps, timestep) {
-    .Call('addmtoolbox_aevacc2_full_output', PACKAGE = 'addmtoolbox', sd, theta, gamma, drift, non_decision_time, maxdur, update, nr_attributes, fixation_model, nr_reps, timestep)
+aevacc2_full_output <- function(parameters, maxdur, update, nr_attributes, fixation_model, nr_reps, timestep) {
+    .Call('addmtoolbox_aevacc2_full_output', PACKAGE = 'addmtoolbox', parameters, maxdur, update, nr_attributes, fixation_model, nr_reps, timestep)
 }
 
 #' Simulate aDDM process by unique trial condition (>2 items)
@@ -73,10 +62,7 @@ aevacc2_full_output <- function(sd, theta, gamma, drift, non_decision_time, maxd
 #' @title Simulate aDDM process by unique trial condition (>2 items)
 #' \code{aevacc_by_condition()}
 #' @return vector that stores decisions and rts for each simulation run
-#' @param sd standard deviation used for drift diffusion process
-#' @param theta theta (attentional bias) used for drift diffusion process
-#' @param drift drift-rate used for drift diffusion process
-#' @param non_decision_time non decision time used for drift diffusion process
+#' @param parameters vector that stores the parameters used for the simulations (Order: [non.decision.time, drift, sd, theta])
 #' @param timestep timestep in ms associated with each step in the drift diffusion process
 #' @param nr_reps number of repitions (simulation runs)
 #' @param maxdur maximum duration in ms that the process is allowed to simulate
@@ -85,11 +71,10 @@ aevacc2_full_output <- function(sd, theta, gamma, drift, non_decision_time, maxd
 #' @param fixdur Vector that stores the fixation durations for a supplied fixed fixation pathway
 #' @param fixdursamples Vector from which fixation duration can be sampled once supplied fixations run out
 #' @param fixation_model a user supplied fixation model that will be utilized to supply fixation locations and potentially fixation durations
-#' @param gamma placeholder for interface consistency / see multiattribute versions for specification
 #' @param nr_attributes placeholder for interface consistency / see multiattribute versions for specification
 #' @export
-aevacc_by_condition <- function(sd, theta, gamma, drift, non_decision_time, maxdur, update, nr_attributes, fixation_model, nr_reps, timestep) {
-    .Call('addmtoolbox_aevacc_by_condition', PACKAGE = 'addmtoolbox', sd, theta, gamma, drift, non_decision_time, maxdur, update, nr_attributes, fixation_model, nr_reps, timestep)
+aevacc_by_condition <- function(parameters, maxdur, update, nr_attributes, fixation_model, nr_reps, timestep) {
+    .Call('addmtoolbox_aevacc_by_condition', PACKAGE = 'addmtoolbox', parameters, maxdur, update, nr_attributes, fixation_model, nr_reps, timestep)
 }
 
 #' Simulate aDDM process by unique trial condition (>2 items, allow memory effects)
@@ -97,10 +82,7 @@ aevacc_by_condition <- function(sd, theta, gamma, drift, non_decision_time, maxd
 #' @title Simulate aDDM process by unique trial condition (>2 items, allow memory effects)
 #' \code{aevacc_by_condition_memnoise()}
 #' @return vector that stores decisions and rts for each simulation run
-#' @param sd standard deviation used for drift diffusion process
-#' @param theta theta (attentional bias) used for drift diffusion process
-#' @param drift drift-rate used for drift diffusion process
-#' @param non_decision_time non decision time used for drift diffusion process
+#' @param parameters vector that stores the parameters used for the simulations (Order: [non.decision.time, drift, sd, theta, gamma, scalar_items_seen_drift, scala_items_seen_noise])
 #' @param timestep timestep in ms associated with each step in the drift diffusion process
 #' @param nr_reps number of repitions (simulation runs)
 #' @param maxdur maximum duration in ms that the process is allowed to simulate
@@ -109,11 +91,9 @@ aevacc_by_condition <- function(sd, theta, gamma, drift, non_decision_time, maxd
 #' @param fixdur Vector that stores the fixation durations for a supplied fixed fixation pathway
 #' @param fixdursamples Vector from which fixation duration can be sampled once supplied fixations run out
 #' @param fixation_model a user supplied fixation model that will be utilized to supply fixation locations and potentially fixation durations
-#' @param items_seen_bias Numeric Variable storing the relative amount of drift that unseen items receive
-#' @param items_seen_noise_bias Numeric Variable storing the relative noise sd that unseen items receive
 #' @export
-aevacc_by_condition_memnoise <- function(sd, theta, drift, non_decision_time, items_seen_bias, items_seen_noise_bias, maxdur, update, fixation_model, nr_reps, timestep) {
-    .Call('addmtoolbox_aevacc_by_condition_memnoise', PACKAGE = 'addmtoolbox', sd, theta, drift, non_decision_time, items_seen_bias, items_seen_noise_bias, maxdur, update, fixation_model, nr_reps, timestep)
+aevacc_by_condition_memnoise <- function(parameters, maxdur, update, fixation_model, nr_reps, timestep) {
+    .Call('addmtoolbox_aevacc_by_condition_memnoise', PACKAGE = 'addmtoolbox', parameters, maxdur, update, fixation_model, nr_reps, timestep)
 }
 
 #' Simulate aDDM process by unique trial (>2 items)
@@ -121,10 +101,7 @@ aevacc_by_condition_memnoise <- function(sd, theta, drift, non_decision_time, it
 #' @author Alexander Fengler, \email{alexanderfengler@@gmx.de}
 #' @title Simulate aDDM process by unique trial (>2 items)
 #' @return Returns a numeric variable that provides a success count (runs that predicted a reaction time in the correct rt-bin and simultaneously the correct decision)
-#' @param sd standard deviation used for drift diffusion process
-#' @param theta theta (attentional bias) used for drift diffusion process
-#' @param drift drift-rate used for drift diffusion process
-#' @param non_decision_time non decision time used for drift diffusion process
+#' @param parameters vector that stores the parameters used for the simulations (Order: [non.decision.time, drift, sd, theta])
 #' @param timestep timestep in ms associated with each step in the drift diffusion process
 #' @param nr_reps number of repitions (simulation runs)
 #' @param maxdur numeric variable that supplies the maximum reaction time considered a success in simulations
@@ -133,11 +110,10 @@ aevacc_by_condition_memnoise <- function(sd, theta, drift, non_decision_time, it
 #' @param update Vector that stores the item valuations for the trial conditon simulated
 #' @param fixpos Vector that stores the locations for a supplied fixed fixation pathway
 #' @param fixdur Vector that stores the fixation durations for a supplied fixed fixation pathway
-#' @param gamma placeholder for interface consistency / see multiattribute versions for specification
 #' @param nr_attributes placeholder for interface consistency / see multiattribute versions for specification
 #' @export
-aevacc_by_trial <- function(sd, theta, gamma, drift, non_decision_time, maxdur, mindur, cur_decision, update, nr_attributes, fixpos, fixdur, nr_reps, timestep) {
-    .Call('addmtoolbox_aevacc_by_trial', PACKAGE = 'addmtoolbox', sd, theta, gamma, drift, non_decision_time, maxdur, mindur, cur_decision, update, nr_attributes, fixpos, fixdur, nr_reps, timestep)
+aevacc_by_trial <- function(parameters, maxdur, mindur, cur_decision, update, nr_attributes, fixpos, fixdur, nr_reps, timestep) {
+    .Call('addmtoolbox_aevacc_by_trial', PACKAGE = 'addmtoolbox', parameters, maxdur, mindur, cur_decision, update, nr_attributes, fixpos, fixdur, nr_reps, timestep)
 }
 
 #' Simulate aDDM process by unique trial (>2 items, allow memory effects)
@@ -145,10 +121,7 @@ aevacc_by_trial <- function(sd, theta, gamma, drift, non_decision_time, maxdur, 
 #' @author Alexander Fengler, \email{alexanderfengler@@gmx.de}
 #' @title Simulate aDDM process by unique trial (>2 items, allow memory effects)
 #' @return numeric variable that provides a success count (runs that predicted a reaction time in the correct rt-bin and simultaneously the correct decision)
-#' @param sd standard deviation used for drift diffusion process
-#' @param theta theta (attentional bias) used for drift diffusion process
-#' @param drift drift-rate used for drift diffusion process
-#' @param non_decision_time non decision time used for drift diffusion process
+#' @param parameters vector that stores the parameters used for the simulations (Order: [non.decision.time, drift, sd, theta, gamma, scalar_items_seen_drift, scala_items_seen_noise])
 #' @param timestep timestep in ms associated with each step in the drift diffusion process
 #' @param nr_reps number of repitions (simulation runs)
 #' @param maxdur numeric variable that supplies the maximum reaction time considered a success in simulations
@@ -160,8 +133,8 @@ aevacc_by_trial <- function(sd, theta, gamma, drift, non_decision_time, maxdur, 
 #' @param items_seen_bias Numeric Variable storing the relative amount of drift that unseen items receive
 #' @param items_seen_noise_bias Numeric Variable storing the relative noise sd that unseen items receive
 #' @export
-aevacc_by_trial_memnoise <- function(sd, theta, drift, non_decision_time, items_seen_bias, items_seen_noise_bias, maxdur, mindur, cur_decision, update, fixpos, fixdur, nr_reps, timestep) {
-    .Call('addmtoolbox_aevacc_by_trial_memnoise', PACKAGE = 'addmtoolbox', sd, theta, drift, non_decision_time, items_seen_bias, items_seen_noise_bias, maxdur, mindur, cur_decision, update, fixpos, fixdur, nr_reps, timestep)
+aevacc_by_trial_memnoise <- function(parameters, maxdur, mindur, cur_decision, update, nr_attributes, fixpos, fixdur, nr_reps, timestep) {
+    .Call('addmtoolbox_aevacc_by_trial_memnoise', PACKAGE = 'addmtoolbox', parameters, maxdur, mindur, cur_decision, update, nr_attributes, fixpos, fixdur, nr_reps, timestep)
 }
 
 #' Simulate aDDM process (>2 items, allow memory effects) for detailed model output
@@ -169,20 +142,15 @@ aevacc_by_trial_memnoise <- function(sd, theta, drift, non_decision_time, items_
 #' @title Simulate aDDM process (>2 items, allow memory effects) for detailed model output
 #' \code{aevacc_full_output_memnoise()}
 #' @return vector that stores detailed output by simulation run
-#' @param sd standard deviation used for drift diffusion process
-#' @param theta theta (attentional bias) used for drift diffusion process
-#' @param drift drift-rate used for drift diffusion process
-#' @param non_decision_time non decision time used for drift diffusion process
+#' @param parameters vector that stores the parameters used for the simulations (Order: [non.decision.time, drift, sd, theta, gamma, scalar_items_seen_drift, scala_items_seen_noise])
 #' @param timestep timestep in ms associated with each step in the drift diffusion process
 #' @param nr_reps number of repitions (simulation runs)
 #' @param maxdur maximum duration in ms that the process is allowed to simulate
 #' @param update Vector that stores the item valuations for the trial conditon simulated
 #' @param fixation_model a user supplied fixation model that will be utilized to supply fixation locations and potentially fixation durations
-#' @param items_seen_bias Numeric Variable storing the relative amount of drift that unseen items receive
-#' @param items_seen_noise_bias Numeric Variable storing the relative noise sd that unseen items receive
 #' @export
-aevacc_full_output_memnoise <- function(sd, theta, drift, non_decision_time, items_seen_bias, items_seen_noise_bias, maxdur, update, fixation_model, nr_reps, timestep) {
-    .Call('addmtoolbox_aevacc_full_output_memnoise', PACKAGE = 'addmtoolbox', sd, theta, drift, non_decision_time, items_seen_bias, items_seen_noise_bias, maxdur, update, fixation_model, nr_reps, timestep)
+aevacc_full_output_memnoise <- function(parameters, maxdur, update, fixation_model, nr_reps, timestep) {
+    .Call('addmtoolbox_aevacc_full_output_memnoise', PACKAGE = 'addmtoolbox', parameters, maxdur, update, fixation_model, nr_reps, timestep)
 }
 
 #' Simulate aDDM process by unique trial condition (2 items, multiattribute)
@@ -190,19 +158,15 @@ aevacc_full_output_memnoise <- function(sd, theta, drift, non_decision_time, ite
 #' @title Simulate aDDM process (by condition, 2 items)
 #' \code{aevaccma2_by_condition()}
 #' @return vector that stores decisions and rts for each simulation run
-#' @param sd standard deviation used for drift diffusion process
-#' @param theta theta used for drift diffusion process [0,1]
-#' @param gamma secondary attentional bias which refers to attributes no inspected [0,1]
-#' @param drift drift-rate used for drift diffusion process
-#' @param non_decision_time non decision time used for drift diffusion process
+#' @param parameters vector that stores the parameters used for the simulations (Order: [non.decision.time, drift, sd, theta, gamma])
 #' @param timestep timestep in ms associated with each step in the drift diffusion process
 #' @param nr_reps number of repitions (simulation runs)
 #' @param maxdur maximum duration in ms that the process is allowed to simulate
 #' @param update Vector that stores the item valuations for the trial conditon simulated
 #' @param fixation_model a user supplied fixation model that will be utilized to supply fixation locations and potentially fixation durations
 #' @export
-aevaccma2_by_condition <- function(sd = 0, theta = 0, gamma = 0, drift = 0, non_decision_time = 0L, maxdur = 0L, update = 0L, nr_attributes = 1L, fixation_model = 0L, nr_reps = 0L, timestep = 0L) {
-    .Call('addmtoolbox_aevaccma2_by_condition', PACKAGE = 'addmtoolbox', sd, theta, gamma, drift, non_decision_time, maxdur, update, nr_attributes, fixation_model, nr_reps, timestep)
+aevaccma2_by_condition <- function(parameters, maxdur = 0L, update = 0L, nr_attributes = 1L, fixation_model = 0L, nr_reps = 0L, timestep = 0L) {
+    .Call('addmtoolbox_aevaccma2_by_condition', PACKAGE = 'addmtoolbox', parameters, maxdur, update, nr_attributes, fixation_model, nr_reps, timestep)
 }
 
 #' Simulate aDDM process by unique trial (2 items // multiattribute)
@@ -210,11 +174,7 @@ aevaccma2_by_condition <- function(sd = 0, theta = 0, gamma = 0, drift = 0, non_
 #' @author Alexander Fengler, \email{alexanderfengler@@gmx.de}
 #' @title Simulate aDDM process (by trial, 2 items, multiattribute)
 #' @return numeric variable that provides a success count (runs that predicted a reaction time in the correct rt-bin and simultaneously the correct decision)
-#' @param sd standard deviation used for drift diffusion process
-#' @param theta theta (attentional bias) used for drift diffusion process [0,1]
-#' @param gamma secondary attentional bias which refers to attributes no inspected [0,1]
-#' @param drift drift-rate used for drift diffusion process
-#' @param non_decision_time non decision time used for drift diffusion process
+#' @param parameters vector that stores the parameters used for the simulations (Order: [non.decision.time, drift, sd, theta, gamma])
 #' @param timestep timestep in ms associated with each step in the drift diffusion process
 #' @param nr_reps number of repitions (simulation runs)
 #' @param maxdur numeric variable that supplies the maximum reaction time considered a success in simulations
@@ -225,8 +185,8 @@ aevaccma2_by_condition <- function(sd = 0, theta = 0, gamma = 0, drift = 0, non_
 #' @param fixdur Vector that stores the fixation durations for a supplied fixed fixation pathway
 #' @param cur_maxfix integer that provides number of fixation in trial
 #' @export
-aevaccma2_by_trial <- function(sd, theta, gamma, drift, non_decision_time, maxdur, mindur, cur_decision, update, nr_attributes, fixpos, fixdur, nr_reps, timestep) {
-    .Call('addmtoolbox_aevaccma2_by_trial', PACKAGE = 'addmtoolbox', sd, theta, gamma, drift, non_decision_time, maxdur, mindur, cur_decision, update, nr_attributes, fixpos, fixdur, nr_reps, timestep)
+aevaccma2_by_trial <- function(parameters, maxdur, mindur, cur_decision, update, nr_attributes, fixpos, fixdur, nr_reps, timestep) {
+    .Call('addmtoolbox_aevaccma2_by_trial', PACKAGE = 'addmtoolbox', parameters, maxdur, mindur, cur_decision, update, nr_attributes, fixpos, fixdur, nr_reps, timestep)
 }
 
 #' Simulate aDDM process (2 items, multiattribute) with detailed output
@@ -234,20 +194,20 @@ aevaccma2_by_trial <- function(sd, theta, gamma, drift, non_decision_time, maxdu
 #' @title Simulate aDDM process (2 items) with detailed output
 #' \code{aevaccma2_full_output()}
 #' @return vector that stores detailed output by simulation run
-#' @param sd standard deviation used for drift diffusion process
-#' @param theta theta (attentional bias) used for drift diffusion process
-#' @param drift drift-rate used for drift diffusion process
-#' @param non_decision_time non decision time used for drift diffusion process
+#' @param parameters vector that stores the parameters used for the simulations (Order: [non.decision.time, drift, sd, theta, gamma])
 #' @param timestep timestep in ms associated with each step in the drift diffusion process
 #' @param nr_reps number of repitions (simulation runs)
 #' @param maxdur maximum duration in ms that the process is allowed to simulate
 #' @param update Vector that stores the item valuations for the trial conditon simulated
 #' @param fixation_model a user supplied fixation model that will be utilized to supply fixation locations and potentially fixation durations
-#' @param gamma placeholder for interface consistency / see multiattribute versions for specification
 #' @param nr_attributes placeholder for interface consistency / see multiattribute versions for specification
 #' @export
-aevaccma2_full_output <- function(sd, theta, gamma, drift, non_decision_time, maxdur, update, nr_attributes, fixation_model, nr_reps, timestep) {
-    .Call('addmtoolbox_aevaccma2_full_output', PACKAGE = 'addmtoolbox', sd, theta, gamma, drift, non_decision_time, maxdur, update, nr_attributes, fixation_model, nr_reps, timestep)
+aevaccma2_full_output <- function(parameters, maxdur, update, nr_attributes, fixation_model, nr_reps, timestep) {
+    .Call('addmtoolbox_aevaccma2_full_output', PACKAGE = 'addmtoolbox', parameters, maxdur, update, nr_attributes, fixation_model, nr_reps, timestep)
+}
+
+defaultt <- function(x = 1L, y = 1L, z = 1L) {
+    .Call('addmtoolbox_defaultt', PACKAGE = 'addmtoolbox', x, y, z)
 }
 
 #' Simulate aDDM process by unique trial condition (2 items)
@@ -255,11 +215,7 @@ aevaccma2_full_output <- function(sd, theta, gamma, drift, non_decision_time, ma
 #' @title Simulate aDDM process (by condition, 2 items)
 #' \code{dynamicaddm()}
 #' @return numeric variable storing likelihood value
-#' @param sd standard deviation used for drift diffusion process
-#' @param theta theta used for drift diffusion process
-#' @param gamma placeholder for interface consistency / see multiattribute versions for specification
-#' @param drift drift-rate used for drift diffusion process
-#' @param non_decision_time non decision time used for drift diffusion process
+#' @param parameters vector that stores the parameters used for the simulations (Order: [non.decision.time, drift, sd, theta, gamma])
 #' @param decision integer which gives choice in current trial (1 or 2)
 #' @param rt reaction time of provided trial
 #' @param valuations vector that stores the item valuations for the provided trial
@@ -268,8 +224,8 @@ aevaccma2_full_output <- function(sd, theta, gamma, drift, non_decision_time, ma
 #' @param fixdur vector with all empirical fixation durations encounrtered in provided trial
 #' @param stateStep numeric variable between [0,1] that indicates how finegrained the vertical grid of the model space shall be computed
 #' @export
-dynamicaddm <- function(sd = 0, theta = 0, gamma = 0, drift = 0, non_decision_time = 0L, decision = 0L, valuations = 0L, nr_attributes = 0L, fixpos = 0L, fixdur = 0L, rt = 0L, stateStep = 0) {
-    .Call('addmtoolbox_dynamicaddm', PACKAGE = 'addmtoolbox', sd, theta, gamma, drift, non_decision_time, decision, valuations, nr_attributes, fixpos, fixdur, rt, stateStep)
+dynamicaddm <- function(parameters, decision = 0L, valuations = 0L, nr_attributes = 0L, fixpos = 0L, fixdur = 0L, rt = 0L, stateStep = 0) {
+    .Call('addmtoolbox_dynamicaddm', PACKAGE = 'addmtoolbox', parameters, decision, valuations, nr_attributes, fixpos, fixdur, rt, stateStep)
 }
 
 #' Simulate DDM process by unique trial condition (2 items)
@@ -277,11 +233,6 @@ dynamicaddm <- function(sd = 0, theta = 0, gamma = 0, drift = 0, non_decision_ti
 #' @title Simulate DDM process (by condition, 2 items)
 #' \code{dynamicddm()}
 #' @return numeric variable storing likelihood value
-#' @param sd standard deviation used for drift diffusion process
-#' @param theta numeric variable placeholder for interface consistency / see attentional versions for specification
-#' @param gamma numeric variable placeholder for interface consistency / see multiattribute versions for specification
-#' @param drift drift-rate used for drift diffusion process
-#' @param non_decision_time non decision time used for drift diffusion process
 #' @param decision integer which gives choice in current trial (1 or 2)
 #' @param rt reaction time of provided trial
 #' @param valuations vector that stores the item valuations for the provided trial
@@ -290,8 +241,8 @@ dynamicaddm <- function(sd = 0, theta = 0, gamma = 0, drift = 0, non_decision_ti
 #' @param fixdur vector placeholder for interface consistency / see attentional versions for specification
 #' @param stateStep numeric variable between [0,1] that indicates how finegrained the vertical grid of the model space shall be computed
 #' @export
-dynamicddm <- function(sd = 0, theta = 0, gamma = 0, drift = 0, non_decision_time = 0L, decision = 0L, valuations = 0L, nr_attributes = 0L, fixpos = 0L, fixdur = 0L, rt = 0L, stateStep = 0) {
-    .Call('addmtoolbox_dynamicddm', PACKAGE = 'addmtoolbox', sd, theta, gamma, drift, non_decision_time, decision, valuations, nr_attributes, fixpos, fixdur, rt, stateStep)
+dynamicddm <- function(parameters, decision = 0L, valuations = 0L, nr_attributes = 0L, fixpos = 0L, fixdur = 0L, rt = 0L, stateStep = 0) {
+    .Call('addmtoolbox_dynamicddm', PACKAGE = 'addmtoolbox', parameters, decision, valuations, nr_attributes, fixpos, fixdur, rt, stateStep)
 }
 
 #' Simulate aDDM process by unique trial condition (2 items)
@@ -299,11 +250,7 @@ dynamicddm <- function(sd = 0, theta = 0, gamma = 0, drift = 0, non_decision_tim
 #' @title Simulate aDDM process (by condition, 2 items)
 #' \code{dynamicaddm()}
 #' @return numeric variable storing likelihood value
-#' @param sd standard deviation used for drift diffusion process
-#' @param theta theta used for drift diffusion process [0,1]
-#' @param gamma secondary attentional bias which refers to attributes no inspected [0,1]
-#' @param drift drift-rate used for drift diffusion process
-#' @param non_decision_time non decision time used for drift diffusion process
+#' @param parameters vector that stores the parameters used for the simulations (Order: [non.decision.time, drift, sd, theta, gamma])
 #' @param decision integer which gives choice in current trial (1 or 2)
 #' @param rt reaction time of provided trial
 #' @param valuations vector that stores the item valuations for the provided trial
@@ -312,8 +259,8 @@ dynamicddm <- function(sd = 0, theta = 0, gamma = 0, drift = 0, non_decision_tim
 #' @param fixdur vector with all empirical fixation durations encounrtered in provided trial
 #' @param stateStep numeric variable between [0,1] that indicates how finegrained the vertical grid of the model space shall be computed
 #' @export
-dynamicmaaddm <- function(sd = 0, theta = 0, gamma = 0, drift = 0, non_decision_time = 0L, decision = 0L, valuations = 0L, nr_attributes = 0L, fixpos = 0L, fixdur = 0L, rt = 0L, stateStep = 0) {
-    .Call('addmtoolbox_dynamicmaaddm', PACKAGE = 'addmtoolbox', sd, theta, gamma, drift, non_decision_time, decision, valuations, nr_attributes, fixpos, fixdur, rt, stateStep)
+dynamicmaaddm <- function(parameters, decision = 0L, valuations = 0L, nr_attributes = 0L, fixpos = 0L, fixdur = 0L, rt = 0L, stateStep = 0) {
+    .Call('addmtoolbox_dynamicmaaddm', PACKAGE = 'addmtoolbox', parameters, decision, valuations, nr_attributes, fixpos, fixdur, rt, stateStep)
 }
 
 #' Simulate DDM process by unique trial condition (2 items)
@@ -321,20 +268,16 @@ dynamicmaaddm <- function(sd = 0, theta = 0, gamma = 0, drift = 0, non_decision_
 #' @title Simulate DDM process (by condition, 2 items)
 #' \code{evacc2_by_condition()}
 #' @return vector that stores decisions and rts for each simulation run
-#' @param sd standard deviation used for drift diffusion process
-#' @param theta placeholder for interface consistency / see attentional versions for specification
-#' @param drift drift-rate used for drift diffusion process
-#' @param non_decision_time non decision time used for drift diffusion process
+#' @param parameters vector that stores the parameters used for the simulations (Order: [non.decision.time, drift, sd])
 #' @param timestep timestep in ms associated with each step in the drift diffusion process
 #' @param nr_reps number of repitions (simulation runs)
 #' @param maxdur maximum duration in ms that the process is allowed to simulate
 #' @param update Vector that stores the item valuations for the trial conditon simulated
 #' @param fixation_model placeholder for interface consistency / see attentional versions for specification
-#' @param gamma placeholder for interface consistency / see multiattribute versions for specification
 #' @param nr_attributes placeholder for interface consistency / see multiattribute versions for specification
 #' @export
-evacc2_by_condition <- function(sd, theta, gamma, drift, non_decision_time, maxdur, update, nr_attributes, fixation_model, nr_reps, timestep) {
-    .Call('addmtoolbox_evacc2_by_condition', PACKAGE = 'addmtoolbox', sd, theta, gamma, drift, non_decision_time, maxdur, update, nr_attributes, fixation_model, nr_reps, timestep)
+evacc2_by_condition <- function(parameters, maxdur, update, nr_attributes, fixation_model, nr_reps, timestep) {
+    .Call('addmtoolbox_evacc2_by_condition', PACKAGE = 'addmtoolbox', parameters, maxdur, update, nr_attributes, fixation_model, nr_reps, timestep)
 }
 
 #' Simulate DDM process by unique trial (2 items)
@@ -342,10 +285,7 @@ evacc2_by_condition <- function(sd, theta, gamma, drift, non_decision_time, maxd
 #' @author Alexander Fengler, \email{alexanderfengler@@gmx.de}
 #' @title Simulate DDM process (by trial, 2 items)
 #' @return numeric variable that provides a success count (runs that predicted a reaction time in the correct rt-bin and simultaneously the correct decision)
-#' @param sd standard deviation used for drift diffusion process
-#' @param theta placeholder for interface consistency / see attentional versions for specification
-#' @param drift drift-rate used for drift diffusion process
-#' @param non_decision_time non decision time used for drift diffusion process
+#' @param parameters vector that stores the parameters used for the simulations (Order: [non.decision.time, drift, sd])
 #' @param timestep timestep in ms associated with each step in the drift diffusion process
 #' @param nr_reps number of repitions (simulation runs)
 #' @param maxdur numeric variable that supplies the maximum reaction time considered a success in simulations
@@ -355,10 +295,9 @@ evacc2_by_condition <- function(sd, theta, gamma, drift, non_decision_time, maxd
 #' @param fixpos Vector placeholder for interface consistency / see attentional versions for specification
 #' @param fixdur Vector placeholder for interface consistency / see attentional versions for specification
 #' @param cur_maxfix integer that provides number of fixation in trial
-#' @param gamma placeholder for interface consistency / see multiattribute versions for specification
 #' @param nr_attributes placeholder for interface consistency / see multiattribute versions for specification
 #' @export
-evacc2_by_trial <- function(sd = 0, theta = 0, gamma = 0, drift = 0, non_decision_time = 0L, maxdur = 0L, mindur = 0L, cur_decision = 0L, update = 0L, nr_attributes = 0L, fixpos = 0L, fixdur = 0L, nr_reps = 0L, timestep = 0L) {
-    .Call('addmtoolbox_evacc2_by_trial', PACKAGE = 'addmtoolbox', sd, theta, gamma, drift, non_decision_time, maxdur, mindur, cur_decision, update, nr_attributes, fixpos, fixdur, nr_reps, timestep)
+evacc2_by_trial <- function(parameters, maxdur = 0L, mindur = 0L, cur_decision = 0L, update = 0L, nr_attributes = 0L, fixpos = 0L, fixdur = 0L, nr_reps = 0L, timestep = 0L) {
+    .Call('addmtoolbox_evacc2_by_trial', PACKAGE = 'addmtoolbox', parameters, maxdur, mindur, cur_decision, update, nr_attributes, fixpos, fixdur, nr_reps, timestep)
 }
 

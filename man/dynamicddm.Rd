@@ -5,22 +5,10 @@
 \title{Simulate DDM process (by condition, 2 items)
 \code{dynamicddm()}}
 \usage{
-dynamicddm(sd = 0, theta = 0, gamma = 0, drift = 0,
-  non_decision_time = 0L, decision = 0L, valuations = 0L,
-  nr_attributes = 0L, fixpos = 0L, fixdur = 0L, rt = 0L,
-  stateStep = 0)
+dynamicddm(parameters, decision = 0L, valuations = 0L, nr_attributes = 0L,
+  fixpos = 0L, fixdur = 0L, rt = 0L, stateStep = 0)
 }
 \arguments{
-\item{sd}{standard deviation used for drift diffusion process}
-
-\item{theta}{numeric variable placeholder for interface consistency / see attentional versions for specification}
-
-\item{gamma}{numeric variable placeholder for interface consistency / see multiattribute versions for specification}
-
-\item{drift}{drift-rate used for drift diffusion process}
-
-\item{non_decision_time}{non decision time used for drift diffusion process}
-
 \item{decision}{integer which gives choice in current trial (1 or 2)}
 
 \item{valuations}{vector that stores the item valuations for the provided trial}

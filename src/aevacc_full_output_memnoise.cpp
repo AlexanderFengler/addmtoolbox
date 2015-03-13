@@ -11,25 +11,15 @@ static Ziggurat::Ziggurat::Ziggurat zigg;
 //' @title Simulate aDDM process (>2 items, allow memory effects) for detailed model output
 //' \code{aevacc_full_output_memnoise()}
 //' @return vector that stores detailed output by simulation run
-//' @param sd standard deviation used for drift diffusion process
-//' @param theta theta (attentional bias) used for drift diffusion process
-//' @param drift drift-rate used for drift diffusion process
-//' @param non_decision_time non decision time used for drift diffusion process
+//' @param parameters vector that stores the parameters used for the simulations (Order: [non.decision.time, drift, sd, theta, gamma, scalar_items_seen_drift, scala_items_seen_noise])
 //' @param timestep timestep in ms associated with each step in the drift diffusion process
 //' @param nr_reps number of repitions (simulation runs)
 //' @param maxdur maximum duration in ms that the process is allowed to simulate
 //' @param update Vector that stores the item valuations for the trial conditon simulated
 //' @param fixation_model a user supplied fixation model that will be utilized to supply fixation locations and potentially fixation durations
-//' @param items_seen_bias Numeric Variable storing the relative amount of drift that unseen items receive
-//' @param items_seen_noise_bias Numeric Variable storing the relative noise sd that unseen items receive
 //' @export
 // [[Rcpp::export]]
-NumericVector aevacc_full_output_memnoise(float sd,
-                                          float theta,
-                                          float drift,
-                                          int non_decision_time,
-                                          float items_seen_bias,
-                                          float items_seen_noise_bias,
+NumericVector aevacc_full_output_memnoise(NumericVector parameters,
                                           int maxdur,
                                           NumericVector update,
                                           Function fixation_model,
@@ -40,6 +30,16 @@ NumericVector aevacc_full_output_memnoise(float sd,
   NumericVector seed(1);
   seed = floor(runif(1,-100000,100000));
   zigg.setSeed(seed[0]);
+  // ----------------------------------------------------------------------------------------------
+
+  // Initialize parameters ------------------------------------------------------------------------
+  int non_decision_time = parameters[0];
+  float drift = parameters[1];
+  float sd = parameters[2];
+  float theta = parameters[3];
+  // float gamma = parameters[4] not used but for completeness as placeholder
+  float items_seen_bias = parameters[5];
+  float items_seen_noise_bias= parameters[6];
   // ----------------------------------------------------------------------------------------------
 
   // Output Collection Variables ------------------------------------------------------------------
@@ -73,8 +73,6 @@ NumericVector aevacc_full_output_memnoise(float sd,
   NumericVector temp_update(nr_items);      // storing current updates adjusted for items_seen and items_seen noise
   NumericVector items_seen(nr_items);       // vector that scales drift for unseen items
   NumericVector items_seen_noise(nr_items); // vector than scales noise for unseen items
-
-  // ------------------------------------------------------------------------------------------------
 
   for (int i = 0; i < nr_items; ++i){
     update[i] = update[i]*drift;

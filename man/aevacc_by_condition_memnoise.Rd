@@ -5,22 +5,11 @@
 \title{Simulate aDDM process by unique trial condition (>2 items, allow memory effects)
 \code{aevacc_by_condition_memnoise()}}
 \usage{
-aevacc_by_condition_memnoise(sd, theta, drift, non_decision_time,
-  items_seen_bias, items_seen_noise_bias, maxdur, update, fixation_model,
+aevacc_by_condition_memnoise(parameters, maxdur, update, fixation_model,
   nr_reps, timestep)
 }
 \arguments{
-\item{sd}{standard deviation used for drift diffusion process}
-
-\item{theta}{theta (attentional bias) used for drift diffusion process}
-
-\item{drift}{drift-rate used for drift diffusion process}
-
-\item{non_decision_time}{non decision time used for drift diffusion process}
-
-\item{items_seen_bias}{Numeric Variable storing the relative amount of drift that unseen items receive}
-
-\item{items_seen_noise_bias}{Numeric Variable storing the relative noise sd that unseen items receive}
+\item{parameters}{vector that stores the parameters used for the simulations (Order: [non.decision.time, drift, sd, theta, gamma, scalar_items_seen_drift, scala_items_seen_noise])}
 
 \item{maxdur}{maximum duration in ms that the process is allowed to simulate}
 

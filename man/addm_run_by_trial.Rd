@@ -6,15 +6,16 @@
 \usage{
 addm_run_by_trial(choice.dat = data.table(v1 = 0, v2 = 0, id = 0),
   eye.dat = data.table(fixloc = 0, fixdur = 0, fixnr = 1, id = 0),
-  model.parameters = c(0.002, 0.5, 0.07, 0), nr.attributes = 1,
-  nr.reps = 1000, timestep = 10, model.type = "standard")
+  model.parameters = c(0, 0.002, 0.07, 1), nr.attributes = 1,
+  boundaryfun = 1, nr.reps = 1000, timestep = 10,
+  model.type = "standard")
 }
 \arguments{
 \item{choice.dat}{data.table storing the item valuations (v1,v2...), reaction times in ms (rt), decisions (decision) and unique trial ids (id).}
 
 \item{eye.dat}{data.table storing eyetracking data by trial. Fixation location (fixloc), Fixation number (fixnr), Fixation duration (fixdur) and a unique trial ids (id).}
 
-\item{model.parameters}{vector with the four core addm parameters in order (drift.rate, theta, sd, non.decision.time).}
+\item{model.parameters}{vector with the four core addm parameters in order (non.decision.time, drift, sd, theta, gamma, boundary-parameters).}
 
 \item{nr.attributes}{integer providing the amount of attributes we consider per item}
 

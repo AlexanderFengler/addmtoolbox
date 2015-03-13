@@ -4,10 +4,12 @@
 \alias{addm2_fixation_model_random}
 \title{Example for user-supplied fixation model (aevacc functions)}
 \usage{
-addm2_fixation_model_random(cur.valuations = c(0, 0))
+addm2_fixation_model_random(cur.valuations = c(0, 0), fixdur = 400)
 }
 \arguments{
 \item{cur.valuations}{vector that provides item valuations in current choice set}
+
+\item{fixdur}{integer variable providing the duration by fixation simulated (in ms)}
 }
 \value{
 matrix with two rows. One providing fixation location and the second providing fixation duration

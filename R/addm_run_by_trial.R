@@ -6,7 +6,7 @@
 #' @export
 #' @param eye.dat data.table storing eyetracking data by trial. Fixation location (fixloc), Fixation number (fixnr), Fixation duration (fixdur) and a unique trial ids (id).
 #' @param choice.dat data.table storing the item valuations (v1,v2...), reaction times in ms (rt), decisions (decision) and unique trial ids (id).
-#' @param model.parameters vector with the four core addm parameters in order (drift.rate, theta, sd, non.decision.time).
+#' @param model.parameters vector with the four core addm parameters in order (non.decision.time, drift, sd, theta, gamma, boundary-parameters).
 #' @param nr.attributes integer providing the amount of attributes we consider per item
 #' @param nr.reps integer that tells the function how many simulation runs to use.
 #' @param model.type string that indicates which version of the model to run. 'standard' for traditional (a)ddm, or 'memnoise' when memory effects shall be allowed.
@@ -14,27 +14,23 @@
 
 addm_run_by_trial = function(choice.dat = data.table(v1 = 0,v2 = 0, id = 0),
                              eye.dat = data.table(fixloc = 0, fixdur = 0, fixnr = 1, id = 0),
-                             model.parameters = c(0.002,0.5,0.07,0),
+                             model.parameters = c(0,0.002,0.07,1),
                              nr.attributes = 1,
+                             boundaryfun = 1,
                              nr.reps = 1000,
                              timestep = 10,
                              model.type = 'standard'){
 
-  # INITIALIZATION OF PARAMETERS -------------------------------------------------------------------------------------------------------
-  if (nr.attributes == 1){
-    drift.rate = model.parameters[1]
-    theta = model.parameters[2]
-    cur.sd = model.parameters[3]
-    non.decision.time = model.parameters[4]
-    gamma = 1
-  } else {
-    drift.rate = model.parameters[1]
-    theta = model.parameters[2]
-    gamma = model.parameters[3]
-    cur.sd = model.parameters[4]
-    non.decision.time = model.parameters[5]
+  # Compute Boundaries -----------------------------------------------------------------------------------------------------------------
+  if (class(boundaryfun) == 'function'){
+    # COMPUTE
   }
-  #-------------------------------------------------------------------------------------------------------------------------------------
+  # ------------------------------------------------------------------------------------------------------------------------------------
+
+  # Initialize parameter theta ---------------------------------------------------------------------------------------------------------
+  # only for readability, because it is used later on
+  theta = model.parameters[4]
+  # ------------------------------------------------------------------------------------------------------------------------------------
 
   # OTHER INITIALIZATIONS --------------------------------------------------------------------------------------------------------------
   # Get set size of current data set
@@ -78,7 +74,11 @@ addm_run_by_trial = function(choice.dat = data.table(v1 = 0,v2 = 0, id = 0),
       }
     }
   } else if (model.type == 'memnoise'){
+    if (cur.set_size / nr.attributes == 2){
+      stop('You attempted to run a set of 2 items with memory effects (by trial): This is not implemented at the moment!')
+    } else {
     aevacc = aevacc_by_trial_memnoise
+    }
   }
   # ------------------------------------------------------------------------------------------------------------------------------------
 
@@ -96,11 +96,7 @@ addm_run_by_trial = function(choice.dat = data.table(v1 = 0,v2 = 0, id = 0),
     cur.maxfix[1] = eye.mat[eye.row.cnt,4]
 
     # Run Model
-    success.counts[trial.cnt] = aevacc(cur.sd,
-                                       theta,
-                                       gamma,
-                                       drift.rate,
-                                       non.decision.time,
+    success.counts[trial.cnt] = aevacc(model.parameters,
                                        cur.rtbin.up[trial.cnt],
                                        cur.rtbin.down[trial.cnt],
                                        decisions[trial.cnt],
@@ -111,25 +107,16 @@ addm_run_by_trial = function(choice.dat = data.table(v1 = 0,v2 = 0, id = 0),
                                        nr.reps,
                                        timestep)
 
-    trial.cnt[1] = trial.cnt + 1
-    eye.row.cnt[1] = eye.row.cnt + cur.maxfix
+    trial.cnt[1] = trial.cnt[1] + 1
+    eye.row.cnt[1] = eye.row.cnt[1] + cur.maxfix
   }
-  # CONTINUE BY CALCULATING LOG LIKELIHOOD----------------------------------------------------------------------------------------------
-  success.counts[success.counts == 0] = nr.reps/(nr.reps + 1)
+  # CONTINUE BY CALCULATING LOG LIKELIHOOD ---------------------------------------------------------------------------------------------
+  success.counts[success.counts == 0] = 1/(1+nr.reps)
   if (nr.attributes == 1){
-    total.log.lik = c(drift.rate,
-                      theta,
-                      cur.sd,
-                      non.decision.time,
-                      nr.reps,
+    total.log.lik = c(model.parameters,
                       (-1)*sum(log(success.counts/nr.reps)))
   } else {
-    total.log.lik = c(drift.rate,
-                      theta,
-                      gamma,
-                      cur.sd,
-                      non.decision.time,
-                      nr.reps,
+    total.log.lik = c(model.parameters,
                       (-1)*sum(log(success.counts/nr.reps)))
   }
 

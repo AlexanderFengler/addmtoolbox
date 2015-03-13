@@ -19,6 +19,7 @@ addm_support_compute_finegrid = function(drift.step.fine = 0,
                                          non.decision.time.step.fine = 0,
                                          coarse.to.fine.ratio = 0,
                                          nr.attributes = 1,
+                                         boundary.parameters = 0,
                                          log.liks = data.table(drift = 0, theta = 0, sd = 0, non.decision.time = 0, nr.reps = 0, loglik = 0)){
 
   # Get parameter values at minimum log likelihood -------------------------------------------------------------------
@@ -66,6 +67,11 @@ addm_support_compute_finegrid = function(drift.step.fine = 0,
                                       fine.sds,
                                       fine.non.decision.times))
   }
+
+  if (length(boundary.parameters > 1)){
+    fine.grid = as.matrix(do.call('expand.grid', c(as.data.frame(fine.grid), as.data.frame(boundary.parameters))))
+  }
+
   return(fine.grid)
   # ------------------------------------------------------------------------------------------------------------------
 }

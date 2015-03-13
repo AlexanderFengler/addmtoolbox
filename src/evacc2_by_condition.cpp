@@ -11,30 +11,22 @@ static Ziggurat::Ziggurat::Ziggurat zigg;
 //' @title Simulate DDM process (by condition, 2 items)
 //' \code{evacc2_by_condition()}
 //' @return vector that stores decisions and rts for each simulation run
-//' @param sd standard deviation used for drift diffusion process
-//' @param theta placeholder for interface consistency / see attentional versions for specification
-//' @param drift drift-rate used for drift diffusion process
-//' @param non_decision_time non decision time used for drift diffusion process
+//' @param parameters vector that stores the parameters used for the simulations (Order: [non.decision.time, drift, sd])
 //' @param timestep timestep in ms associated with each step in the drift diffusion process
 //' @param nr_reps number of repitions (simulation runs)
 //' @param maxdur maximum duration in ms that the process is allowed to simulate
 //' @param update Vector that stores the item valuations for the trial conditon simulated
 //' @param fixation_model placeholder for interface consistency / see attentional versions for specification
-//' @param gamma placeholder for interface consistency / see multiattribute versions for specification
 //' @param nr_attributes placeholder for interface consistency / see multiattribute versions for specification
 //' @export
 // [[Rcpp::export]]
-IntegerVector evacc2_by_condition(float sd,
-                                   float theta,
-                                   float gamma,
-                                   float drift,
-                                   int non_decision_time,
-                                   int maxdur,
-                                   NumericVector update,
-                                   int nr_attributes,
-                                   Function fixation_model,
-                                   int nr_reps,
-                                   int timestep){
+IntegerVector evacc2_by_condition(NumericVector parameters,
+                                  int maxdur,
+                                  NumericVector update,
+                                  int nr_attributes,
+                                  Function fixation_model,
+                                  int nr_reps,
+                                  int timestep){
 
   // Set seed for random sampler ------------------------------------------------------------------
   NumericVector seed(1);
@@ -46,6 +38,12 @@ IntegerVector evacc2_by_condition(float sd,
   IntegerVector out(2*nr_reps);
   // ----------------------------------------------------------------------------------------------
 
+  // Initialize parameters ------------------------------------------------------------------------
+  int non_decision_time = parameters[0];
+  float drift = parameters[1];
+  float sd = parameters[2];
+  // ----------------------------------------------------------------------------------------------
+
   // Initialize Variables needed to propagate model -----------------------------------------------
   int nr_items = update.size();
   float rdv;
@@ -53,7 +51,7 @@ IntegerVector evacc2_by_condition(float sd,
   int cur_rt = 0;
   int out_cnt = -2; // index for output vector
   int out_plus = 0;
-  int cur_drift = 0;
+  float cur_drift = 0;
 
   for (int i = 0; i < nr_items; ++i){
     update[i] = update[i]*drift;

@@ -5,19 +5,11 @@
 \title{Simulate aDDM process (2 items) with detailed output
 \code{aevacc2_full_output()}}
 \usage{
-aevacc2_full_output(sd, theta, gamma, drift, non_decision_time, maxdur, update,
-  nr_attributes, fixation_model, nr_reps, timestep)
+aevacc2_full_output(parameters, maxdur, update, nr_attributes, fixation_model,
+  nr_reps, timestep)
 }
 \arguments{
-\item{sd}{standard deviation used for drift diffusion process}
-
-\item{theta}{theta (attentional bias) used for drift diffusion process}
-
-\item{gamma}{placeholder for interface consistency / see multiattribute versions for specification}
-
-\item{drift}{drift-rate used for drift diffusion process}
-
-\item{non_decision_time}{non decision time used for drift diffusion process}
+\item{parameters}{vector that stores the parameters used for the simulations (Order: [non.decision.time, drift, sd, theta])}
 
 \item{maxdur}{maximum duration in ms that the process is allowed to simulate}
 
@@ -30,6 +22,8 @@ aevacc2_full_output(sd, theta, gamma, drift, non_decision_time, maxdur, update,
 \item{nr_reps}{number of repitions (simulation runs)}
 
 \item{timestep}{timestep in ms associated with each step in the drift diffusion process}
+
+\item{gamma}{placeholder for interface consistency / see multiattribute versions for specification}
 }
 \value{
 vector that stores detailed output by simulation run

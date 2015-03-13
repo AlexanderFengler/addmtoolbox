@@ -6,7 +6,7 @@
 #' @export
 #' @param conditions.dat  data.table storing the item valuations (v1,v2...) by unique trial conditions. An id column (conditions_id) needs to be provided
 #' @param choice.dat data.table storing the item valuations (v1,v2...), reaction times in ms (rt), decisions as decision and an id column (conditions_id).
-#' @param model.parameters vector with the four core addm parameters in order (drift.rate, theta, sd, non.decision.time).
+#' @param model.parameters vector with the four core addm parameters in order (non.decision.time, drift, sd, theta, gamma, boundary-parameters).
 #' @param nr.attributes integer providing the amount of attributes we consider per item
 #' @param nr.reps integer that tells the function how many simulation runs to use.
 #' @param model.type string that indicates which version of the model to run. 'standard' for standard (a)ddm model or 'memnoise' when memory effects shall be allowed.
@@ -16,34 +16,35 @@
 #' @param generate boolean variable that tells the function to return either log likelihood values (0) or rt, decision (1). Relevant only if model.type variable is 'fit'.
 
 addm_run_by_condition = function(choice.dat = data.table(decision = 0, rt = 0, condition_id = 0),
-                                 conditions.dat = data.table(v1 = 0, v2 = 0, condition_id = 0),
-                                 model.parameters = c(0.002,0.6,0.07,0),
+                                 conditions.dat = data.table(v1 = 1, v2 = 100, condition_id = 0),
+                                 model.parameters = c(0,0.002,0.07,0.5),
                                  nr.attributes = 1,
-                                 nr.reps = 1000,
+                                 boundaryfun = 1,
+                                 nr.reps = 2000,
                                  timestep = 10,
                                  model.type = 'standard',
                                  output.type = 'fit',
                                  fixation.model = 'fixedpath',
                                  generate = 0){
 
-  # INITIALIZATION OF PARAMETERS AND RELEVANT SUBSETS OF DATA FRAMES--------------------------------------------------------------------
-  if (nr.attributes == 1){
-    drift.rate = model.parameters[1]
-    theta = model.parameters[2]
-    cur.sd = model.parameters[3]
-    non.decision.time = model.parameters[4]
-    gamma = 1
-  } else {
-    drift.rate = model.parameters[1]
-    theta = model.parameters[2]
-    gamma = model.parameters[3]
-    cur.sd = model.parameters[4]
-    non.decision.time = model.parameters[5]
+  # Compute Boundaries -----------------------------------------------------------------------------------------------------------------
+  if (class(boundaryfun) == 'function'){
+    # COMPUTE
   }
-  #-------------------------------------------------------------------------------------------------------------------------------------
+  # ------------------------------------------------------------------------------------------------------------------------------------
+
+  # Initialize parameter theta ---------------------------------------------------------------------------------------------------------
+  # only for readability, because it is used later on
+  theta = model.parameters[4]
+
+  # fill up model parameter vector if supplied to little
+  if (length(model.parameters) < 7){
+    model.parameters[(length(model.parameters)+1):7] = 0
+  }
+  #return(model.parameters)
+  # ------------------------------------------------------------------------------------------------------------------------------------
 
   # SOME MISCELLANEOUS VARIABLES THAT ARE UTILIZED LATER--------------------------------------------------------------------------------
-
   # First we need to define max.RT
   cur.max.RT = 40000
 
@@ -56,9 +57,9 @@ addm_run_by_condition = function(choice.dat = data.table(decision = 0, rt = 0, c
   nr_rows = length(conditions.dat[,condition_id])*nr.reps
   len.trials = length(conditions.dat[,condition_id])
   ids = conditions.dat[,condition_id]
-  cur.set_size = length(which(conditions.dat[1,grep("^v[1-9]*",names(conditions.dat)),with=FALSE] > -1))
+  cur.set_size = length(which(conditions.dat[1, grep("^v[1-9]*", names(conditions.dat)), with=FALSE] > -1))
 
-  # Define Matrix that stores values adjusted for drift rates // will be fed into evidence accumulaiton function
+  # Define Matrix that stores values by condition
   valuations=matrix(rep(0,len.trials*cur.set_size),nrow=cur.set_size,ncol=len.trials)
 
   # Define position of vector where valuations start
@@ -68,7 +69,7 @@ addm_run_by_condition = function(choice.dat = data.table(decision = 0, rt = 0, c
     valuations[i,] = conditions.dat[[start.pos + i - 1]]
   }
 
-  if (output.type == "fit"){
+    if (output.type == "fit"){
     addm.output = matrix(rep(-1,nr_rows*2),nrow=nr_rows,ncol=2)
     addm.output[,1] = -1 #Decision
     addm.output[,2] = -1 #RT
@@ -79,30 +80,17 @@ addm_run_by_condition = function(choice.dat = data.table(decision = 0, rt = 0, c
   }
 
   if (output.type == "full"){
-    if (nr.attributes == 1){
-    addm.output = matrix(rep(-1,nr_rows*(4 + 6 +(2*cur.set_size))),nrow = nr_rows, ncol = 4 + 6 +(2*cur.set_size))
-    addm.output[,1] = drift.rate
-    addm.output[,2] = theta
-    addm.output[,3] = cur.sd
-    addm.output[,4] = non.decision.time
+    len.params = length(model.parameters)
+    addm.output = matrix(rep(-1,nr_rows*(len.params + 6 +(2*cur.set_size))),nrow = nr_rows, ncol = len.params + 6 +(2*cur.set_size))
+
+    for (i in 1:len.params){
+    addm.output[,i] = model.parameters[i]
+    }
 
     # output cols are the columns in which the output (Choices and RT's) will be stored
     output = rep(0,(6+(2*cur.set_size))*nr.reps)
-    output.cols = seq(5, 4 + 6 +(2*cur.set_size))
+    output.cols = seq(len.params + 1, len.params + 6 +(2*cur.set_size))
     nr.output.cols = length(output.cols)
-    } else {
-      addm.output = matrix(rep(-1,nr_rows*(5 + 6 +(2*cur.set_size))),nrow = nr_rows, ncol = 5 + 6 +(2*cur.set_size))
-      addm.output[,1] = drift.rate
-      addm.output[,2] = theta
-      addm.output[,3] = gamma
-      addm.output[,4] = cur.sd
-      addm.output[,5] = non.decision.time
-
-      # output cols are the columns in which the output (Choices and RT's) will be stored
-      output = rep(0, (6 + (2*cur.set_size))*nr.reps)
-      output.cols = seq(6, 5 + 6 + (2*cur.set_size))
-      nr.output.cols = length(output.cols)
-    }
   }
   #-------------------------------------------------------------------------------------------------------------------------------------
 
@@ -111,7 +99,7 @@ addm_run_by_condition = function(choice.dat = data.table(decision = 0, rt = 0, c
     if (output.type == "fit"){
       if (nr.attributes == 1){
         if (cur.set_size / nr.attributes == 2){
-          if (theta ==1){
+          if (theta == 1){
             aevacc = evacc2_by_condition
           } else {
             aevacc = aevacc2_by_condition
@@ -156,7 +144,6 @@ addm_run_by_condition = function(choice.dat = data.table(decision = 0, rt = 0, c
       }
     }
   }
-
   #-------------------------------------------------------------------------------------------------------------------------------------
 
   # INITIALIZE FIXATION PATHWAYS -------------------------------------------------------------------------------------------------------
@@ -196,18 +183,13 @@ addm_run_by_condition = function(choice.dat = data.table(decision = 0, rt = 0, c
   cnt = 1
 
   for (id in ids){
-    output[] = aevacc(cur.sd,
-                      theta,
-                      gamma,
-                      drift.rate,
-                      non.decision.time,
+    output[] = aevacc(model.parameters,
                       cur.max.RT,
                       valuations[,cnt],
                       nr.attributes,
                       fixation_model,
                       nr.reps,
                       timestep)
-
     addm.output[output.row.min:output.row.max,output.cols] = matrix(output,nrow=nr.reps,ncol=nr.output.cols,byrow=TRUE)
     output.row.min[1] = sum(output.row.min,nr.reps)
     output.row.max[1] = sum(output.row.max,nr.reps)
@@ -217,18 +199,24 @@ addm_run_by_condition = function(choice.dat = data.table(decision = 0, rt = 0, c
 
   # STORING DATA FRAME THAT COLLECTS ALL RELEVANT INFORMATION CONCERNING MODEL OUTPUT---------------------------------------------------
   if (output.type == "full"){
-    if (nr.attributes == 1){
       output.names = c("condition_id",
+                       "non.decision.time",
+                       "drift.rate",
                        "sd",
                        "theta",
-                       "drift.rate",
-                       "non.decision.time",
-                       "decision",
-                       "nr.fixations",
-                       "rt",
-                       "item.last.attended",
-                       "value.last.attended",
-                       "chosen.last.attended")
+                       "gamma",
+                       "scalar_items_not_seen_drift",
+                       "scalar_items_not_seen_noise")
+
+      namelen = length(output.names)
+      if (length(model.parameters) > 7){
+        for (i in 8:length(model.parameters)){
+          output.names[namelen + (i-7)] = paste("boundary.param.",toString(i-7),sep='')
+        }
+      }
+
+      namelen = length(output.names)
+      output.names[(namelen+1):(namelen + 6)] = c('decision', 'nr.fixations','rt','item.last.attended','value.last.attended','chosen.last.attended')
 
       namelen = length(output.names)
       for (i in seq_len(cur.set_size)){
@@ -239,30 +227,6 @@ addm_run_by_condition = function(choice.dat = data.table(decision = 0, rt = 0, c
     addm.output.frame = cbind(data.table(condition_id = rep(ids,each=nr.reps)),as.data.table(addm.output))
     setnames(addm.output.frame,output.names)
     return(addm.output.frame)
-    } else {
-      output.names = c("condition_id",
-                       "sd",
-                       "theta",
-                       'gamma',
-                       "drift.rate",
-                       "non.decision.time",
-                       "decision",
-                       "nr.fixations",
-                       "rt",
-                       "item.last.attended",
-                       "value.last.attended",
-                       "chosen.last.attended")
-
-      namelen = length(output.names)
-      for (i in seq_len(cur.set_size)){
-        output.names[namelen + i] = paste("duration.",toString(i),sep='')
-        output.names[namelen + cur.set_size + i] = paste("nr.fix.",toString(i),sep='')
-      }
-
-      addm.output.frame = cbind(data.table(condition_id = rep(ids,each=nr.reps)),as.data.table(addm.output))
-      setnames(addm.output.frame,output.names)
-      return(addm.output.frame)
-    }
 
   } else if (output.type == "fit"){
 
@@ -290,16 +254,16 @@ addm_run_by_condition = function(choice.dat = data.table(decision = 0, rt = 0, c
     setkey(real.choice.table,condition_id,decision,rtbins)
 
     temp.table = addm.choice.table[real.choice.table]
-    temp.table[is.na(choice.p),choice.p:=1/(nr.reps + 1)]
+    temp.table[is.na(choice.p),choice.p:=1/(nr.reps + 1)] # alternative would be to maybe use 1/(nr.reps + 1)
     temp.table[,log.lik:=log(choice.p)]
     LogLik = (-1)*sum(temp.table[,log.lik])
     # -----------------------------------------------------------------------------------------------------------------------------------
 
     # STORE AND RETURN ------------------------------------------------------------------------------------------------------------------
     if (nr.attributes == 1){
-      total.log.lik = c(drift.rate,theta,cur.sd,non.decision.time,nr.reps,LogLik)
+      total.log.lik = c(model.parameters,LogLik)
     } else {
-      total.log.lik  = c(drift.rate, theta, gamma, cur.sd, non.decision.time, nr.reps, LogLik)
+      total.log.lik  = c(model.parameters,LogLik)
     }
     print(total.log.lik)
     return(total.log.lik)

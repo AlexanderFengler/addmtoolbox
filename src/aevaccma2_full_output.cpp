@@ -11,24 +11,16 @@ static Ziggurat::Ziggurat::Ziggurat zigg;
 //' @title Simulate aDDM process (2 items) with detailed output
 //' \code{aevaccma2_full_output()}
 //' @return vector that stores detailed output by simulation run
-//' @param sd standard deviation used for drift diffusion process
-//' @param theta theta (attentional bias) used for drift diffusion process
-//' @param drift drift-rate used for drift diffusion process
-//' @param non_decision_time non decision time used for drift diffusion process
+//' @param parameters vector that stores the parameters used for the simulations (Order: [non.decision.time, drift, sd, theta, gamma])
 //' @param timestep timestep in ms associated with each step in the drift diffusion process
 //' @param nr_reps number of repitions (simulation runs)
 //' @param maxdur maximum duration in ms that the process is allowed to simulate
 //' @param update Vector that stores the item valuations for the trial conditon simulated
 //' @param fixation_model a user supplied fixation model that will be utilized to supply fixation locations and potentially fixation durations
-//' @param gamma placeholder for interface consistency / see multiattribute versions for specification
 //' @param nr_attributes placeholder for interface consistency / see multiattribute versions for specification
 //' @export
 // [[Rcpp::export]]
-NumericVector aevaccma2_full_output(float sd,
-                                    float theta,
-                                    float gamma,
-                                    float drift,
-                                    int non_decision_time,
+NumericVector aevaccma2_full_output(NumericVector parameters,
                                     int maxdur,
                                     NumericVector update,
                                     int nr_attributes,
@@ -40,6 +32,14 @@ NumericVector aevaccma2_full_output(float sd,
   NumericVector seed(1);
   seed = floor(runif(1,-100000,100000));
   zigg.setSeed(seed[0]);
+  // ----------------------------------------------------------------------------------------------
+
+  // Initialize parameters ------------------------------------------------------------------------
+  int non_decision_time = parameters[0];
+  float drift = parameters[1];
+  float sd = parameters[2];
+  float theta = parameters[3];
+  float gamma = parameters[4];
   // ----------------------------------------------------------------------------------------------
 
   // Output Collection Variables ------------------------------------------------------------------

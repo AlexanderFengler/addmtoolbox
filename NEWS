@@ -1,10 +1,16 @@
+addmtoolbox v0.3.01 =======================================================
+
+* models with memory effects (model.type = 'memnoise') do now work
+* full output for n > 2 cases now available for all model types ('standard', 'memnoise')
+* start of flexible boundary implementation (user can now supply a boundary function with arbitrary number of parameters to addm_fit_grid())
+* evidence accumulation function received an interface simplification (we pass a vector of parameters instead of passing parameters separately, that makes addm_run_() functions simpler)
+
 addmtoolbox v0.2.29 =======================================================
 
 * output.type='full' for multiattribute version now available
 * If theta = 1, now optimized evidence accumulation functions are called during the fitting process (by trial and by condition)
 * first bits of better error handling implemented (model called that is not implemented will now result in specific error message)
 * many general bug-fixes
-
 
 addmtoolbox v0.2.27 =======================================================
 

@@ -5,17 +5,18 @@
 \title{Run model by unique trial condition}
 \usage{
 addm_run_by_condition(choice.dat = data.table(decision = 0, rt = 0,
-  condition_id = 0), conditions.dat = data.table(v1 = 0, v2 = 0, condition_id
-  = 0), model.parameters = c(0.002, 0.6, 0.07, 0), nr.attributes = 1,
-  nr.reps = 1000, timestep = 10, model.type = "standard",
-  output.type = "fit", fixation.model = "fixedpath", generate = 0)
+  condition_id = 0), conditions.dat = data.table(v1 = 1, v2 = 100,
+  condition_id = 0), model.parameters = c(0, 0.002, 0.07, 0.5),
+  nr.attributes = 1, boundaryfun = 1, nr.reps = 2000, timestep = 10,
+  model.type = "standard", output.type = "fit",
+  fixation.model = "fixedpath", generate = 0)
 }
 \arguments{
 \item{choice.dat}{data.table storing the item valuations (v1,v2...), reaction times in ms (rt), decisions as decision and an id column (conditions_id).}
 
 \item{conditions.dat}{data.table storing the item valuations (v1,v2...) by unique trial conditions. An id column (conditions_id) needs to be provided}
 
-\item{model.parameters}{vector with the four core addm parameters in order (drift.rate, theta, sd, non.decision.time).}
+\item{model.parameters}{vector with the four core addm parameters in order (non.decision.time, drift, sd, theta, gamma, boundary-parameters).}
 
 \item{nr.attributes}{integer providing the amount of attributes we consider per item}
 

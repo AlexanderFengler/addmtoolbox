@@ -17,24 +17,29 @@
 #' @param rtbinsize integer providing the binsize that reaction times will be sorted into
 addm_generate_artificial = function(set.size = 2,
                                     possible.valuations = c(0,1,2,3),
-                                    model.parameters = c(0.002,0.5,0.07,0),
+                                    model.parameters = c(0,0.002,0.07,0.5),
                                     nr.attributes = 1,
-                                    nr.reps = 100,
+                                    nr.reps = 2000,
                                     timestep = 10,
                                     rtbinsize = 100,
-                                    nr.conditions = 10,
+                                    nr.conditions = 30,
                                     model.type = "standard"){
 # GENERATE MODEL INPUT DATA --------------------------------------------------------------------------------------------------------------
-  # Conditions
+  # Sample Conditions
   val.dat = as.data.table(matrix(sample(possible.valuations,nr.conditions*set.size,replace=TRUE),ncol=set.size))
+  # Matrix automaticall has Capital letter column names like so: V1,V2 etc. so we can just do lower-case and we are done
   setnames(val.dat,names(val.dat),tolower(names(val.dat)))
+
+  # We can simply number the conditions
   ids = data.table(condition_id = 1:nr.conditions)
+
   conditions =  cbind(val.dat, ids)
 
   test.dat = list(choice.dat = 0,
                   conditions.dat = conditions,
                   model.parameters = model.parameters,
                   nr.attributes = 1,
+                  boundaryfun = 1,
                   nr.reps = nr.reps,
                   timestep = timestep,
                   model.type = model.type,
@@ -114,5 +119,6 @@ eye.dat.tab = data.table(id = eye.dat[,5],
 #------------------------------------------------------------------------------------------------------------------------------------------
 return(list(choice.dat = choices,
             conditions.dat = conditions,
-            eye.dat = eye.dat.tab))
+            eye.dat = eye.dat.tab,
+            attributes = nr.attributes))
 }

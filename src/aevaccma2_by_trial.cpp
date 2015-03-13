@@ -12,11 +12,7 @@ static Ziggurat::Ziggurat::Ziggurat zigg;
 //' @author Alexander Fengler, \email{alexanderfengler@@gmx.de}
 //' @title Simulate aDDM process (by trial, 2 items, multiattribute)
 //' @return numeric variable that provides a success count (runs that predicted a reaction time in the correct rt-bin and simultaneously the correct decision)
-//' @param sd standard deviation used for drift diffusion process
-//' @param theta theta (attentional bias) used for drift diffusion process [0,1]
-//' @param gamma secondary attentional bias which refers to attributes no inspected [0,1]
-//' @param drift drift-rate used for drift diffusion process
-//' @param non_decision_time non decision time used for drift diffusion process
+//' @param parameters vector that stores the parameters used for the simulations (Order: [non.decision.time, drift, sd, theta, gamma])
 //' @param timestep timestep in ms associated with each step in the drift diffusion process
 //' @param nr_reps number of repitions (simulation runs)
 //' @param maxdur numeric variable that supplies the maximum reaction time considered a success in simulations
@@ -28,11 +24,7 @@ static Ziggurat::Ziggurat::Ziggurat zigg;
 //' @param cur_maxfix integer that provides number of fixation in trial
 //' @export
 // [[Rcpp::export]]
-int aevaccma2_by_trial(float sd,
-                       float theta,
-                       float gamma,
-                       float drift,
-                       int non_decision_time,
+int aevaccma2_by_trial(NumericVector parameters,
                        int maxdur,
                        int mindur,
                        int cur_decision,
@@ -48,6 +40,14 @@ int aevaccma2_by_trial(float sd,
   seed = floor(runif(1,-100000,100000));
   zigg.setSeed(seed[0]);
   // ------------------------------------------------------------------------------------------------
+
+  // Initialize parameters ------------------------------------------------------------------------
+  int non_decision_time = parameters[0];
+  float drift = parameters[1];
+  float sd = parameters[2];
+  float theta = parameters[3];
+  float gamma = parameters[4];
+  // ----------------------------------------------------------------------------------------------
 
   // Variable collecting success counts -------------------------------------------------------------
   int out = 0;

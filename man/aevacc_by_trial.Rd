@@ -4,19 +4,11 @@
 \alias{aevacc_by_trial}
 \title{Simulate aDDM process by unique trial (>2 items)}
 \usage{
-aevacc_by_trial(sd, theta, gamma, drift, non_decision_time, maxdur, mindur,
-  cur_decision, update, nr_attributes, fixpos, fixdur, nr_reps, timestep)
+aevacc_by_trial(parameters, maxdur, mindur, cur_decision, update, nr_attributes,
+  fixpos, fixdur, nr_reps, timestep)
 }
 \arguments{
-\item{sd}{standard deviation used for drift diffusion process}
-
-\item{theta}{theta (attentional bias) used for drift diffusion process}
-
-\item{gamma}{placeholder for interface consistency / see multiattribute versions for specification}
-
-\item{drift}{drift-rate used for drift diffusion process}
-
-\item{non_decision_time}{non decision time used for drift diffusion process}
+\item{parameters}{vector that stores the parameters used for the simulations (Order: [non.decision.time, drift, sd, theta])}
 
 \item{maxdur}{numeric variable that supplies the maximum reaction time considered a success in simulations}
 

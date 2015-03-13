@@ -389,10 +389,7 @@ rts = c(100,200,400,1600,3200,6400,12800,25600,51200)
 cnt = 1
 mean.time = rep(0,length(rts))
 for (cur.rt in rts){
-  mean.time[cnt] = mean(microbenchmark(dynamicaddm(sd = 0.07,
-                                                   theta = 0.5,
-                                                   drift = 0.002,
-                                                   non_decision_time = 0,
+  mean.time[cnt] = mean(microbenchmark(dynamicaddm(parameters = c(0,0.002,0.07,1),
                                                    decision = 1,
                                                    valuations = c(0,3),
                                                    fixpos = 1,
@@ -478,7 +475,7 @@ out.frame.2  = data.frame(model.type = 'sim_by_trial',
                           mean.time = mean.time)
 # -------------------------------------------------------------------------------------------------------------
 
-# Simulation by Conditions ------------------------------------------------------------------------------------
+# 7. Simulation by Conditions ------------------------------------------------------------------------------------
 # Generate Data
 mean.time = rep(0,2)
 sim.nums = c(1000)
@@ -493,13 +490,62 @@ cnt = 1
   co = x$conditions.dat
 
   mean.time[1] = mean(microbenchmark(addm_run_by_condition(choice.dat = ch, conditions.dat = co, nr.reps = sim.nums),times=5)$time/1e+09)
-  mean.time[2] = mean(microbenchmark(addm_run_by_condition(choice.dat = ch, conditions.dat = co, nr.reps = sim.nums, model.parameters = c(0.002,1,0.07,0)),times=5)$time/1e+09)
+  mean.time[2] = mean(microbenchmark(addm_run_by_condition(choice.dat = ch, conditions.dat = co, nr.reps = sim.nums, model.parameters = c(0,0.002,0.07,1),times=5)$time/1e+09)
 
   mean.time[1] = mean(microbenchmark(addm_run_by_trial(choice.dat = ch, eye.dat = ey, nr.reps = sim.nums),times=5)$time/1e+09)
-  mean.time[2] = mean(microbenchmark(addm_run_by_trial(choice.dat = ch, eye.dat = ey, nr.reps = sim.nums, model.parameters = c(0.002,1,0.07,0)),times=5)$time/1e+09)
+  mean.time[2] = mean(microbenchmark(addm_run_by_trial(choice.dat = ch, eye.dat = ey, nr.reps = sim.nums, model.parameters = c(0,0.002,0.07,1),times=5)$time/1e+09)
 
   mean.time[1] = mean(microbenchmark(addm_run_by_trial_dynamic(choice.dat = ch, eye.dat = ey),times=5)$time/1e+09)
-  mean.time[2] = mean(microbenchmark(addm_run_by_trial_dynamic(choice.dat = ch, eye.dat = ey, model.parameters = c(0.002,1,0.07,0)),times=5)$time/1e+09)
-# -------------------------------------------------------------------------------------------------------------
-# ------------------------------------------------------------------------------------------------------------
+  mean.time[2] = mean(microbenchmark(addm_run_by_trial_dynamic(choice.dat = ch, eye.dat = ey, model.parameters = c(0,0.002,0.07,1),times=5)$time/1e+09)
+# --------------------------------------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------------------------
 
+
+# 8. Simulation by Trial ---------------------------------------------------------------------------------------
+# Generate Data
+num.trials = rep(0,7)
+mean.time = rep(0,7)
+
+cur.num.conditions = 10
+num.reps = c(10,20,40)
+cnt = 1
+for(cur.num.reps in num.reps){
+  x = addm_generate_artificial(nr.reps = cur.num.reps,nr.conditions = cur.num.conditions)
+  ch = x$choice.dat
+  ey = x$eye.dat
+
+  mean.time[cnt] = mean(microbenchmark(addm_run_by_trial(choice.dat = ch, eye.dat = ey, model.type = 'standard'),times=5)$time/1e+09)
+  num.trials[cnt] = cur.num.reps*cur.num.conditions
+  cnt = cnt + 1
+}
+
+out.frame.2  = data.frame(model.type = 'sim_by_trial',
+                          number.trials = num.trials,
+                          number.conditions = cur.num.conditions,
+                          mean.time = mean.time)
+# -----------------------------------------------------------------------------------------------------------
+
+# Simulation by Conditions ----------------------------------------------------------------------------------
+# Generate Data
+num.trials = rep(0,7)
+mean.time = rep(0,7)
+
+cur.num.conditions = 10
+num.reps = c(10,20,40)
+cnt = 1
+for(cur.num.reps in num.reps){
+  x = addm_generate_artificial(nr.reps = cur.num.reps,nr.conditions = cur.num.conditions)
+  ch = x$choice.dat
+  ey = x$eye.dat
+  co = x$conditions.dat
+
+  mean.time[cnt] = mean(microbenchmark(addm_run_by_condition(choice.dat = ch, conditions.dat = co, model.type = 'standard'),times=5)$time/1e+09)
+  num.trials[cnt] = cur.num.reps*cur.num.conditions
+  cnt = cnt + 1
+}
+
+out.frame.3  = data.frame(model.type = 'sim_by_condition',
+                          number.trials = num.trials,
+                          number.conditions = cur.num.conditions,
+                          mean.time = mean.time)
+# -----------------------------------------------------------------------------------------------------------

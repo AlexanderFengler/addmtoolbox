@@ -12,10 +12,7 @@ static Ziggurat::Ziggurat::Ziggurat zigg;
 //' @author Alexander Fengler, \email{alexanderfengler@@gmx.de}
 //' @title Simulate DDM process (by trial, 2 items)
 //' @return numeric variable that provides a success count (runs that predicted a reaction time in the correct rt-bin and simultaneously the correct decision)
-//' @param sd standard deviation used for drift diffusion process
-//' @param theta placeholder for interface consistency / see attentional versions for specification
-//' @param drift drift-rate used for drift diffusion process
-//' @param non_decision_time non decision time used for drift diffusion process
+//' @param parameters vector that stores the parameters used for the simulations (Order: [non.decision.time, drift, sd])
 //' @param timestep timestep in ms associated with each step in the drift diffusion process
 //' @param nr_reps number of repitions (simulation runs)
 //' @param maxdur numeric variable that supplies the maximum reaction time considered a success in simulations
@@ -25,24 +22,19 @@ static Ziggurat::Ziggurat::Ziggurat zigg;
 //' @param fixpos Vector placeholder for interface consistency / see attentional versions for specification
 //' @param fixdur Vector placeholder for interface consistency / see attentional versions for specification
 //' @param cur_maxfix integer that provides number of fixation in trial
-//' @param gamma placeholder for interface consistency / see multiattribute versions for specification
 //' @param nr_attributes placeholder for interface consistency / see multiattribute versions for specification
 //' @export
 // [[Rcpp::export]]
-int evacc2_by_trial(float sd = 0,
-                     float theta = 0,
-                     float gamma = 0,
-                     float drift = 0,
-                     int non_decision_time = 0,
-                     int maxdur = 0,
-                     int mindur = 0,
-                     int cur_decision = 0,
-                     NumericVector update = 0,
-                     int nr_attributes = 0,
-                     IntegerVector fixpos = 0,
-                     IntegerVector fixdur = 0,
-                     int nr_reps = 0,
-                     int timestep = 0){
+int evacc2_by_trial(NumericVector parameters,
+                    int maxdur = 0,
+                    int mindur = 0,
+                    int cur_decision = 0,
+                    NumericVector update = 0,
+                    int nr_attributes = 0,
+                    IntegerVector fixpos = 0,
+                    IntegerVector fixdur = 0,
+                    int nr_reps = 0,
+                    int timestep = 0){
 
   // Set seed for random sampler --------------------------------------------------------------------
   NumericVector seed(1);
@@ -53,6 +45,12 @@ int evacc2_by_trial(float sd = 0,
   // Variable collecting success counts -------------------------------------------------------------
   int out = 0;
   // ------------------------------------------------------------------------------------------------
+
+  // Initialize parameters ------------------------------------------------------------------------
+  int non_decision_time = parameters[0];
+  float drift = parameters[1];
+  float sd = parameters[2];
+  // ----------------------------------------------------------------------------------------------
 
   // Initialize Variables need for model propagation ------------------------------------------------
   int nr_items = update.size();

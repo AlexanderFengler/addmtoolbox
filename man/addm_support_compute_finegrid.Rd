@@ -6,8 +6,9 @@
 \usage{
 addm_support_compute_finegrid(drift.step.fine = 0, thetas = 0, gammas = 0,
   sd.step.fine = 0, non.decision.time.step.fine = 0,
-  coarse.to.fine.ratio = 0, nr.attributes = 1, log.liks = data.table(drift
-  = 0, theta = 0, sd = 0, non.decision.time = 0, nr.reps = 0, loglik = 0))
+  coarse.to.fine.ratio = 0, nr.attributes = 1, boundary.parameters = 0,
+  log.liks = data.table(drift = 0, theta = 0, sd = 0, non.decision.time = 0,
+  nr.reps = 0, loglik = 0))
 }
 \arguments{
 \item{drift.step.fine}{numeric variable storing precision with which drift rate space is searched in the fine grid parameter matrix.}

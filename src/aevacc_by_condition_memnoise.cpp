@@ -12,10 +12,7 @@ static Ziggurat::Ziggurat::Ziggurat zigg;
 //' @title Simulate aDDM process by unique trial condition (>2 items, allow memory effects)
 //' \code{aevacc_by_condition_memnoise()}
 //' @return vector that stores decisions and rts for each simulation run
-//' @param sd standard deviation used for drift diffusion process
-//' @param theta theta (attentional bias) used for drift diffusion process
-//' @param drift drift-rate used for drift diffusion process
-//' @param non_decision_time non decision time used for drift diffusion process
+//' @param parameters vector that stores the parameters used for the simulations (Order: [non.decision.time, drift, sd, theta, gamma, scalar_items_seen_drift, scala_items_seen_noise])
 //' @param timestep timestep in ms associated with each step in the drift diffusion process
 //' @param nr_reps number of repitions (simulation runs)
 //' @param maxdur maximum duration in ms that the process is allowed to simulate
@@ -24,16 +21,9 @@ static Ziggurat::Ziggurat::Ziggurat zigg;
 //' @param fixdur Vector that stores the fixation durations for a supplied fixed fixation pathway
 //' @param fixdursamples Vector from which fixation duration can be sampled once supplied fixations run out
 //' @param fixation_model a user supplied fixation model that will be utilized to supply fixation locations and potentially fixation durations
-//' @param items_seen_bias Numeric Variable storing the relative amount of drift that unseen items receive
-//' @param items_seen_noise_bias Numeric Variable storing the relative noise sd that unseen items receive
 //' @export
 // [[Rcpp::export]]
-IntegerVector aevacc_by_condition_memnoise(float sd,
-                                           float theta,
-                                           float drift,
-                                           int non_decision_time,
-                                           float items_seen_bias,
-                                           float items_seen_noise_bias,
+IntegerVector aevacc_by_condition_memnoise(NumericVector parameters,
                                            int maxdur,
                                            NumericVector update,
                                            Function fixation_model,
@@ -48,6 +38,16 @@ IntegerVector aevacc_by_condition_memnoise(float sd,
 
   // Initialize Variable that collects output -----------------------------------------------------
   IntegerVector out(2*nr_reps);
+  // ----------------------------------------------------------------------------------------------
+
+  // Initialize parameters ------------------------------------------------------------------------
+  int non_decision_time = parameters[0];
+  float drift = parameters[1];
+  float sd = parameters[2];
+  float theta = parameters[3];
+  // float gamma = parameters[4] not used but for completeness as placeholder
+  float items_seen_bias = parameters[5];
+  float items_seen_noise_bias= parameters[6];
   // ----------------------------------------------------------------------------------------------
 
   // Initialize Variables needed to propagate model -----------------------------------------------

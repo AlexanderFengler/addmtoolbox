@@ -5,8 +5,8 @@
 \title{Generate artificial dataset}
 \usage{
 addm_generate_artificial(set.size = 2, possible.valuations = c(0, 1, 2, 3),
-  model.parameters = c(0.002, 0.5, 0.07, 0), nr.attributes = 1,
-  nr.reps = 100, timestep = 10, rtbinsize = 100, nr.conditions = 10,
+  model.parameters = c(0, 0.002, 0.07, 0.5), nr.attributes = 1,
+  nr.reps = 2000, timestep = 10, rtbinsize = 100, nr.conditions = 30,
   model.type = "standard")
 }
 \arguments{

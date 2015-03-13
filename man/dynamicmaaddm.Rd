@@ -5,21 +5,12 @@
 \title{Simulate aDDM process (by condition, 2 items)
 \code{dynamicaddm()}}
 \usage{
-dynamicmaaddm(sd = 0, theta = 0, gamma = 0, drift = 0,
-  non_decision_time = 0L, decision = 0L, valuations = 0L,
+dynamicmaaddm(parameters, decision = 0L, valuations = 0L,
   nr_attributes = 0L, fixpos = 0L, fixdur = 0L, rt = 0L,
   stateStep = 0)
 }
 \arguments{
-\item{sd}{standard deviation used for drift diffusion process}
-
-\item{theta}{theta used for drift diffusion process [0,1]}
-
-\item{gamma}{secondary attentional bias which refers to attributes no inspected [0,1]}
-
-\item{drift}{drift-rate used for drift diffusion process}
-
-\item{non_decision_time}{non decision time used for drift diffusion process}
+\item{parameters}{vector that stores the parameters used for the simulations (Order: [non.decision.time, drift, sd, theta, gamma])}
 
 \item{decision}{integer which gives choice in current trial (1 or 2)}
 

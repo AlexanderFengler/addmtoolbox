@@ -5,20 +5,11 @@
 \title{Simulate aDDM process (by condition, 2 items)
 \code{aevaccma2_by_condition()}}
 \usage{
-aevaccma2_by_condition(sd = 0, theta = 0, gamma = 0, drift = 0,
-  non_decision_time = 0L, maxdur = 0L, update = 0L, nr_attributes = 1L,
-  fixation_model = 0L, nr_reps = 0L, timestep = 0L)
+aevaccma2_by_condition(parameters, maxdur = 0L, update = 0L,
+  nr_attributes = 1L, fixation_model = 0L, nr_reps = 0L, timestep = 0L)
 }
 \arguments{
-\item{sd}{standard deviation used for drift diffusion process}
-
-\item{theta}{theta used for drift diffusion process [0,1]}
-
-\item{gamma}{secondary attentional bias which refers to attributes no inspected [0,1]}
-
-\item{drift}{drift-rate used for drift diffusion process}
-
-\item{non_decision_time}{non decision time used for drift diffusion process}
+\item{parameters}{vector that stores the parameters used for the simulations (Order: [non.decision.time, drift, sd, theta, gamma])}
 
 \item{maxdur}{maximum duration in ms that the process is allowed to simulate}
 

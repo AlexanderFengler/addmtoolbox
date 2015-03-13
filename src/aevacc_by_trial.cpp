@@ -11,10 +11,7 @@ static Ziggurat::Ziggurat::Ziggurat zigg;
 //' @author Alexander Fengler, \email{alexanderfengler@@gmx.de}
 //' @title Simulate aDDM process by unique trial (>2 items)
 //' @return Returns a numeric variable that provides a success count (runs that predicted a reaction time in the correct rt-bin and simultaneously the correct decision)
-//' @param sd standard deviation used for drift diffusion process
-//' @param theta theta (attentional bias) used for drift diffusion process
-//' @param drift drift-rate used for drift diffusion process
-//' @param non_decision_time non decision time used for drift diffusion process
+//' @param parameters vector that stores the parameters used for the simulations (Order: [non.decision.time, drift, sd, theta])
 //' @param timestep timestep in ms associated with each step in the drift diffusion process
 //' @param nr_reps number of repitions (simulation runs)
 //' @param maxdur numeric variable that supplies the maximum reaction time considered a success in simulations
@@ -23,15 +20,10 @@ static Ziggurat::Ziggurat::Ziggurat zigg;
 //' @param update Vector that stores the item valuations for the trial conditon simulated
 //' @param fixpos Vector that stores the locations for a supplied fixed fixation pathway
 //' @param fixdur Vector that stores the fixation durations for a supplied fixed fixation pathway
-//' @param gamma placeholder for interface consistency / see multiattribute versions for specification
 //' @param nr_attributes placeholder for interface consistency / see multiattribute versions for specification
 //' @export
 // [[Rcpp::export]]
-int aevacc_by_trial(float sd,
-                    float theta,
-                    float gamma,
-                    float drift,
-                    int non_decision_time,
+int aevacc_by_trial(NumericVector parameters,
                     int maxdur,
                     int mindur,
                     int cur_decision,
@@ -42,16 +34,22 @@ int aevacc_by_trial(float sd,
                     int nr_reps,
                     int timestep){
 
-  // Set seed for random sampler ------------------------------------------------------------------
+  // Set seed for random sampler ---------------------------------------------------------------------
   NumericVector seed(1);
   seed = floor(runif(1,-100000,100000));
   zigg.setSeed(seed[0]);
-  // ----------------------------------------------------------------------------------------------
+  // -------------------------------------------------------------------------------------------------
 
-
-   // Variable collecting success counts ----------------------------------------------------------
+   // Variable collecting success counts -------------------------------------------------------------
    int out = 0;
-   // ---------------------------------------------------------------------------------------------
+   // ------------------------------------------------------------------------------------------------
+
+   // Initialize parameters ------------------------------------------------------------------------
+   int non_decision_time = parameters[0];
+   float drift = parameters[1];
+   float sd = parameters[2];
+   float theta = parameters[3];
+   // ----------------------------------------------------------------------------------------------
 
    // Initialize Variables need for model propagation ------------------------------------------------
    int nr_items = update.size();

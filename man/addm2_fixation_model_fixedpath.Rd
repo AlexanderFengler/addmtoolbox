@@ -4,10 +4,12 @@
 \alias{addm2_fixation_model_fixedpath}
 \title{Example for user-supplied fixation model (aevacc functions)}
 \usage{
-addm2_fixation_model_fixedpath(cur.valuations = c(0, 0))
+addm2_fixation_model_fixedpath(cur.valuations = c(0, 0), fixdur = 250)
 }
 \arguments{
 \item{cur.valuations}{vector of current valuations in choice set}
+
+\item{fixdur}{integer variable that provides the duration of fixations simulated (in ms)}
 }
 \value{
 matrix with two rows. One providing fixation location and the second providing fixation duration

@@ -6,11 +6,7 @@ using namespace Rcpp;
 //' @title Simulate aDDM process (by condition, 2 items)
 //' \code{dynamicaddm()}
 //' @return numeric variable storing likelihood value
-//' @param sd standard deviation used for drift diffusion process
-//' @param theta theta used for drift diffusion process
-//' @param gamma placeholder for interface consistency / see multiattribute versions for specification
-//' @param drift drift-rate used for drift diffusion process
-//' @param non_decision_time non decision time used for drift diffusion process
+//' @param parameters vector that stores the parameters used for the simulations (Order: [non.decision.time, drift, sd, theta, gamma])
 //' @param decision integer which gives choice in current trial (1 or 2)
 //' @param rt reaction time of provided trial
 //' @param valuations vector that stores the item valuations for the provided trial
@@ -20,11 +16,7 @@ using namespace Rcpp;
 //' @param stateStep numeric variable between [0,1] that indicates how finegrained the vertical grid of the model space shall be computed
 //' @export
 // [[Rcpp::export]]
-double dynamicaddm(float sd = 0,
-                   float theta = 0,
-                   float gamma = 0,
-                   float drift = 0,
-                   int non_decision_time = 0,
+double dynamicaddm(NumericVector parameters,
                    int decision = 0,
                    NumericVector valuations = 0,
                    int nr_attributes = 0,
@@ -34,6 +26,12 @@ double dynamicaddm(float sd = 0,
                    float stateStep = 0){
 
   // INITIALIZATIONS -----------------------------------------------------------------------------------
+
+  // parameters
+  int non_decision_time = parameters[0];
+  float drift = parameters[1];
+  float sd = parameters[2];
+  float theta = parameters[3];
 
   // intialize loglik output variable
   double loglik = 0;

@@ -4,22 +4,11 @@
 \alias{aevacc_by_trial_memnoise}
 \title{Simulate aDDM process by unique trial (>2 items, allow memory effects)}
 \usage{
-aevacc_by_trial_memnoise(sd, theta, drift, non_decision_time, items_seen_bias,
-  items_seen_noise_bias, maxdur, mindur, cur_decision, update, fixpos, fixdur,
-  nr_reps, timestep)
+aevacc_by_trial_memnoise(parameters, maxdur, mindur, cur_decision, update,
+  nr_attributes, fixpos, fixdur, nr_reps, timestep)
 }
 \arguments{
-\item{sd}{standard deviation used for drift diffusion process}
-
-\item{theta}{theta (attentional bias) used for drift diffusion process}
-
-\item{drift}{drift-rate used for drift diffusion process}
-
-\item{non_decision_time}{non decision time used for drift diffusion process}
-
-\item{items_seen_bias}{Numeric Variable storing the relative amount of drift that unseen items receive}
-
-\item{items_seen_noise_bias}{Numeric Variable storing the relative noise sd that unseen items receive}
+\item{parameters}{vector that stores the parameters used for the simulations (Order: [non.decision.time, drift, sd, theta, gamma, scalar_items_seen_drift, scala_items_seen_noise])}
 
 \item{maxdur}{numeric variable that supplies the maximum reaction time considered a success in simulations}
 
@@ -36,6 +25,10 @@ aevacc_by_trial_memnoise(sd, theta, drift, non_decision_time, items_seen_bias,
 \item{nr_reps}{number of repitions (simulation runs)}
 
 \item{timestep}{timestep in ms associated with each step in the drift diffusion process}
+
+\item{items_seen_bias}{Numeric Variable storing the relative amount of drift that unseen items receive}
+
+\item{items_seen_noise_bias}{Numeric Variable storing the relative noise sd that unseen items receive}
 }
 \value{
 numeric variable that provides a success count (runs that predicted a reaction time in the correct rt-bin and simultaneously the correct decision)

@@ -6,33 +6,29 @@
 #' @export
 #' @param eye.dat data.table storing eyetracking data by trial. Fixation location (fixloc), Fixation number (fixnr), Fixation duration (fixdur) and a unique trial ids (id).
 #' @param choice.dat data.table storing the item valuations (v1,v2...), reaction times in ms (rt), decisions (decision) and unique trial ids (id).
-#' @param model.parameters vector with the four core addm parameters in order (drift.rate, theta, sd, non.decision.time).
+#' @param model.parameters vector with the four core addm parameters in order (non.decision.time, drift, sd, theta, gamma, boundary-parameters).
 #' @param nr.attributes integer providing the amount of attributes we consider per item
 #' @param timestep integer number that provides the timestep-size that is used in the simulations (in ms).
 #' @param state.step numeric variable between 0 and 1, that indicate how finegrained the vertial grid is supposed to be
 
-addm_run_by_trial_dynamic = function(choice.dat = data.table(v1 = 0,v2 = 0, id = 0),
+addm_run_by_trial_dynamic = function(choice.dat = data.table(v1 = 0,v2 = 0, decision = 0, id = 0),
                                      eye.dat = data.table(fixloc = 0, fixdur = 0, fixnr = 1, id = 0),
-                                     model.parameters = c(0.002,0.5,0.07,0),
+                                     model.parameters = c(0,0.002,0.07,0.6),
                                      nr.attributes = 1,
+                                     boundaryfun = 1,
                                      timestep = 10,
                                      state.step = 0.1){
 
-  # INITIALIZATION OF PARAMETERS -------------------------------------------------------------------------------------------------------
-  if (nr.attributes == 1){
-    drift.rate = model.parameters[1]
-    theta = model.parameters[2]
-    cur.sd = model.parameters[3]
-    non.decision.time = model.parameters[4]
-    gamma = 1
-  } else {
-    drift.rate = model.parameters[1]
-    theta = model.parameters[2]
-    gamma = model.parameters[3]
-    cur.sd = model.parameters[4]
-    non.decision.time = model.parameters[5]
+  # Compute Boundaries -----------------------------------------------------------------------------------------------------------------
+  if (class(boundaryfun) == 'function'){
+    # COMPUTE
   }
-  #-------------------------------------------------------------------------------------------------------------------------------------
+  # ------------------------------------------------------------------------------------------------------------------------------------
+
+  # Initialize parameter theta ---------------------------------------------------------------------------------------------------------
+  # only for readability, because it is used later on
+  theta = model.parameters[4]
+  # ------------------------------------------------------------------------------------------------------------------------------------
 
   # OTHER INITIALIZATIONS --------------------------------------------------------------------------------------------------------------
   # Get set size of current data set
@@ -87,11 +83,7 @@ addm_run_by_trial_dynamic = function(choice.dat = data.table(v1 = 0,v2 = 0, id =
     cur.maxfix[1] = eye.mat[eye.row.cnt,4]
 
     # Run Model
-    likelihoods[trial.cnt] = aevacc(cur.sd,
-                                    theta,
-                                    gamma,
-                                    drift.rate,
-                                    non.decision.time,
+    likelihoods[trial.cnt] = aevacc(model.parameters,
                                     decisions[trial.cnt],
                                     valuations[,trial.cnt],
                                     nr.attributes,
@@ -105,19 +97,10 @@ addm_run_by_trial_dynamic = function(choice.dat = data.table(v1 = 0,v2 = 0, id =
   }
   # CONTINUE BY CALCULATING LOG LIKELIHOOD----------------------------------------------------------------------------------------------
   if (nr.attributes == 1){
-    total.log.lik = c(drift.rate,
-                      theta,
-                      cur.sd,
-                      non.decision.time,
-                      0,
+    total.log.lik = c(model.parameters,
                       (-1)*sum(log(likelihoods)))
   } else {
-    total.log.lik = c(drift.rate,
-                      theta,
-                      gamma,
-                      cur.sd,
-                      non.decision.time,
-                      0,
+    total.log.lik = c(model.parameters,
                       (-1)*sum(log(likelihoods)))
   }
 
