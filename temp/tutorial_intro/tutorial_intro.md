@@ -22,7 +22,7 @@ aDDM: quick intro // equations 2 items
 <br> <br>
 $$
 \begin{aligned}
-  RDV_t = RDV_{t-1} + d*(r_{left} - \theta*r_{right}) + e_{t}
+  RDV_t = RDV_{t-1} + d*(r_{left} - \theta*r_{right}) + \epsilon_t
 \end{aligned}
 $$
 
@@ -30,7 +30,7 @@ $$
 <br> <br>
 $$
 \begin{aligned}
-  RDV_t = RDV_{t-1} + d*(\theta*r_{left} - r_{right}) + e_t
+  RDV_t = RDV_{t-1} + d*(\theta*r_{left} - r_{right}) + \epsilon_t
 \end{aligned}
 $$
 
@@ -45,9 +45,9 @@ aDDM: quick intro // n > 2 items
 
 $$
 \begin{align*}
-  E1_t &= E1_{t-1} + d*V1 + e_{t} \\
-  E2_t &= E2_{t-1} + \theta*d*V2 + e_{t} \\
-  E3_t &= E3_{t-1} + \theta*d*V3 + e_{t} \\
+  E^{1}_t &= E^{1}_{t-1} + d*V^{1} + \epsilon_{t} \\
+  E^{2}_t &= E^{2}_{t-1} + \theta*d*V^{2} + \epsilon_{t} \\
+  E^{3}_t &= E^{3}_{t-1} + \theta*d*V^{3} + \epsilon_{t} \\
 \end{align*}
 $$
 
@@ -55,31 +55,39 @@ $$
 
 $$
 \begin{align*}
-  RDV1_t &= E1_t - max(E2_t,E3_t) \\
-  RDV2_t &= E2_t - max(E1_t,E3_t) \\
-  RDV3_t &= E3_t - max(E1_t,E2_t) \\
+  RDV^{1}_t &= E^{1}_t - max(E^{2}_t,E^{3}_t) \\
+  RDV^{2}_t &= E^{2}_t - max(E^{1}_t,E^{3}_t) \\
+  RDV^{3}_t &= E^{3}_t - max(E^{1}_t,E^{2}_t) \\
 \end{align*}
 $$
 
 $$
 \begin{align*}
-  RDVG_t &= max(RDV1_t, RDV2_t, RDV3_t) \\
+  RDVG_t &= max(RDV^{1}_t, RDV^{2}_t, RDV^{3}_t) \\
 \end{align*}
 $$
 
 aDDM: quick intro // multiattribute (2)
 ==========================================================
 
+<br> <br>
+
 <span><strong>Fixation left (Attribute 1):</strong></span>
 
 $$
 \begin{align*}
 
-RDV_t = RDV_{t-1} +
-
+RDV_t = RDV_{t-1} +  d*(V^{1}_1 - \theta*V^{2}_1 + \gamma*(V^{1}_2 - theta*V^{2}_2)) + \epsilon_t
 
 \end{align*}
 $$
+
+<br>
+
+Decision taken if $RDV_t > 1$ | $RDV_t < -1$ ....
+
+<br>
+New parameter $\gamma$ that discounts unfixated attributes separately.
 
 
 aDDM: quick intro // code
@@ -155,7 +163,6 @@ aDDM quick intro // fit by condition
 <br>
 *Standard way of fitting the addm,*
 
-<br>
 
  - define unique trial conditions
 
@@ -165,7 +172,9 @@ aDDM quick intro // fit by condition
 
 
 **Implemented** in addmtoolbox. You can supply your own arbitrary fixation model
-and the package will use it.
+and the package will use it in the simulations.
+
+*Example fixation models* included. Fixed and random fixation pathways with fixed duration length.
 
 
 aDDM quick intro // fit by trial
@@ -182,7 +191,7 @@ aDDM quick intro // fit by trial
   - no need for separate fixation model for model fits
 
 
-**Implemented** in addmtoolbox. *Note*, that you will still need a fixation model when simulating a fake data set, once you have the optimal parameter!
+**Implemented** in addmtoolbox. *Note*, that you will still need a fixation model when simulating a fake data set, once you have the optimal parameters!
 
 addmtoolbox: functions
 ========================================================
@@ -227,7 +236,7 @@ addmtoolbox: internal functions
 
 Internal computations
 
-Internal model simulation
+Evidence Accumulation
 
 ***
 
@@ -265,12 +274,7 @@ Detailed function documentation:
 
 
 ```r
-?addm_dataprep
-```
-
-```
-No documentation for 'addm_dataprep' in specified packages and libraries:
-you could try '??addm_dataprep'
+?addm_preprocess
 ```
 
 Tutorials:
@@ -287,17 +291,20 @@ addmtoolbox: data
 ========================================================
 <br>
 The addmtoolbox comes with a full **set of example data**.
+to make it easier to,
 
-This will help you,
-
+- Understand the **data format expected** by addmtoolbox
 <br> <br>
-1. Understand the data **format expected** by addmtoolbox
-<br> <br>
-2. Understand the data **formats returned** by addmtoolbox
+- Understand the **data formats returned** by addmtoolbox
 
-<br>
 
 The corresponding data frames are **automatically loaded** with the package.
+
+
+```r
+View(addm_data_choice)
+View(addm_data_eye)
+```
 
 
 addmtoolbox: data

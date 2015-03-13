@@ -134,7 +134,7 @@ addm_loglik_condition = addm_fit_grid(addm.dat,
                                       thetas = c(0,0.5,1),
                                       sds = c(0.06,0.08,0.1),
                                       fit.type = 'condition',
-                                      fixation.model = 'random') # mention 'user'
+                                      fixation.model = 'random') # can be 'fixedpath' or 'user'
 
 addm_plot_loglik(addm_loglik_condition)
 
@@ -165,7 +165,7 @@ addm_output = addm_run_by_condition(choice.dat = addm.dat$choice.dat,
                                     conditions.dat = addm.dat$conditions.dat,
                                     model.parameters = c(0,0.0014,0.071,1), # mention order
                                     nr.reps = 500,
-                                    fixation.model = 'random',
+                                    fixation.model = 'random', # can be 'fixedpath' or 'user'
                                     output.type = 'full')
 
 # Take a look at whats included
@@ -229,10 +229,6 @@ afloglik = addm_fit_grid(afdat,
                          fit.type = 'trial')
 addm_plot_loglik(afloglik)
 # --------------------------------------------------------------------------------------------
-
-
-
-
 
 
 
